@@ -1,0 +1,476 @@
+@use 'variables' as var
+
+.sunorhc-timeline-container
+  box-sizing: border-box !important
+  -webkit-text-size-adjust: 100%
+  word-break: normal
+  -moz-tab-size: 4
+  tab-size: 4
+  position: relative
+  display: flex
+  flex-direction: column
+  flex-wrap: nowrap
+  justify-content: space-between
+  align-items: stretch
+  width: 100%
+  height: max-content
+  color: var.$baseFontColor
+  font-size: var.$baseFontSize
+  font-family: var.$baseFontFamily
+  font-weight: normal
+  line-height: 1.5em // 24px
+  background-color: transparent
+  border-style: none
+  outline-style: none
+
+  &[data-timeline-font="ja"]
+    font-family: var.$baseFontFamilyJa
+
+  &[data-timeline-font="ja2"]
+    font-family: var.$baseFontFamilyJa2
+
+  &[data-timeline-layout="rounded"]
+    border-radius: 0.5em // 8px
+    overflow: hidden
+
+  &[data-timeline-outline="true"]
+    border-style: solid
+    border-width: 1px
+    border-color: var.$baseContainerOutlineColor
+
+  &[data-timeline-elevation]
+    background-color: var.$baseBGColor1
+
+  &[data-timeline-elevation="0"]
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, .2), 0 0 0 0 rgba(0, 0, 0, .14), 0 0 0 0 rgba(0, 0, 0, .12) !important
+
+  &[data-timeline-elevation="1"]
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12) !important
+  
+  &[data-timeline-elevation="2"]
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12) !important
+
+  &[data-timeline-elevation="3"]
+    box-shadow: 0 8px 10px -5px rgba(0, 0, 0, .2), 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12) !important
+
+  &[data-timeline-elevation="4"]
+    box-shadow: 0 11px 15px -7px rgba(0, 0, 0, .2), 0 24px 38px 3px rgba(0, 0, 0, .14), 0 9px 46px 8px rgba(0, 0, 0, .12) !important
+
+  *, ::before, ::after
+    background-repeat: none
+    box-sizing: inherit
+
+  ::before, ::after
+    text-decoration: inherit
+    vertical-align: inherit
+
+  *
+    padding: 0
+    margin: 0
+
+  ul[class^="sunorhc-timeline-"]
+    margin-block-start: 0
+    margin-block-end: 0
+    padding-inline-start: 0
+    list-style-type: none
+
+  *[data-text-overflow="hidden"]
+    overflow: hidden
+    white-space: nowrap
+    text-overflow: ellipsis
+
+  .sunorhc-timeline-header, .sunorhc-timeline-footer
+    position: relative
+    display: flex
+    flex-direction: row
+    flex-wrap: nowrap
+    justify-content: space-around
+    align-items: center
+    width: 100%
+    height: max-content
+    margin: 0
+    padding-top: 0.1875em // 3px
+    padding-bottom: 0.1875em // 3px
+    background-color: var.$baseBGColor1
+    border-style: none
+    outline-style: none
+    z-index: 99
+
+    &[data-flex-direction="column"]
+      flex-direction: column
+
+    *
+      overflow: hidden
+      white-space: nowrap
+      width: inherit
+      text-overflow: ellipsis
+
+  .sunorhc-timeline-header
+    padding: 0
+    color: var.$headerTextColor
+
+    h2
+      margin: calc(1em / 3) auto
+      padding: 0 1em
+      font-size: 1.5em // 24px
+      font-weight: 600
+      line-height: 2.25em // 36px
+      user-select: none
+
+  .sunorhc-timeline-footer
+    padding: 0.5em // 8px
+    color: var.$footerTextColor
+
+    p
+      margin: calc(1em / 3) auto
+      padding: 0 1em
+      font-size: 0.875em // 14px
+      font-weight: 400
+      line-height: 1.25em // 20px
+      user-select: none
+
+  .sunorhc-timeline-body
+    box-sizing: border-box !important
+    position: relative
+    display: flex
+    flex-direction: row
+    flex-wrap: nowrap
+    justify-content: space-between
+    align-items: stretch
+    width: 100%
+    height: 100%
+    margin: 0
+    padding: 0
+    background-color: transparent
+    border-style: none
+    outline-style: none
+    user-select: none
+    z-index: 80
+
+    &[data-timeline-layout="rounded"]
+      border-radius: 0.5em // 8px
+
+    &[data-timeline-outline="true"]
+      border: solid 1px var.$baseBodyOutlineColor
+      overflow: hidden
+
+      .sunorhc-timeline-sidebar
+        &[data-sidebar-position="left"]
+          border-right: solid 1px var.$baseSidebarOutlineColor
+
+        &[data-sidebar-position="right"]
+          border-left: solid 1px var.$baseSidebarOutlineColor
+
+        ul
+          border-top: solid 1px var.$baseSidebarOutlineColor
+          border-bottom: solid 1px var.$baseSidebarOutlineColor
+
+          li:not(:last-child)
+            border-bottom: solid 1px var.$baseSidebarOutlineColor
+
+      .sunorhc-timeline-ruler
+        outline: solid 1px var.$rose
+
+        &[data-ruler-position="top"]
+          .sunorhc-timeline-ruler-row
+            li
+              border-right: solid 1px var.$baseRulerOutlineColor
+              border-bottom: solid 1px var.$baseRulerOutlineColor
+
+              &:last-child
+                border-right: none
+
+            &[data-ruler-grain="min"] li,
+            &.last-order-row li
+              // `.last-order-row`クラスは親要素`.sunorhc-timeline-ruler`の`data-ruler-rows`属性の値と同じ値を`data-ruler-order`属性に持つ要素に付与される動的クラス
+              border-bottom: none
+
+        &[data-ruler-position="bottom"]
+          margin-top: -1px
+
+          .sunorhc-timeline-ruler-row
+            li
+              border-right: solid 1px var.$baseRulerOutlineColor
+              border-bottom: solid 1px var.$baseRulerOutlineColor
+
+              &:last-child
+                border-right: none
+
+            &.last-order-row li
+              // `.last-order-row`クラスは親要素`.sunorhc-timeline-ruler`の`data-ruler-rows`属性の値と同じ値を`data-ruler-order`属性に持つ要素に付与される動的クラス
+              border-bottom: none
+
+        &[data-alternate-rows="true"]
+          .sunorhc-timeline-ruler-row
+            &:nth-child(2n)
+              background-color: var.$baseRulerBgColorEven
+
+            li:nth-child(2n)
+              background-color: var.$baseRulerCellBgColorEven
+
+    .sunorhc-timeline-sidebar
+      box-sizing: border-box !important
+      position: relative
+      display: block
+      max-width: 150px // attr(data-sidebar-max-width px);
+      width: 100%
+      height: calc(100% + 1px)
+      margin: 0
+      padding: 0
+      background-color: var.$noneColor
+      border-style: none
+      //border: solid 1px var.$baseSidebarOutlineColor
+      outline: none
+      z-index: 50
+
+      ul
+        box-sizing: border-box !important
+        position: relative
+        display: flex
+        flex-direction: column
+        justify-content: flex-start
+        align-items: stretch
+        width: inherit
+        height: calc(100% - 126px) // calc(100% - (offset-top + offset-bottom))
+        margin: 0
+        // margin-top: 84px // attr(data-sidebar-offset-top px);
+        // margin-bottom: calc(42px + 1px) // attr(data-sidebar-offset-bottom px);
+        padding: 0
+
+        &[data-alternate-rows="true"] li:nth-child(2n)
+          background-color: var.$baseSidebarBgColorEven
+
+        li
+          box-sizing: border-box !important
+          position: relative
+          display: flex
+          flex-direction: row
+          flex-wrap: nowrap
+          justify-content: center
+          align-items: center
+          margin: 0 auto
+          padding: 0
+          width: 100% // calc(100% - 2px) | calc(100% - (border-left + border-right))
+          height: 100% // calc(100% - 2px) | calc(100% - (border-top + border-bottom))
+          background-color: var.$baseSidebarBgColorOdd
+          border-style: none
+
+          *
+            display: inline-block
+            margin: 0.25em // 4px
+
+            &[data-sidebar-item-type="avatar"]
+              max-width: calc(100% - 0.5em)
+              max-height: calc(100% - 0.5em)
+              height: inherit
+              width: inherit
+
+              img
+                display: block
+                max-width: inherit
+                max-height: inherit
+                height: 100%
+                width: 100%
+                margin-top: auto
+                margin-bottom: auto
+
+            &[data-sidebar-item-type="icon"]
+              max-width: calc(100% - 0.5em)
+              max-height: calc(100% - 0.5em)
+
+              i
+                max-width: inherit
+                max-height: inherit
+
+            &[data-sidebar-item-type="image"]
+              position: absolute
+              margin: 0
+              height: 100%
+              width: 100%
+              text-indent: 100%
+              white-space: nowrap
+              overflow: hidden
+              background-image: var(--bg-image)
+              background-repeat: no-repeat
+              background-size: cover
+              background-position: center center
+              z-index: 51
+
+            &[data-sidebar-item-type="caption"]
+              position: relative
+              margin: 0
+              height: inherit
+              width: inherit
+              display: inline-flex
+              justify-content: center
+              align-items: center
+              z-index: 52
+
+              &[data-caption-position*="top"]
+                align-items: start
+
+              &[data-caption-position*="middle"]
+                align-items: center
+
+              &[data-caption-position*="bottom"]
+                align-items: end
+
+              &[data-caption-position*="left"]
+                justify-content: flex-start
+
+              &[data-caption-position*="center"]
+                justify-content: center
+
+              &[data-caption-position*="right"]
+                justify-content: flex-end
+
+              &[data-caption-color]
+                color: var(--text-color)
+
+              span
+                display: inline-block
+                max-height: inherit
+                max-width: inherit
+                overflow: hidden
+
+              &[data-caption-overflow="hidden"] span
+                white-space: nowrap
+                text-overflow: ellipsis
+
+          &[data-sidebar-item-action]
+            cursor: pointer
+
+            &:hover
+              box-shadow: inset 0 0 0 1px rgba(var.$primaryBlue, .2)
+              background-color: rgba(var.$lightBlue, .5)
+
+    .sunorhc-timeline-main-canvas
+      box-sizing: border-box !important
+      position: relative
+      /* 親要素.sunorhc-timeline-bodyのwidth:100% から左右サイドバー要素の幅を減算した値をwidthとする（動的算出） */
+      width: calc(100% - calc(150px * 2))
+      height: auto
+      overflow-y: hidden
+      overflow-x: auto
+      z-index: 20
+
+      .sunorhc-timeline-ruler
+        box-sizing: border-box !important
+        position: relative
+        display: flex
+        flex-direction: column
+        flex-wrap: nowrap
+        justify-content: space-evenly
+        align-items: stretch
+        width: 100%
+        margin: 0
+        padding: 0
+
+        .sunorhc-timeline-ruler-row
+          box-sizing: border-box !important
+          position: relative
+          display: flex
+          flex-direction: row
+          flex-wrap: nowrap
+          justify-content: space-evenly
+          align-items: stretch
+          list-style-type: none
+          width: 100%
+          margin: 0
+          padding: 0
+          background-color: var.$baseRulerBgColorOdd
+          overflow: hidden
+
+          &[data-ruler-order]
+            order: 0 // attr(data-ruler-order number);
+
+          &[data-ruler-order="1"]
+            order: 1
+
+          &[data-ruler-order="2"]
+            order: 2
+
+          &[data-ruler-order="3"]
+            order: 3
+
+          &[data-ruler-order="4"]
+            order: 4
+
+          &[data-ruler-order="5"]
+            order: 5
+
+          &[data-ruler-order="6"]
+            order: 6
+
+          &[data-ruler-order="7"]
+            order: 7
+
+          &[data-ruler-order="8"]
+            order: 8
+
+          &[data-ruler-order="9"]
+            order: 9
+
+          li
+            box-sizing: border-box !important
+            display: inline-block
+            width: 100%
+            height: max-content
+            margin: 0
+            line-height: 1.5em // 24px
+            vertical-align: middle
+            text-align: center
+            background-color: var.$noneColor
+            border-style: none
+            outline: none
+            overflow: hidden
+            white-space: nowrap
+            text-overflow: ellipsis
+
+      .sunorhc-timeline-nodes
+        height: 100% // calc(100% - calc(96px + 72px)) // calc(100% - (ruler-top-height + ruler-bottom-height))
+        margin-top: 1px
+        background-color: rgba(var.$nodeContainerBGColor1, 0.5)
+        outline: none
+
+        &[data-background="striped"]
+          background-image: repeating-linear-gradient(135deg, rgba(var.$nodeContainerBGColor1, 0.6), rgba(var.$nodeContainerBGColor1, 0.6) 1em, rgba(var.$nodeContainerBGColor2, 0.5) 1em, rgba(var.$nodeContainerBGColor2, 0.5) 2em)
+
+        &[data-background="grid"]
+          background-image: linear-gradient(rgba(var.$borderColor, 0.3) 1px, transparent 0), linear-gradient(90deg, rgba(var.$borderColor, 0.3) 1px, transparent 0)
+          background-size: 2em 2em
+          background-position: -1px -1px
+          background-repeat: repeat
+
+        &[data-background="toned"]
+          background-color: transparent
+          background-image: repeating-linear-gradient(0deg, rgba(var.$nodeContainerBGColor1, 0.3), rgba(var.$nodeContainerBGColor1, 0.3) 80px, rgba(var.$nodeContainerBGColor2, 0.5) 80px, rgba(var.$nodeContainerBGColor2, 0.5) 160px)
+          background-position: 0 -2px
+
+
+// Extended Styles
+
+ul:where([data-ruler-type="weekday"], [data-ruler-type="day"]) > li
+  &[data-item-datetime$=",sat"]
+    position: relative
+    display: inline-block
+    color: var.$primaryBlue
+    background-color: var.$blue !important
+
+    &::after
+      content: ''
+      position: absolute
+      display: inline-block
+      height: 82px
+      width: 100vh
+      bottom: 100%
+      right: 100%
+      background-color: rgba(var.$blue,.5)
+      transform-origin: left top
+      transform: rotate(-90deg)
+      z-index: 9999
+
+  &[data-item-datetime$=",sun"]
+    color: var.$magenta
+    background-color: var.$pink !important
+

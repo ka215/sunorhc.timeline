@@ -1,0 +1,22 @@
+[
+    { "eventId": "1", "end": "2024/5/26", "_": "Events with only end datetime are invalid." },
+    { "invalid": true, "_": "Events that do not have properties defined in the interface are invalid." },
+    { "eventId": "1", "start": "May 28, 2024", "_": "An event is valid if it has at least a start datetime." },
+    { "start": "2023-17-39", "_": "Events with invalid start datestimes are invalid." },
+    { "eventId": "1", "start": "2024/5/27",  "end": "invalid-date", "_": "Even if the end datetime are invalid, it is still a valid event if it has a start datetime." },
+    { "start": "2024-5-30",  "end": "2024-6-9",   "row": 2,  "size": "md", "_": "Is set correct row only." },
+    { "start": "2024-5-21",  "end": "2024-5-24",  "row": 3,  "group": "invalid", "_": "Is set correct row and invalid group." },
+    { "start": "2024-5-30 12:00",  "end": "2024-6-1 6:00",  "row": 0,                       "label": "Is set 0 row.", "size": "xs" },
+    { "start": "2024-6-2 8:47:21",  "end": "2024-6-3 19:13:12",  "row": 0,  "group": "invalid",  "label": "Is set 0 row and invalid group.", "content": "Text...", "size": "sm" },
+    { "start": "2024-05-17", "end": "2024-05-27", "row": 10, "group": "invalid",  "label": "Is set row of over number and invalid group.", "content": "Text...", "textColor": "teal" },
+    { "start": "2024-05-22", "end": "2024-05-26", "row": 10, "group": "H.X.",     "label": "Is set row of over number and correct group.", "content": "Text...", "textColor": "#66CCFF", "backgroundColor": "orange" },
+    { "start": "2024-5-1",   "end": "2024-5-17",  "row": 2,  "group": "N.O.",     "label": "Event started out of range", "content": "Text...", "textColor": "red" },
+    { "start": "2024-6-8",   "end": "2024-7-31",  "row": 3,  "group": "N.O.",     "label": "Event ended out of range", "content": "Text...", "textColor": "#33FF66", "backgroundColor": "pink" },
+    { "start": "2024/3/1",   "end": "2024/3/31 23:59:59.999",  "row": 4,  "group": "R.H.",     "label": "Entire event is out of range (before)", "content": "Text...", "textColor": "rgba(255,255,255)", "backgroundColor": "#33f", "borderColor": "gray" },
+    { "start": "2024/8/1",   "end": "2024/8/14",  "row": 4,  "group": "R.H.",     "label": "Entire event is out of range (after)", "content": "Text...", "textColor": "rgba(255,255,255)", "backgroundColor": "#33f", "borderColor": "gray" },
+    { "start": "2024/3/1",   "end": "2024/8/1",   "row": 5,  "group": "C.T.",     "label": "Both edges of event is out of range", "content": "Text...", "textColor": "rgba(255,255,255)", "backgroundColor": "#33f", "borderColor": "gray" },
+    { "start": "2024/5/30",  "end": "2024/6/3",              "group": "E.L.",     "label": "Is set correct group only", "content": "Text...", "textColor": "white", "backgroundColor": "#3f3", "borderColor": "red", "size": "xl" },
+    { "start": "2024/6/2",                        "row": 2,                       "label": "Is set correct start only", "content": "Text...", "textColor": "rgba(255,255,255)", "backgroundColor": "#33f", "borderColor": "gray", "size": "lg" },
+    { "start": "2023/12/2",  "end": "2023-12-31", "row": 1,                       "label": "test", "content": "Text...", "textColor": "rgba(255,255,255)", "backgroundColor": "#33f", "borderColor": "gray", "size": "lg" }
+
+]

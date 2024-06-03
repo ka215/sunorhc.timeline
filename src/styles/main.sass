@@ -1,0 +1,760 @@
+@use 'variables' as vars
+@use 'test'
+
+//@media (prefers-color-scheme: light)
+//  :root
+//    --base-text: #{vars.$gray900}
+//    --base-bg: #{vars.$noneColor}
+//    --elevation-bg: #{vars.$gray50}
+
+//@media (prefers-color-scheme: dark)
+//  :root
+//    --base-text: #{vars.$gray50}
+//    --base-bg: #{vars.$noneColor}
+//    --elevation-bg: #{vars.$gray900}
+
+:root
+  --font-size: #{vars.$baseFontSize}
+  --font-family: #{vars.$baseFontFamily}
+  --text-color: #{vars.$gray900}
+  --border-color: #{vars.$gray400}
+  --bg-color: #{vars.$noneColor}
+  --elevation-bg: #{vars.$white}
+  --shadow-inner: #{vars.$lightShadowIn}
+  --shadow-middle: #{vars.$lightShadowMid}
+  --shadow-outer: #{vars.$lightShadowOut}
+  --sidebar-bg-odd: #{vars.$lightSidebarBgColorOdd}
+  --sidebar-bg-even: #{vars.$lightSidebarBgColorEven}
+  --ruler-bg-odd: #{vars.$lightRulerBgColorOdd}
+  --ruler-bg-even: #{vars.$lightRulerBgColorEven}
+  --ruler-cell-bg-even: #{vars.$lightRulerCellBgColorEven}
+  --canvas-bg-odd: #{vars.$lightCanvasBgColorOdd}
+  --canvas-bg-even: #{vars.$lightCanvasBgColorEven}
+  --canvas-border: #{vars.$lightCanvasBorderColor}
+  --ruler-sat-text: #{vars.$lightSaturdayTextColor}
+  --ruler-sun-text: #{vars.$lightSundayTextColor}
+  --ruler-sat-bg: #{vars.$lightSaturdayBgColor}
+  --ruler-sun-bg: #{vars.$lightSundayBgColor}
+  --link-text: #{vars.$lightLinkTextColor}
+  --link-hover-bg: #{vars.$lightLinkHoverBgColor}
+  --text-shadow: #{vars.$lightTextShadow}
+  --event-node-text-color: #{vars.$lightEventNodeTextColor}
+  --event-node-bg-color: #{vars.$lightEventNodeBgColor}
+  --event-node-border-color: #{vars.$lightEventNodeBorderColor}
+  --event-node-text-color-hovered: #{vars.$lightEventNodeHoverTextColor}
+  --event-node-bg-color-hovered: #{vars.$lightEventNodeHoverBgColor}
+  --event-node-border-color-hovered: #{vars.$lightEventNodeHoverBorderColor}
+  --tooltip-text-color: #{vars.$lightTooltipTextColor}
+  --tooltip-bg-color: #{vars.$lightTooltipBgColor}
+  transition: .3s
+  scroll-behavior: smooth
+
+.dark-theme
+  --text-color: #{vars.$gray100}
+  --border-color: #{vars.$gray600}
+  --bg-color: #{vars.$noneColor}
+  --elevation-bg: #{vars.$gray950}
+  --shadow-inner: #{vars.$darkShadowIn}
+  --shadow-middle: #{vars.$darkShadowMid}
+  --shadow-outer: #{vars.$darkShadowOut}
+  --sidebar-bg-odd: #{vars.$darkSidebarBgColorOdd}
+  --sidebar-bg-even: #{vars.$darkSidebarBgColorEven}
+  --ruler-bg-odd: #{vars.$darkRulerBgColorOdd}
+  --ruler-bg-even: #{vars.$darkRulerBgColorEven}
+  --ruler-cell-bg-even: #{vars.$darkRulerCellBgColorEven}
+  --canvas-bg-odd: #{vars.$darkCanvasBgColorOdd}
+  --canvas-bg-even: #{vars.$darkCanvasBgColorEven}
+  --canvas-border: #{vars.$darkCanvasBorderColor}
+  --ruler-sat-text: #{vars.$darkSaturdayTextColor}
+  --ruler-sun-text: #{vars.$darkSundayTextColor}
+  --ruler-sat-bg: #{vars.$darkSaturdayBgColor}
+  --ruler-sun-bg: #{vars.$darkSundayBgColor}
+  --link-text: #{vars.$darkLinkTextColor}
+  --link-hover-bg: #{vars.$darkLinkHoverBgColor}
+  --text-shadow: #{vars.$darkTextShadow}
+  --event-node-text-color: #{vars.$darkEventNodeTextColor}
+  --event-node-bg-color: #{vars.$darkEventNodeBgColor}
+  --event-node-border-color: #{vars.$darkEventNodeBorderColor}
+  --event-node-text-color-hovered: #{vars.$darkEventNodeHoverTextColor}
+  --event-node-bg-color-hovered: #{vars.$darkEventNodeHoverBgColor}
+  --event-node-border-color-hovered: #{vars.$darkEventNodeHoverBorderColor}
+  --tooltip-text-color: #{vars.$darkTooltipTextColor}
+  --tooltip-bg-color: #{vars.$darkTooltipBgColor}
+
+
+.sunorhc-timeline-container
+  box-sizing: border-box !important
+  -webkit-text-size-adjust: 100%
+  word-break: normal
+  -moz-tab-size: 4
+  tab-size: 4
+  position: relative
+  display: flex
+  flex-direction: column
+  flex-wrap: nowrap
+  justify-content: space-between
+  align-items: stretch
+  width: 100%
+  height: max-content
+  padding: 1px
+  margin: 0 auto
+  color: var(--text-color)
+  font-size: var(--font-size)
+  font-family: var(--font-family)
+  font-weight: normal
+  line-height: 24px
+  background-color: var(--bg-color)
+  border-style: none
+  outline-style: none
+  opacity: 1
+  transition: all 0.3s ease-out
+
+  &.preparing
+    opacity: 0
+
+  &[data-timeline-layout="rounded"],
+  &[data-timeline-linestyle="rounded"]
+    border-radius: 8px
+    overflow: hidden
+
+  &[data-timeline-outline="true"],
+  &[data-timeline-outlined="true"]
+    padding: 0
+    border: var(--outline-style, solid) 1px var(--border-color)
+
+    .sunorhc-timeline-body
+      &[data-timeline-outline="true"],
+      &[data-timeline-outlined="true"]
+        border-style: none !important
+
+        .sunorhc-timeline-ruler
+          &[data-ruler-position="top"]
+            margin-top: -1px
+            border-top: var(--outline-style, solid) 1px var(--border-color)
+
+          &[data-ruler-position="bottom"]
+            border-bottom: var(--outline-style, solid) 1px var(--border-color)
+
+  &[data-timeline-elevation]
+    background-color: var(--elevation-bg)
+
+  &[data-timeline-elevation="0"]
+    box-shadow: 0 0 0 0 var(--shadow-inner), 0 0 0 0 var(--shadow-middle), 0 0 0 0 var(--shadow-outer) !important
+
+  &[data-timeline-elevation="1"]
+    box-shadow: 0 2px 4px -1px var(--shadow-inner), 0 4px 5px 0 var(--shadow-middle), 0 1px 10px 0 var(--shadow-outer) !important
+  
+  &[data-timeline-elevation="2"]
+    box-shadow: 0 5px 5px -3px var(--shadow-inner), 0 8px 10px 1px var(--shadow-middle), 0 3px 14px 2px var(--shadow-outer) !important
+
+  &[data-timeline-elevation="3"]
+    box-shadow: 0 8px 10px -5px var(--shadow-inner), 0 16px 24px 2px var(--shadow-middle), 0 6px 30px 5px var(--shadow-outer) !important
+
+  &[data-timeline-elevation="4"]
+    box-shadow: 0 11px 15px -7px var(--shadow-inner), 0 24px 38px 3px var(--shadow-middle), 0 9px 46px 8px var(--shadow-outer) !important
+
+  *, ::before, ::after
+    background-repeat: none
+    box-sizing: inherit
+
+  ::before, ::after
+    text-decoration: inherit
+    vertical-align: inherit
+
+  *
+    padding: 0
+    margin: 0
+
+  ul[class^="sunorhc-timeline-"]
+    margin-block-start: 0
+    margin-block-end: 0
+    padding-inline-start: 0
+    list-style-type: none
+
+  *[data-text-overflow="hidden"]
+    overflow: hidden
+    white-space: nowrap
+    text-overflow: ellipsis
+
+  .sunorhc-timeline-header, .sunorhc-timeline-footer
+    position: relative
+    display: flex
+    flex-direction: row
+    flex-wrap: nowrap
+    justify-content: space-around
+    align-items: center
+    width: 100%
+    height: max-content
+    margin: 0
+    padding-top: 3px
+    padding-bottom: 3px // = 0.1875em
+    background-color: var(--bg-color)
+    border-style: none
+    outline-style: none
+    z-index: 99
+
+    &[data-flex-direction="column"]
+      flex-direction: column
+
+    *
+      overflow: hidden
+      white-space: nowrap
+      width: inherit
+      text-overflow: ellipsis
+
+    &[hidden]
+      display: none
+
+  .sunorhc-timeline-header
+    padding: 0
+    color: var(--text-color)
+
+    h2
+      margin: calc(1em / 3) auto
+      padding: 0 16px
+      color: var(--text-color)
+      font-size: 24px // = 1.5em
+      font-weight: 600
+      line-height: 36px // = 2.25em
+
+  .sunorhc-timeline-footer
+    padding: 8px // = 0.5em
+    color: var(--text-color)
+
+    p
+      margin: calc(1em / 3) auto
+      padding: 0 16px
+      font-size: 14px // = 0.875em
+      font-weight: 400
+      line-height: 20px // = 1.25em
+      user-select: none
+
+  .sunorhc-timeline-body
+    box-sizing: border-box !important
+    position: relative
+    display: flex
+    flex-direction: row
+    flex-wrap: nowrap
+    justify-content: space-between
+    align-items: stretch
+    width: 100%
+    height: 100%
+    margin: 0
+    padding: 1px
+    background-color: transparent
+    border-style: none
+    outline-style: none
+    user-select: none
+    z-index: 80
+
+    &[data-timeline-layout="rounded"],
+    &[data-timeline-linestyle="rounded"]
+      border-radius: 8px // = 0.5em
+
+    &[data-timeline-outline="true"],
+    &[data-timeline-outlined="true"]
+      padding: 0
+      border: var(--outline-style, solid) 1px var(--border-color)
+      overflow: hidden
+
+      .sunorhc-timeline-sidebar
+        padding-bottom: 0
+
+        &[data-sidebar-position="left"]
+          border-right: var(--outline-style, solid) 1px var(--border-color)
+
+        &[data-sidebar-position="right"]
+          border-left: var(--outline-style, solid) 1px var(--border-color)
+
+        ul
+          border-bottom: var(--outline-style, solid) 1px var(--border-color)
+          //border-top: var(--outline-style, solid) 1px var(--border-color)
+
+          li:not(:last-child)
+            border-bottom: var(--outline-style, solid) 1px var(--border-color)
+
+      .sunorhc-timeline-ruler
+        transition: all 0.15s ease-out
+
+        &[data-ruler-position="top"]
+          top: 1px
+          border-bottom: var(--outline-style, solid) 1px var(--border-color)
+
+          .sunorhc-timeline-ruler-row
+            li
+              border-right: var(--outline-style, solid) 1px var(--border-color)
+              border-bottom: var(--outline-style, solid) 1px var(--border-color)
+
+              &:last-child
+                border-right: none
+
+            &[data-ruler-grain="min"] li,
+            &.last-order-row li
+              // The dynamic class ".last-order-row" is assigned to an element whose "data-ruler-order" attribute has 
+              // the same value as the "data-ruler-rows" attribute value of the parent element ".sunorhc-timeline-ruler".
+              padding-bottom: 1px
+              border-bottom: none
+
+        &[data-ruler-position="bottom"]
+          top: -1px !important
+          border-top: var(--outline-style, solid) 1px var(--border-color)
+
+          .sunorhc-timeline-ruler-row
+            background-color: var(--ruler-bg-odd)
+
+            li
+              border-right: var(--outline-style, solid) 1px var(--border-color)
+              border-bottom: var(--outline-style, solid) 1px var(--border-color)
+
+              &:last-child
+                border-right: none
+
+            &.last-order-row li
+              // The dynamic class ".last-order-row" is assigned to an element whose "data-ruler-order" attribute has 
+              // the same value as the "data-ruler-rows" attribute value of the parent element ".sunorhc-timeline-ruler".
+              border-bottom: none
+
+        &[data-alternate-rows="true"]
+          .sunorhc-timeline-ruler-row
+            &:nth-child(2n)
+              background-color: var(--ruler-bg-even)
+
+            li:nth-child(2n)
+              background-color: var(--ruler-cell-bg-even)
+      
+      .sunorhc-timeline-nodes
+        top: 1px !important
+
+    .sunorhc-timeline-sidebar
+      box-sizing: border-box !important
+      position: relative
+      display: block
+      max-width: var(--sidebar-max-width, 150px)
+      width: 100%
+      height: 100%//calc(100% + 1px)
+      top: var(--sidebar-adjust-top, 1px)
+      margin: 0
+      padding: 0
+      background-color: var(--bg-color)
+      //border-style: none
+      border-top: var(--outline-style, solid) 1px var(--border-color)
+      outline-style: none
+      overflow-y: auto
+      z-index: 50
+
+      &[data-sidebar-overflow="true"]
+        max-height: var(--sidebar-max-height)
+        top: var(--sidebar-adjust-top, 0)
+        overflow-y: hidden
+        border-bottom: var(--outline-style, solid) 1px var(--border-color)
+
+      &[data-sidebar-position="left"]
+        border-right: var(--outline-style, solid) 1px transparent
+
+      &[data-sidebar-position="right"]
+        border-left: var(--outline-style, solid) 1px transparent
+
+      ul
+        box-sizing: border-box !important
+        position: relative
+        display: flex
+        flex-direction: column
+        justify-content: flex-start
+        align-items: stretch
+        width: inherit
+        height: auto // calc(100% - (offset-top + offset-bottom))
+        margin: 0
+        padding: 0
+
+        &[data-alternate-rows="true"] li:nth-child(2n)
+          background-color: var(--sidebar-bg-even)
+
+        li
+          box-sizing: border-box !important
+          position: relative
+          display: flex
+          flex-direction: row
+          flex-wrap: nowrap
+          justify-content: center
+          align-items: center
+          margin: 0 auto
+          padding: 1px
+          width: 100% // calc(100% - 2px) | calc(100% - (border-left + border-right))
+          height: 100% // calc(100% - 2px) | calc(100% - (border-top + border-bottom))
+          background-color: var(--sidebar-bg-odd, --bg-color)
+          border-style: none
+
+          *
+            display: inline-block
+            margin: 4px // = 0.25em
+
+            &[data-sidebar-item-type="text"]
+              color: attr(data-text-color, inherit)
+
+            &[data-sidebar-item-type="avatar"]
+              max-width: calc(100% - 8px)
+              max-height: calc(100% - 8px)
+              height: inherit
+              width: inherit
+
+              img
+                display: block
+                max-width: 100%
+                max-height: 100%
+                height: max-content
+                width: auto
+                margin-top: auto
+                margin-bottom: auto
+
+            &[data-sidebar-item-type="icon"]
+              max-width: calc(100% - 8px)
+              max-height: calc(100% - 8px)
+
+              i
+                max-width: inherit
+                max-height: inherit
+
+            &[data-sidebar-item-type="image"]
+              position: absolute
+              margin: 0
+              height: 100%
+              width: 100%
+              text-indent: 100%
+              white-space: nowrap
+              overflow: hidden
+              background-image: var(--bg-image)
+              background-repeat: no-repeat
+              background-size: cover
+              background-position: center center
+              z-index: 51
+
+            &[data-sidebar-item-type="caption"]
+              position: relative
+              margin: 0
+              height: inherit
+              width: inherit
+              display: inline-flex
+              justify-content: center
+              align-items: center
+              z-index: 52
+
+              &[data-caption-position*="top"]
+                align-items: start
+
+              &[data-caption-position*="middle"]
+                align-items: center
+
+              &[data-caption-position*="bottom"]
+                align-items: end
+
+              &[data-caption-position*="left"]
+                justify-content: flex-start
+
+              &[data-caption-position*="center"]
+                justify-content: center
+
+              &[data-caption-position*="right"]
+                justify-content: flex-end
+
+              &[data-caption-color]
+                color: var(--text-color)
+
+                span
+                  text-shadow: var(--text-shadow)
+
+              span
+                display: inline-block
+                max-height: inherit
+                max-width: inherit
+                overflow: hidden
+
+              &[data-caption-overflow="hidden"] span
+                white-space: nowrap
+                text-overflow: ellipsis
+
+          &[data-sidebar-item-action]
+            cursor: pointer
+
+            &:hover
+              color: var(--link-text)
+              box-shadow: inset 0 0 0 1px rgba(var(--link-text),.2)
+              background-color: var(--link-hover-bg)
+
+    .sunorhc-timeline-main-canvas
+      box-sizing: border-box !important
+      position: relative
+      width: var(--main-visible-width)
+      height: auto
+      margin-left: -1px
+      margin-right: -1px
+      border-left: var(--outline-style, solid) 1px var(--border-color)
+      border-right: var(--outline-style, solid) 1px var(--border-color)
+      overflow: hidden
+      z-index: 20
+
+      &[data-hide-scrollbar="true"]::-webkit-scrollbar
+        overflow: auto
+        display: none
+
+      .sunorhc-timeline-ruler
+        box-sizing: border-box !important
+        position: relative
+        display: flex
+        flex-direction: column
+        flex-wrap: nowrap
+        justify-content: space-evenly
+        align-items: stretch
+        width: max-content
+        margin: 0
+        padding: 0
+        border-style: none
+        //border: var(--outline-style, solid) 1px transparent
+        outline-style: none
+        overflow: hidden
+
+        &[data-ruler-position="top"]
+          top: 1px
+
+          &[data-overlay-sticky="top"]
+            position: sticky
+            top: 1px
+            z-index: 25
+            background-color: var(--elevation-bg)
+      
+        &[data-ruler-position="bottom"]
+          //top: 6px
+
+          &[data-overlay-sticky="bottom"]
+            position: sticky
+            bottom: 0//1px
+            z-index: 25
+            background-color: var(--elevation-bg)
+
+        .sunorhc-timeline-ruler-row
+          box-sizing: border-box !important
+          position: relative
+          display: flex
+          flex-direction: row
+          flex-wrap: nowrap
+          justify-content: space-evenly
+          align-items: stretch
+          list-style-type: none
+          width: 100%
+          margin: 0
+          padding: 0
+          background-color: var(--bg-color)
+          overflow: hidden
+
+          &[data-ruler-order]
+            order: 0
+
+          &[data-ruler-order="1"]
+            order: 1
+
+          &[data-ruler-order="2"]
+            order: 2
+
+          &[data-ruler-order="3"]
+            order: 3
+
+          &[data-ruler-order="4"]
+            order: 4
+
+          &[data-ruler-order="5"]
+            order: 5
+
+          &[data-ruler-order="6"]
+            order: 6
+
+          &[data-ruler-order="7"]
+            order: 7
+
+          &[data-ruler-order="8"]
+            order: 8
+
+          &[data-ruler-order="9"]
+            order: 9
+
+          li
+            box-sizing: border-box !important
+            display: inline-block
+            width: 100%
+            min-width: var(--min-grain-width, 48px)
+            height: max-content
+            min-height: var(--ruler-row-height, 23px)
+            margin: 0
+            font-size: var(--ruler-item-font, inherit)
+            color: var(--ruler-text-color, inherit)
+            line-height: 1.428
+            vertical-align: middle
+            text-align: center
+            background-color: var(--ruler-bg-color, --bg-color)
+            border-style: none
+            outline-style: none
+            overflow: hidden
+            white-space: nowrap
+            text-overflow: ellipsis
+
+      .sunorhc-timeline-nodes
+        box-sizing: border-box !important
+        position: relative
+        height: 100% // calc(100% - calc(96px + 72px)) // calc(100% - (ruler-top-height + ruler-bottom-height))
+        width: 100%
+        top: 0//6px // number of borders in top ruler + margin?
+        background-color: rgba(var(--canvas-bg-odd),.5)
+        outline-style: none
+        z-index: 21
+
+        &[data-background="striped"]
+          //background-image: repeating-linear-gradient(135deg, rgba(vars.$nodeContainerBGColor1, 0.6), rgba(vars.$nodeContainerBGColor1, 0.6) 1em, rgba(vars.$nodeContainerBGColor2, 0.5) 1em, rgba(vars.$nodeContainerBGColor2, 0.5) 2em)
+          background-image: repeating-linear-gradient(135deg, var(--canvas-bg-even), var(--canvas-bg-even) 40px, var(--canvas-bg-odd) 40px, var(--canvas-bg-odd) 80px)
+
+        &[data-background="grid"]
+          //background-image: linear-gradient(rgba(vars.$borderColor, 0.3) 1px, transparent 0), linear-gradient(90deg, rgba(vars.$borderColor, 0.3) 1px, vars.$noneColor 0)
+          background-image: linear-gradient(var(--canvas-border) 1px, transparent 0), linear-gradient(90deg, var(--canvas-border) 1px, transparent 0)
+          background-size: var(--canvas-grid-width, 85.25px) var(--canvas-grid-height, 80px)
+          //background-size: 85.25px 80px // 1st is width of ruler cell, 2nd is height of sidebar row item
+          background-position: -0.5px -0.5px
+          background-repeat: repeat
+
+        &[data-background="toned"]
+          background-color: transparent
+          //background-image: repeating-linear-gradient(0deg, var(--canvas-bg-even), var(--canvas-bg-even) calc(100% / var(--canvas-grid-rows)), var(--canvas-bg-odd) calc(100% / var(--canvas-grid-rows)), var(--canvas-bg-odd) calc(calc(100% / var(--canvas-grid-rows-half)) - 1px))
+          background-image: repeating-linear-gradient(0deg, var(--canvas-bg-even), var(--canvas-bg-even) calc(100% / var(--canvas-grid-rows, 5)), var(--canvas-bg-odd) calc(100% / var(--canvas-grid-rows, 5)), var(--canvas-bg-odd) calc(calc(100% / var(--canvas-grid-rows-half, 2.5)) - 1px))
+          background-position: 0 -3px
+
+        &[data-background="plaid"]
+          position: relative
+          background-color: transparent
+          //background-image: repeating-linear-gradient(0deg, var(--canvas-bg-even), var(--canvas-bg-even) calc(100% / var(--canvas-grid-rows)), var(--canvas-bg-odd) calc(100% / var(--canvas-grid-rows)), var(--canvas-bg-odd) calc(calc(100% / var(--canvas-grid-rows-half)) - 1px))
+          background-image: repeating-linear-gradient(0deg, var(--canvas-bg-even), var(--canvas-bg-even) calc(100% / var(--canvas-grid-rows, 5)), var(--canvas-bg-odd) calc(100% / var(--canvas-grid-rows, 5)), var(--canvas-bg-odd) calc(calc(100% / var(--canvas-grid-rows-half, 2.5)) - 1px))
+          background-position: 0 -3px
+
+          &::after
+            position: absolute
+            content: ''
+            top: 0
+            left: 0
+            height: 100%
+            width: 100%
+            background-image: linear-gradient(var(--canvas-border) 1px, transparent 0), linear-gradient(90deg, var(--canvas-border) 1px, transparent 0)
+            background-size: var(--canvas-grid-width, 85.25px) var(--canvas-grid-height, 80px)
+            //background-size: 85.25px 80px // 1st is width of ruler cell, 2nd is height of sidebar row item
+            background-position: -0.5px -0.5px
+            background-repeat: repeat
+            z-index: 22
+        
+        .sunorhc-timeline-event-node
+          position: absolute
+          display: inline-flex
+          height: var(--event-node-height, 16px)
+          width: var(--event-node-width, 16px)
+          top: var(--event-node-y, calc(80px - 8px)) // This axis Y is dynamic calculation value
+          left: var(--event-node-x, calc(83px - 8px)) // This axis X is dynamic calculation value
+          justify-content: center
+          align-items: center
+          text-align: left
+          vertical-align: middle
+          font-size: calc(var(--event-node-height, 16px) * 75%)
+          color: var(--event-node-text-color)
+          background-color: var(--event-node-bg-color)
+          border: solid var(--event-node-border-width, 1px) var(--event-node-border-color)
+          border-radius: var(--event-node-border-radius, 50%)
+          z-index: var(--event-node-z-index, 25)
+
+          &.bar-type
+            border-radius: var(--event-node-border-radius, 10%)
+
+            &.before-start
+              border-left-width: 0
+              border-top-left-radius: 0
+              border-bottom-left-radius: 0
+
+            &.after-end
+              border-right-width: 0
+              border-top-right-radius: 0
+              border-bottom-right-radius: 0
+
+          &:hover
+            color: var(--event-node-text-color-hovered)
+            background-color: var(--event-node-bg-color-hovered)
+            border: solid var(--event-node-border-width) var(--event-node-border-color-hovered)
+
+          &> span
+            overflow: hidden
+            white-space: nowrap
+            text-overflow: ellipsis
+            pointer-events: none
+
+          .tooltip
+            display: none
+            position: absolute
+            padding: 8px
+            font-size: 12px
+            line-height: 1.4
+            color: var(--tooltip-text-color)
+            border-radius: 4px
+            background-color: var(--tooltip-bg-color)
+            height: var(--tooltip-height, max-content)
+            width: var(--tooltip-width, max-content)
+            box-shadow: 0 2px 4px -1px var(--shadow-inner), 0 4px 5px 0 var(--shadow-middle), 0 1px 10px 0 var(--shadow-outer)
+            opacity: 0
+            z-index: 81 !important
+            pointer-events: auto !important
+            transition: opacity .3s ease-out
+
+            &::before
+              content: ''
+              position: absolute
+              top: -17px
+              right: calc(50% - 10px)
+              border: solid 10px transparent
+              border-top: solid 10px var(--tooltip-bg-color)
+              margin-left: -10px
+              z-index: 80 !important
+              transform: rotateZ(180deg)
+
+            &.shown
+              opacity: 1
+         
+          &:hover .tooltip
+            display: inline-block
+            top: var(--tooltip-y, 30px)
+            left: var(--tooltip-x, 0)
+
+
+// Extended Styles
+
+ul:where([data-ruler-type="weekday"], [data-ruler-type="day"]) > li
+  &[data-item-datetime*=",sat"]
+    position: relative
+    display: inline-block
+    color: var(--ruler-sat-text)
+
+  &[data-item-datetime*=",sun"], &[data-item-datetime*=",hol"]
+    position: relative
+    display: inline-block
+    color: var(--ruler-sun-text)
+
+.sunorhc-timeline-ruler.force-day-bg-color
+  ul:where([data-ruler-type="weekday"], [data-ruler-type="day"]) > li
+    &[data-item-datetime*=",sat"]
+      background-color: var(--ruler-sat-bg) !important
+
+    &[data-item-datetime*=",sun"], &[data-item-datetime*=",hol"]
+      background-color: var(--ruler-sun-bg) !important
+
+
+// Test class as like TailwindCSS
+
+.text-teal-600
+  color: #0d9488 !important
+
+.dark-theme
+  .dark\:text-teal-400
+    color: #2dd4bf !important
+
+// Autoprefixer Test Styles
+
+.autoprefixer-test
+  @include test.autoprefixerTest()
