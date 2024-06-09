@@ -1,0 +1,11 @@
+[
+    { "start": "2024-06-04 12:54",        "end": "2024-06-4 12:57",    "row": 1, "label": "test1 <b style=\"color:#4ade80;\">Ok!</b>", "backgroundColor": "#dcfce7", "borderColor": "#22c55e", "size": "xl" },
+    { "start": "2024-06-04 12:59:30",     "end": "2024-06-4 13:03:45", "row": 1, "label": "test2", "size": "sm" },
+    { "start": "2024-06-04 12:52:20.987",                              "row": 2, "label": "test3", "size": "xs" },
+    { "start": "2024-06-04 13:00",                                     "row": 2, "label": "test4", "size": "md" },
+    { "start": "2024-06-04 12:00",        "end": "2024-06-4 12:42",    "row": 3, "label": "test5" },
+    { "start": "2024-06-04 13:09:50",     "end": "2024-06-4 13:55",    "row": 3, "label": "test6" },
+    { "start": "2024-06-04 12:50",        "end": "2024-06-4 13:12",    "row": 4, "label": "test7" },
+    { "start": "June 4, 2024 12:58",      "end": "June 4, 2024 1:07 pm", "row": 5, "label": "test8" },
+    { "start": "2024-06-04 12:00",        "end": "2024-06-4 14:00",    "row": 6, "label": "test9" }
+]

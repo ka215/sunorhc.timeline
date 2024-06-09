@@ -1,4 +1,4 @@
-import { isElement, getRect, getAtts, setAtts, removeAtts, setStyles, setContent, strToNode, replaceTagName, replaceAttribute, isHidden, hide, show, toggleClass, reflow, watcher } from './dom'
+import { isElement, getRect, getAtts, setAtts, removeAtts, setStyles, setContent, strToNode, replaceTagName, replaceAttribute, wrapChildNodes, isHidden, hide, show, toggleClass, reflow, watcher } from './dom'
 import { Window } from 'happy-dom'
 //import { JSDOM } from 'jsdom'
 import $ from 'jquery'
@@ -686,6 +686,82 @@ describe('replaceAttribute', () => {
         expect(prevAttr2).toBeUndefined()
     })
 
+})
+
+describe('wrapChildNodes', () => {
+    let parentElement: HTMLElement
+
+    beforeEach(() => {
+        // Create a new parent element for each test.
+        parentElement = document.createElement('div')
+    })
+
+    it('should wrap text nodes and element nodes with the specified wrapper tag', () => {
+        parentElement.innerHTML = 'Text node<p>Paragraph</p><span>Span</span>'
+
+        wrapChildNodes(parentElement, 'div')
+
+        expect(parentElement.children.length).toBe(3)
+        expect(parentElement.children[0].tagName).toBe('DIV')
+        expect(parentElement.children[0].textContent).toBe('Text node')
+        expect(parentElement.children[1].tagName).toBe('DIV')
+        expect(parentElement.children[1].innerHTML).toBe('<p>Paragraph</p>')
+        expect(parentElement.children[2].tagName).toBe('DIV')
+        expect(parentElement.children[2].innerHTML).toBe('<span>Span</span>')
+    })
+
+    it('should handle empty parent element', () => {
+        wrapChildNodes(parentElement, 'div')
+        expect(parentElement.children.length).toBe(0)
+    })
+
+    it('should handle parent element with only text nodes', () => {
+        parentElement.innerHTML = 'Text node 1 Text node 2'
+
+        wrapChildNodes(parentElement, 'span')
+
+        expect(parentElement.children.length).toBe(1)
+        expect(parentElement.children[0].tagName).toBe('SPAN')
+        expect(parentElement.children[0].textContent).toBe('Text node 1 Text node 2')
+    })
+
+    it('should handle parent element with only element nodes', () => {
+        parentElement.innerHTML = '<p>Paragraph 1</p><p>Paragraph 2</p>'
+
+        wrapChildNodes(parentElement, 'div')
+
+        expect(parentElement.children.length).toBe(2)
+        expect(parentElement.children[0].tagName).toBe('DIV')
+        expect(parentElement.children[0].innerHTML).toBe('<p>Paragraph 1</p>')
+        expect(parentElement.children[1].tagName).toBe('DIV')
+        expect(parentElement.children[1].innerHTML).toBe('<p>Paragraph 2</p>')
+    })
+
+    it('should not change the wrapper tag if it is empty', () => {
+        parentElement.innerHTML = 'Text node<p>Paragraph</p><span>Span</span>'
+
+        wrapChildNodes(parentElement, '')
+
+        expect(parentElement.childNodes.length).toBe(3)
+        expect(parentElement.childNodes[0].nodeName).toBe('#text')
+        expect(parentElement.childNodes[0].nodeValue).toBe('Text node')
+        expect(parentElement.childNodes[1].nodeName).toBe('P')
+        expect(parentElement.childNodes[2].nodeName).toBe('SPAN')
+    })
+
+    it('should preserve the original order of nodes', () => {
+        parentElement.innerHTML = '<p>Paragraph 1</p>Text node<span>Span</span>'
+
+        wrapChildNodes(parentElement, 'section')
+
+        expect(parentElement.children.length).toBe(3)
+        expect(parentElement.children[0].tagName).toBe('SECTION')
+        expect(parentElement.children[0].innerHTML).toBe('<p>Paragraph 1</p>')
+        expect(parentElement.children[1].tagName).toBe('SECTION')
+        expect(parentElement.children[1].textContent).toBe('Text node')
+        expect(parentElement.children[2].tagName).toBe('SECTION')
+        expect(parentElement.children[2].innerHTML).toBe('<span>Span</span>')
+    })
 })
 
 describe('isHidden', () => {

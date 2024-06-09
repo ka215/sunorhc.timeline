@@ -1,7 +1,7 @@
 // DOM-related general-purpose helper methods
 // Methods:
 // isElement, getRect, getAtts, setAtts, removeAtts, setStyles, setContent, strToNode, replaceTagName, 
-// replaceAttribute, isHidden, hide, show, toggleClass, reflow, watcher
+// replaceAttribute, wrapChildNodes, isHidden, hide, show, toggleClass, reflow, watcher
 
 import { isNumberString, isBooleanString } from './common'
 
@@ -218,6 +218,36 @@ export const replaceAttribute = (targetElement: HTMLElement, attributeName: stri
     prevAttr[attributeName] = attrValue
 
     return prevAttr
+}
+
+/**
+ * Wraps the child elements or text nodes of the specified element with the specified element.
+ * 
+ * @param {HTMLElement} parentElement - The parent element to wrap the child elements or text nodes around.
+ * @param {string} wrapperTag - The tag name of the wrapper element to use.
+ * @returns {void}
+ */
+export const wrapChildNodes = (parentElement: HTMLElement, wrapperTag: string): void => {
+    if (wrapperTag === '') {
+        return
+    }
+    // Get the child nodes of a parent element.
+    const childNodes = Array.from(parentElement.childNodes)
+
+    // Remove the original child nodes (to replace them with the wrapper element).
+    childNodes.forEach(child => parentElement.removeChild(child))
+
+    // Wrap each child node.
+    childNodes.forEach(child => {
+       // Create a new wrapper element.
+       const wrapper = document.createElement(wrapperTag)
+
+       // Adding a child node to a wrapper element.
+       wrapper.appendChild(child)
+
+       // Add a wrapper element to the parent element.
+       parentElement.appendChild(wrapper)
+    })
 }
 
 /**

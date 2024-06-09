@@ -75,6 +75,7 @@ export const validatorRulerConfig: OptionValidators<Def.RulerConfig> = {
 export const validatorRulerRole: OptionValidators<Def.RulerRole> = {
     placement:      (v: Def.RulerPlacement | undefined): Def.RulerPlacement => !v || typeof v !== 'string' || !/^(both|top|bottom|none)$/i.test(v) ? 'both' : v.toLowerCase() as Def.RulerPlacement,
     truncateLowers: (v: boolean | undefined): boolean => typeof v === 'boolean' ? v : false,
+    firstDayOfWeek: (v: number | undefined): number => !v || typeof v !== 'number' ? 0 : (v > 6 ? 6 : (v < 0 ? 0 : Math.floor(v))),// default to 0 (equal Sunday)
     minGrainWidth:  (v: number | string | undefined): number | string => !v || !/^(number|string)$/.test(typeof v) ? '48px' : (/^\d+(|px)$/.test(String(v)) ? v : '48px'),
     filters:        (v: Def.RulerFilter | undefined): Def.RulerFilter | undefined => !v || typeof v !== 'object' ? undefined : validateTimelineOptions<Def.RulerFilter>(v, validatorRulerFilter) as Def.RulerFilter,
     top:            (v: Def.RulerConfig | undefined): Def.RulerConfig => !v || typeof v !== 'object' ? { rows: [ 'day' ] } : validateTimelineOptions<Def.RulerConfig>(v, validatorRulerConfig) as Def.RulerConfig,
@@ -112,7 +113,7 @@ export const validatorEventNode: OptionValidators<Def.EventNode> = {
     classes: (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
     styles: (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
     image: (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
-    size: (v: Def.PointerSize | undefined): Def.PointerSize => !v || !/^(string|number)$/.test(typeof v) ? 'md' : (/^(\d+|xs|sm|md|lg|xl)$/i.test(String(v)) ? v : 'md'),
+    size: (v: Def.PointerSize | undefined): Def.PointerSize => !v || !/^(string|number)$/.test(typeof v) ? 'md' : (/^(([+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?)|xs|sm|md|lg|xl)$/i.test(String(v)) ? v : 'md'),
     remote: (v: boolean | undefined): boolean => !v || typeof v !== 'boolean' ? false : v,
     expiration: (v: Def.CacheExpiration | undefined): Def.CacheExpiration => !v || !/^(string|number)$/.test(typeof v) ? 'always' : (/^(\d+|always|none)$/i.test(String(v)) ? v : 'always'),
     relation: (v: Def.RelationConfig | undefined): Def.RelationConfig | undefined => !v || typeof v !== 'object' ? undefined : validateTimelineOptions<Def.RelationConfig>(v, validatorRelationConfig) as Def.RelationConfig,
@@ -129,12 +130,12 @@ export const validatorLayouts: OptionValidators<Def.Layouts> = {
     eventsBackground: (v: Def.EventsBackground | undefined): Def.EventsBackground => !v || typeof v !== 'string' || !/^(striped|grid|toned|plaid|none)$/.test(v) ? 'plaid' : String(v) as Def.EventsBackground,
     width:         (v: number | string | undefined): number | string => !v || !/^(number|string)$/.test(typeof v) ? 'auto' : (typeof v === 'number' ? v : (/^(\d+(px|%|vw)|auto|inherit|(max|min|fit)-content)$/.test(v) ? v : 'auto')),
     height:        (v: number | string | undefined): number | string => !v || !/^(number|string)$/.test(typeof v) ? 'auto' : (typeof v === 'number' ? v : (/^(\d+(px|%|vh)|auto|inherit|(max|min|fit)-content)$/.test(v) ? v : 'auto')),
+    rtl:          (v: boolean | undefined): boolean => typeof v === 'boolean' ? v : false,
 }
 
 export const validatorEffects: OptionValidators<Def.Effects> = {
     presentTime:      (v: boolean | undefined): boolean => typeof v === 'boolean' ? v : false,
     defaultAlignment: (v: Def.Alignment | undefined): Def.Alignment => !v || !/^(string|number)$/.test(typeof v) || !/^(\d+|left|begin|center|right|end|current(|ly)|latest)$/i.test(String(v)) ? 'latest' : (typeof v === 'string' ? v.toLowerCase() : v) as Def.Alignment,
-    //firstDayOfWeek:   (v: number | undefined): number => !v || typeof v !== 'number' ? 0 : (v > 6 ? 6 : (v < 0 ? 0 : Math.floor(v))),// default to 0 (equal Sunday)
     cacheExpiration:  (v: Def.CacheExpiration | undefined): Def.CacheExpiration => !v || !/^(string|number)$/.test(typeof v) || !/^(\d+|always|none)$/i.test(String(v)) ? 'always' : v as Def.CacheExpiration,
     hoverEvent:       (v: boolean | undefined): boolean => typeof v === 'boolean' ? v : false,
     onClickEvent:     (v: Def.Action | undefined): Def.Action => !v || typeof v !== 'string' || !/^(normal|modal|custom|none)$/i.test(v) ? 'normal' : v as Def.Action,
@@ -156,7 +157,6 @@ export const validatorTimelineOptions: OptionValidators<Def.TimelineOptions> = {
     end:        (v: string | Date | undefined): string | Date => v || 'auto',
     timezone:   (v: string | undefined): string => v || 'UTC',
     //type:       (v: string | undefined): FixedType => !v || typeof v !== 'string' || !/^(bar|point|mixed)$/i.test(v) ? 'mixed' : v.toLowerCase() as FixedType,
-    //scale:      (v: string | undefined): Scale => !v || typeof v !== 'string' || !/^(millennium|century|decade|lustrum|year|month|week|(week|)day|(quarter|half|)-?hour|minute|second|millisecond)$/i.test(v) ? 'day' : v.toLowerCase() as Scale,
     scale:      (v: Def.Scale | undefined): Def.Scale => !v || typeof v !== 'string' || !/^(year|month|week|(week|)day|hour|minute|second|millisecond)$/i.test(v) ? 'day' : v.toLowerCase() as Def.Scale,
     file:       (v: string | null | undefined): string | undefined => !v ? undefined : (typeof v === 'string' ? v : undefined),
     header:     (v: Def.LandmarkRole | undefined): Def.LandmarkRole => !v || typeof v !== 'object' ? { display: false } : validateTimelineOptions<Def.LandmarkRole>(v, validatorLandmarkRole) as Def.LandmarkRole,

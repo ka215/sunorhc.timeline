@@ -5,7 +5,7 @@
 // getEndDatetime,
 
 import { Scale, DateTimeObject } from '@/types/definitions'
-import { isEmptyObject, deepMergeObjects } from './common'
+//import { isEmptyObject, deepMergeObjects } from './common'
 
 /**
  * Gets Intl.DateTimeFormatOptions in the specified time zone.
@@ -30,8 +30,10 @@ export const getIntlDateTimeFormatOptions = (
         hour12: false,
         timeZone: timeZone
     }
-    if (!!overrideOptions && !isEmptyObject(overrideOptions)) {
-        return deepMergeObjects(defaultOptions, overrideOptions) as Intl.DateTimeFormatOptions
+    //if (!!overrideOptions && !isEmptyObject(overrideOptions)) {
+    if (!!overrideOptions && Object.keys(overrideOptions).length !== 0) {
+        //return deepMergeObjects(defaultOptions, overrideOptions) as Intl.DateTimeFormatOptions
+        return { ...defaultOptions, ...overrideOptions }
     } else {
         return defaultOptions
     }
@@ -45,30 +47,73 @@ export const getIntlDateTimeFormatOptions = (
  */
 export const getStartOfYearInTimeZone = (year: number, timeZone: string = 'UTC'): Date => {
     const options: Intl.DateTimeFormatOptions = getIntlDateTimeFormatOptions(timeZone)
-    const locale: string | undefined = undefined// or 'en-US'
-    const formatter = new Intl.DateTimeFormat(locale, options)
-    const startOfYearStr = `${year}-01-01T00:00:00${timeZone === 'UTC' ? '.000Z' : ''}`
+    //const locale: string | undefined = undefined// or 'en-US'
+    const formatter = new Intl.DateTimeFormat(undefined, options)
+    const startOfYearStr = `${year.toString().padStart(4, '0')}-01-01T00:00:00${timeZone === 'UTC' ? '.000Z' : ''}`
     const parts = formatter.formatToParts(new Date(startOfYearStr))
     const dateStr = parts.map(({ value }) => value).join('') + (timeZone === 'UTC' ? '.000Z' : '')
-    return new Date(dateStr)
+    let resultDate = new Date(dateStr)
+    if (year < 100) {
+        resultDate = new Date(timeZone === 'UTC' ? resultDate.setUTCFullYear(year) : resultDate.setFullYear(year))
+        //console.log('!!!:', year, startOfYearStr, new Date(startOfYearStr), parts, dateStr, resultDate)
+    }
+    return resultDate
 }
 
 /**
  * Calculate the number of weeks by calculating the number of days that have passed 
  * since the beginning of the year and dividing it by 7.
  * @param {Date} date
- * @param {string} timeZone
+ * @param {number | undefined} firstDayOfWeek - number of first day of week in calendar; In range from Sunday is 0 to Saturday is 6.
+ * @param {string | undefined} timeZone
  * @returns {number}
  */
-export const getWeekNumber = (date: Date, timeZone: string = 'UTC'): number => {
+export const getWeekNumber = (date: Date, firstDayOfWeek: number = 0/*, timeZone: string = 'UTC'*/): number => {
+    /* */
     // Calculate the day of the year in the given time zone
-    const timeZoneOffset = (date.getTime() - new Date(date.toLocaleString(undefined, { timeZone })).getTime())
-    const localDate = new Date(date.getTime() + timeZoneOffset)
+    /*
+    let timeZoneOffset: number
+    if (date.getFullYear() < 100) {
+        timeZoneOffset = timeZone === 'UTC' ? 0 : getTimeZoneOffset(date, timeZone)
+        //const test = new Date(date.getTime() + timeZoneOffset)
+        //console.log('!!:', date, timeZone, timeZoneOffset, test.getUTCFullYear(), test.getFullYear())
+    } else {
+        timeZoneOffset = timeZone === 'UTC' ? 0 : (date.getTime() - new Date(date.toLocaleString(undefined, { timeZone })).getTime())
+    }
+    */
+    //const timeZoneOffset = getTimeZoneOffset(date, timeZone)
+    //let utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()))
+    let utcDate = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0, 0))
+    if (date.getFullYear() < 100) {
+        utcDate = new Date(utcDate.setUTCFullYear(date.getFullYear()))
+    }
     // Get the start of the year in the given time zone
-    const startOfYear = getStartOfYearInTimeZone(timeZone === 'UTC' ? localDate.getUTCFullYear() : localDate.getFullYear(), timeZone)
-    const pastDaysOfYear = Math.floor((localDate.getTime() - startOfYear.getTime()) / (24 * 60 * 60 * 1000)) + 1
+    const startOfYear = getStartOfYearInTimeZone(utcDate.getUTCFullYear(), 'UTC')
+    //const startOfYear = getStartOfYearInTimeZone(timeZone === 'UTC' ? localDate.getUTCFullYear() : localDate.getFullYear(), timeZone)
+    const startDayOfWeek = startOfYear.getUTCDay()
+    //const startDayOfWeek = timeZone === 'UTC' ? startOfYear.getUTCDay() : startOfYear.getDay()
+    const pastDaysOfYear = Math.floor((utcDate.getTime() - startOfYear.getTime()) / (24 * 60 * 60 * 1000)) + 1
+
+    //const firstWeekDayOffset = (7 + (firstDayOfWeek - startDayOfWeek)) % 7
+    const firstWeekDayOffset = (7 + (startDayOfWeek - firstDayOfWeek)) % 7
+    const adjustedDayOfYear = pastDaysOfYear + firstWeekDayOffset
     // Calculate the week number
-    return Math.ceil(pastDaysOfYear / 7)
+    const weekNumber =  Math.ceil(adjustedDayOfYear / 7)
+    //console.log('getWeekNumber:', utcDate.toISOString(), startOfYear.toISOString(), startDayOfWeek, pastDaysOfYear, firstWeekDayOffset, adjustedDayOfYear, weekNumber)
+    /*
+    const timeZoneOffset = getTimeZoneOffset(date, timeZone)
+    const localDate = new Date(date.getTime() - timeZoneOffset)
+
+    const startOfYear = getStartOfYearInTimeZone(localDate.getFullYear(), timeZone)
+    const startDayOfWeek = startOfYear.getUTCDay()
+
+    const dayOfYear = Math.floor((localDate.getTime() - startOfYear.getTime()) / (24 * 60 * 60 * 1000)) + 1
+
+    const firstWeekDayOffset = (7 + (firstDayOfWeek - startDayOfWeek)) % 7
+    const adjustedDayOfYear = dayOfYear + firstWeekDayOffset
+    const weekNumber = Math.ceil(adjustedDayOfYear / 7)
+    */
+    return weekNumber
 }
 
 /**
@@ -90,10 +135,18 @@ export const isValidISOStrings = (dateString: string): boolean => {
  * @param {string | undefined} timeZone
  * @param {string[] | undefined} monthNames
  * @param {string[] | undefined} dayNames
+ * @param {number | undefined} firstDayOfWeek - number of first day of week in calendar; In range from Sunday is 0 to Saturday is 6.
  * @param {string | undefined} locale
  * @returns {DateTimeObject}
  */
-export const parseDateTime = (dateTime: string | number | Date, timeZone?: string, monthNames?: string[], dayNames?: string[], locale?: string): DateTimeObject | null => {
+export const parseDateTime = (
+    dateTime: string | number | Date, 
+    timeZone?: string, 
+    monthNames?: string[], 
+    dayNames?: string[], 
+    firstDayOfWeek: number = 0,
+    locale?: string
+): DateTimeObject | null => {
     // Based "dateObject" must be UTC datetime.
     let dateObject: Date
     let isGivenUTC: boolean = false
@@ -105,9 +158,14 @@ export const parseDateTime = (dateTime: string | number | Date, timeZone?: strin
             const matches = /^((?<_y>[+-]?\d{1,4})[-\/](?<_m>\d{1,2})[-\/](?<_d>\d{1,2})(?:[T\s](?<_h>\d{1,2}):(?<_mi>\d{1,2})(?::(?<_s>\d{1,2})(?:\.(?<_ms>\d{1,3}))?)?(?:(?<_utc>Z)|(?<_tzo>[+-]\d{1,2}:\d{1,2}))?)?)$/.exec(dateTime)
             if (matches?.groups && matches?.length > 0) {
                 isGivenUTC = !!matches.groups._utc
-                //if (isUTCString) {
-                dateObject = new Date(Date.UTC(Number(matches.groups._y), Number(matches.groups._m) - 1, Number(matches.groups._d), Number(matches.groups._h || 0), Number(matches.groups._mi || 0), Number(matches.groups._s || 0), Number(matches.groups._ms || 0)))
-                //console.log('parseDateTime::2-1:', matches.groups, isGivenUTC, dateObject)
+                //console.log('!!!:', dateTime, matches.groups, isGivenUTC, matches.groups._y.length)
+                if (matches.groups._y.length > 2) {
+                    dateObject = new Date(Date.UTC(Number(matches.groups._y), Number(matches.groups._m) - 1, Number(matches.groups._d), Number(matches.groups._h || 0), Number(matches.groups._mi || 0), Number(matches.groups._s || 0), Number(matches.groups._ms || 0)))
+                } else {
+                    dateObject = new Date(Date.UTC(100, Number(matches.groups._m) - 1, Number(matches.groups._d), Number(matches.groups._h || 0), Number(matches.groups._mi || 0), Number(matches.groups._s || 0), Number(matches.groups._ms || 0)))
+                    dateObject.setUTCFullYear(Number(matches.groups._y))
+                    //console.log('parseDateTime::2-1:', matches.groups, isGivenUTC, dateObject)
+                }
             }
         } else {
             // Other format of date strings. Treated as a datetime in local timezone.
@@ -125,6 +183,9 @@ export const parseDateTime = (dateTime: string | number | Date, timeZone?: strin
         // Treated as a datetime in local timezone, then convert to UTC.
         _localDate = dateTime
         dateObject = new Date(Date.UTC(_localDate.getUTCFullYear(), _localDate.getUTCMonth(), _localDate.getUTCDate(), _localDate.getUTCHours(), _localDate.getUTCMinutes(), _localDate.getUTCSeconds(), _localDate.getUTCMilliseconds()))
+        if (_localDate.getUTCFullYear() < 100) {
+            dateObject.setUTCFullYear(_localDate.getUTCFullYear())
+        }
         isGivenUTC = true
     } else {
         return null
@@ -146,9 +207,9 @@ export const parseDateTime = (dateTime: string | number | Date, timeZone?: strin
         dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
     }
 
-    const timeZoneOffset = getTimeZoneOffset(dateObject!, timeZone)
-    const offsetHours = Math.floor(timeZoneOffset / (60 * 60 * 1000))
-    const offsetMinutes = Math.floor((timeZoneOffset - (offsetHours * 60 * 60 * 1000)) / (60 * 1000))
+    const timeZoneOffset = getTimeZoneOffset(dateObject!, timeZone) || 0
+    const offsetHours = Math.floor(timeZoneOffset / (60 * 60 * 1000)) || 0
+    const offsetMinutes = Math.floor((timeZoneOffset - (offsetHours * 60 * 60 * 1000)) / (60 * 1000)) || 0
     const localDate = new Date(dateObject!.getTime() + (isGivenUTC ? timeZoneOffset : 0))
     //console.log('parseDateTime::3:', dateObject!, timeZone, timeZoneOffset, offsetHours, offsetMinutes, localDate)
 
@@ -163,7 +224,7 @@ export const parseDateTime = (dateTime: string | number | Date, timeZone?: strin
     const fixedHours = parseInt(hours, 10) - (isGivenUTC ? 0 : offsetHours)
     const fixedMinutes = parseInt(minutes, 10) - (isGivenUTC ? 0 : offsetMinutes)
     const monthname = monthNames[Number(month) - 1]
-    const weeks = getWeekNumber(dateObject!, timeZone)
+    const weeks = getWeekNumber(dateObject!, firstDayOfWeek)
     const weekday = timeZone === 'UTC' ? dayNames[dateObject!.getUTCDay()] : dayNames[dateObject!.getDay()]
     const milliseconds = timeZone === 'UTC' ? dateObject!.getUTCMilliseconds() : dateObject!.getMilliseconds()
     let ISOFormatString = dateObject!.toISOString()
@@ -223,9 +284,17 @@ export const parseDateTime = (dateTime: string | number | Date, timeZone?: strin
  * @returns {boolean}
  */
 export const isCurrentDate = (dateString: string, patternRegExp: RegExp | null = null, asUTC: boolean = true): boolean => {
-    const currentDate = new Date()
-    const currentDateValue = asUTC ? currentDate.valueOf() : currentDate.setHours(0, 0, 0, 0)
-    let year: number | string = 0, month: number | string = 0, day: number | string = 0
+    let currentDate = new Date() // local timezone datetime
+    currentDate = asUTC 
+        ? new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), currentDate.getUTCDate(), currentDate.getUTCHours(), currentDate.getUTCMinutes(), currentDate.getUTCSeconds(), 0))
+        : new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), currentDate.getHours(), currentDate.getMinutes(), currentDate.getSeconds(), 0)
+    const currentDateValue = currentDate.valueOf() // same `Date.getTime()` method
+    let year: number | string = 0
+    let month: number | string = 0
+    let day: number | string = 0
+    let hours: number | string = 0
+    let minutes: number | string = 0
+    let seconds: number | string = 0
     
     try {
         if (!patternRegExp) {
@@ -233,9 +302,12 @@ export const isCurrentDate = (dateString: string, patternRegExp: RegExp | null =
             if (isNaN(dateObject.getTime())) {
                 throw new Error('Invalid date')
             }
-            year = dateObject.getFullYear()
-            month = dateObject.getMonth() + 1
-            day = dateObject.getDate()
+            year    = asUTC ? dateObject.getUTCFullYear() : dateObject.getFullYear()
+            month   = asUTC ? dateObject.getUTCMonth() + 1 : dateObject.getMonth() + 1
+            day     = asUTC ? dateObject.getUTCDate() : dateObject.getDate()
+            hours   = asUTC ? dateObject.getUTCHours() : dateObject.getHours()
+            minutes = asUTC ? dateObject.getUTCMinutes() : dateObject.getMinutes()
+            seconds = asUTC ? dateObject.getUTCSeconds() : dateObject.getSeconds()
         } else {
             const flags = patternRegExp.flags || ''
             const globalPatternRegExp = new RegExp(patternRegExp.source, flags.includes('g') ? flags : flags + 'g')
@@ -243,21 +315,26 @@ export const isCurrentDate = (dateString: string, patternRegExp: RegExp | null =
             if (!matches || !matches[0].groups) {
                 throw new Error('Pattern unmatched')
             }
-            ({ year, month, day } = matches[0].groups)
-            year = year ? parseInt(year, 10) : (asUTC ? currentDate.getUTCFullYear() : currentDate.getFullYear())
-            month = parseInt(month, 10)
-            day = parseInt(day, 10)
+            ({ year, month, day, hours, minutes, seconds } = matches[0].groups)
+            year    = !!year ? parseInt(year, 10) : (asUTC ? currentDate.getUTCFullYear() : currentDate.getFullYear())
+            month   = !!month ? parseInt(month, 10) : (asUTC ? currentDate.getUTCMonth() + 1 : currentDate.getMonth() + 1)
+            day     = !!day ? parseInt(day, 10) : (asUTC ? currentDate.getUTCDate() : currentDate.getDate())
+            hours   = !!hours ? parseInt(hours, 10) : (asUTC ? currentDate.getUTCHours() : currentDate.getHours())
+            minutes = !!minutes ? parseInt(minutes, 10) : (asUTC ? currentDate.getUTCMinutes() : currentDate.getMinutes())
+            seconds = !!seconds ? parseInt(seconds, 10) : (asUTC ? currentDate.getUTCSeconds() : currentDate.getSeconds())
         }
 
-        //console.log(dateString, patternRegExp, year, month, day)
-        if (isNaN(year) || isNaN(month) || isNaN(day)) {
+        //console.log('!!:', dateString, patternRegExp, asUTC ? 'UTC' : 'local', year, month, day, hours, minutes, seconds)
+        if (isNaN(year) || isNaN(month) || isNaN(day) || isNaN(hours) || isNaN(minutes) || isNaN(seconds)) {
             throw new Error('Invalid date components')
         }
 
-        const targetDate = new Date(year, month - 1, day)
-        const targetDateValue = asUTC ? Date.UTC(year, month - 1, day) : targetDate.setHours(0, 0, 0, 0)
+        const targetDate = asUTC 
+            ? new Date(Date.UTC(year, month - 1, day, hours, minutes, seconds, 0)) 
+            : new Date(year, month - 1, day, hours, minutes, seconds, 0)
+        const targetDateValue = targetDate.valueOf()
         
-        //console.log(targetDate, targetDateValue, currentDateValue === targetDateValue)
+        //console.log('!!!:', currentDate, targetDate, currentDateValue, targetDateValue, currentDateValue === targetDateValue)
         return currentDateValue === targetDateValue
     } catch (error: unknown) {
         console.error('Failed to parse date in isCurrentDate():', error instanceof Error ? error.message : error)
@@ -288,7 +365,7 @@ export const getTimeZoneOffset = (date: Date, timeZone: string): number => {
         throw new Error(`Invalid time zone specified: ${timeZone}`)
     }
   
-    const localTimeString = `${yearPart.value}-${monthPart.value}-${dayPart.value}T${hourPart.value}:${minutePart.value}:${secondPart.value}`
+    const localTimeString = `${yearPart.value.padStart(4, '0')}-${monthPart.value}-${dayPart.value}T${hourPart.value}:${minutePart.value}:${secondPart.value}`
     const utcTimeString = date.toISOString().substring(0, 19)
   
     const localTime = Date.parse(`${localTimeString}Z`)
@@ -354,11 +431,12 @@ export const addTime = (baseTimestamp: number, amount: number, unit: TimeUnit | 
   const baseDate = new Date(baseTimestamp)
 
   // Calculate time zone offset.
-  const timeZoneOffset = getTimeZoneOffset(baseDate, timeZone)
+  const timeZoneOffset = getTimeZoneOffset(baseDate, timeZone) || 0
 
   // Local time with time zone offset applied.
   const localBaseDate = new Date(baseDate.getTime() - timeZoneOffset)
 
+  //console.log('addTime!!!:', baseTimestamp, amount, unit, timeZone, baseDate.toISOString(), timeZoneOffset, localBaseDate)
   // Add increase amount.
   const filteredUnit = (!/.+s$/.test(unit) ? unit + 's' : unit) as TimeUnit
   const updatedLocalDate = addToDate(localBaseDate, amount, filteredUnit)

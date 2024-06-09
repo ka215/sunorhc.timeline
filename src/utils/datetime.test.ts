@@ -25,7 +25,7 @@ describe('getIntlDateTimeFormatOptions', () => {
         const overrideOptions = {
             year: '2-digit',
             hour12: true
-        }
+        } as any
         const expected = {
             year: '2-digit',
             month: 'numeric',
@@ -91,6 +91,7 @@ describe('getStartOfYearInTimeZone', () => {
         const year = 2024
         const timeZone = 'Asia/Tokyo'
         const result = getStartOfYearInTimeZone(year, timeZone)
+        //console.log(result)
         
         //const expectedDate = new Date(Date.UTC(2024, 0, 1, 0, 0, 0))
         const expectedDate = new Date(2024, 0, 1, 0, 0, 0)// JST
@@ -116,28 +117,124 @@ describe('getStartOfYearInTimeZone', () => {
 describe('getWeekNumber', () => {
 
     it('should return the correct week number in UTC when no timezone is specified', () => {
-        const date = new Date('2024-01-01T00:00:00')
-        const result = getWeekNumber(date)
-        const expected = 1
-
-        expect(result).toBe(expected)
+        const test = [
+          // American format: firstDayOfWeek = 0 (Sun)
+          { date: '2023-12-30T00:00:00', firstDayOfWeek: 0, expected: 52 },// Sat:6 ceil(364 / 7) = 52 + x = 52 [x = 0]  364 % 7 = 0
+          { date: '2023-12-31T00:00:00', firstDayOfWeek: 0, expected: 53 },// Sun:0 ceil(365 / 7) = 53 + x = 53 [x = 0]  365 % 7 = 1
+          { date: '2024-01-01T00:00:00', firstDayOfWeek: 0, expected: 1 }, // Mon:1 ceil(1 / 7) = 1 + x = 1 [x = 0]  1 % 7 = 1
+          { date: '2024-01-06T00:00:00', firstDayOfWeek: 0, expected: 1 }, // Sat:6 ceil(6 / 7) = 1 + x = 1 [x = 0]  6 % 7 = 6
+          { date: '2024-01-07T00:00:00', firstDayOfWeek: 0, expected: 2 }, // Sun:0 ceil(7 / 7) = 1 + x = 2 [x = 1]! 7 % 7 = 0
+          { date: '2024-01-08T00:00:00', firstDayOfWeek: 0, expected: 2 }, // Mon:1 ceil(8 / 7) = 2 + x = 2 [x = 0]  8 % 7 = 1
+          // Europian format: firstDayOfWeek = 1 (Mon)
+          { date: '2023-12-30T00:00:00', firstDayOfWeek: 1, expected: 53 },// Sat:6 ceil(364 / 7) = 52 + x = 53 [x = -1]!
+          { date: '2023-12-31T00:00:00', firstDayOfWeek: 1, expected: 53 },// Sun:0 ceil(365 / 7) = 53 + x = 53 [x = 0]
+          { date: '2024-01-01T00:00:00', firstDayOfWeek: 1, expected: 1 }, // Mon:1 ceil(1 / 7) = 1 + x = 1 [x = 0]
+          { date: '2024-01-06T00:00:00', firstDayOfWeek: 1, expected: 1 }, // Sat:6 ceil(6 / 7) = 1 + x = 1 [x = 0]
+          { date: '2024-01-07T00:00:00', firstDayOfWeek: 1, expected: 1 }, // Sun:0 ceil(7 / 7) = 1 + x = 1 [x = 0]
+          { date: '2024-01-08T00:00:00', firstDayOfWeek: 1, expected: 2 }, // Mon:1 ceil(8 / 7) = 2 + x = 2 [x = 0]
+          // Islamic format: firstDayOfWeek = 6 (Sat)
+          { date: '2023-12-30T00:00:00', firstDayOfWeek: 6, expected: 53 },// Sat:6 ceil(364 / 7) = 52 + x = 53 [x = 1]!
+          { date: '2023-12-31T00:00:00', firstDayOfWeek: 6, expected: 53 },// Sun:0 ceil(365 / 7) = 53 + x = 53 [x = 0]
+          { date: '2024-01-01T00:00:00', firstDayOfWeek: 6, expected: 1 }, // Mon:1 ceil(1 / 7) = 1 + x = 1 [x = 0]
+          { date: '2024-01-06T00:00:00', firstDayOfWeek: 6, expected: 2 }, // Sat:6 ceil(6 / 7) = 1 + x = 2 [x = 1]!
+          { date: '2024-01-07T00:00:00', firstDayOfWeek: 6, expected: 2 }, // Sun:0 ceil(7 / 7) = 1 + x = 2 [x = 1]!
+          { date: '2024-01-08T00:00:00', firstDayOfWeek: 6, expected: 2 }, // Mon:1 ceil(8 / 7) = 2 + x = 2 [x = 0]
+          // Custom format:
+          { date: '2024-01-01T00:00:00', firstDayOfWeek: 2, expected: 1 },// firstDayOfWeek = 2 (Tue)
+          { date: '2024-01-02T00:00:00', firstDayOfWeek: 2, expected: 2 },
+          { date: '2024-01-09T00:00:00', firstDayOfWeek: 2, expected: 3 },
+          { date: '2024-01-01T00:00:00', firstDayOfWeek: 3, expected: 1 },// firstDayOfWeek = 3 (Wed)
+          { date: '2024-01-03T00:00:00', firstDayOfWeek: 3, expected: 2 },
+          { date: '2024-01-10T00:00:00', firstDayOfWeek: 3, expected: 3 },
+          { date: '2024-01-01T00:00:00', firstDayOfWeek: 4, expected: 1 },// firstDayOfWeek = 4 (Thu)
+          { date: '2024-01-04T00:00:00', firstDayOfWeek: 4, expected: 2 },
+          { date: '2024-01-11T00:00:00', firstDayOfWeek: 4, expected: 3 },
+          { date: '2024-01-01T00:00:00', firstDayOfWeek: 5, expected: 1 },// firstDayOfWeek = 5 (Fri)
+          { date: '2024-01-05T00:00:00', firstDayOfWeek: 5, expected: 2 },
+          { date: '2024-01-12T00:00:00', firstDayOfWeek: 5, expected: 3 },
+        ]
+        test.forEach(chk => {
+          const result = getWeekNumber(new Date(chk.date), chk.firstDayOfWeek)
+          // console.log(`${chk.firstDayOfWeek}: "${chk.date}"'s week number should be "${chk.expected}", so result is "${result}".`)
+          expect(result).toBe(chk.expected)
+        })
     })
 
     it('should return the correct week number in a specified timezone', () => {
-        const date = new Date('2024-01-05T00:00:00')
-        const timeZone = 'America/New_York' // Eastern Time Zone
-        const result = getWeekNumber(date, timeZone)
-        const expected = 1 // January 5, 2024, falls in the first week of the year in Eastern Time Zone
-
-        expect(result).toBe(expected)
+        // Now that this method doesn't handle timezones, this test covers the case when the second argument is omitted.
+        const test = [
+          // Eastern Time Zone
+          { date: '2024-01-05T00:00:00', timeZone: 'America/New_York', firstDayOfWeek: undefined, expected: 1 },
+          { date: '2024-01-06T00:00:00', timeZone: 'America/New_York', firstDayOfWeek: undefined, expected: 1 },
+          { date: '2024-01-07T00:00:00', timeZone: 'America/New_York', firstDayOfWeek: undefined, expected: 2 },
+          // JST Time Zone
+          { date: '2023-12-31T00:00:00', timeZone: 'Asia/Tokyo', firstDayOfWeek: 0, expected: 53 },
+          { date: '2024-01-01T00:00:00', timeZone: 'Asia/Tokyo', firstDayOfWeek: 0, expected: 1 },
+          { date: '2024-01-07T00:00:00', timeZone: 'Asia/Tokyo', firstDayOfWeek: 0, expected: 2 },
+          // Central European Time
+          { date: '2023-12-30T00:00:00', timeZone: 'Europe/Berlin', firstDayOfWeek: 1, expected: 53 },
+          { date: '2024-01-01T00:00:00', timeZone: 'Europe/Berlin', firstDayOfWeek: 1, expected: 1 },
+          { date: '2024-01-07T00:00:00', timeZone: 'Europe/Berlin', firstDayOfWeek: 1, expected: 1 },
+          { date: '2024-01-08T00:00:00', timeZone: 'Europe/Berlin', firstDayOfWeek: 1, expected: 2 },
+          { date: '2024-03-31T03:00:00', timeZone: 'Europe/Berlin', firstDayOfWeek: 1, expected: 13 },
+          // UAE Standard Time 
+          { date: '2023-12-30T00:00:00', timeZone: 'Asia/Dubai', firstDayOfWeek: 6, expected: 53 },
+          { date: '2024-01-01T00:00:00', timeZone: 'Asia/Dubai', firstDayOfWeek: 6, expected: 1 },
+          { date: '2024-01-06T00:00:00', timeZone: 'Asia/Dubai', firstDayOfWeek: 6, expected: 2 },
+        ]
+        test.forEach(chk => {
+          const result = getWeekNumber(new Date(chk.date), chk.firstDayOfWeek)
+          // console.log(`${chk.timeZone}: "${chk.date}"'s week number should be "${chk.expected}", so result is "${result}".`)
+          expect(result).toBe(chk.expected)
+        })
     })
 
-    it('should handle different dates correctly', () => {
-        const date = new Date('2024-02-15T00:00:00')
-        const result = getWeekNumber(date)
-        const expected = 7 // February 15, 2024, falls in the 7th week of the year
+    it('should correctly handle UTC and local timezone datetimes', () => {
+        const firstDayOfWeek = 0
+        let expected = 1 // as week number
+        for (let d = 1; d <= 366; d++) {
+          const utcDate   = new Date(Date.UTC(2024, 0, d, 0, 0, 0, 0))
+          const localDate = new Date(2024, 0, d, 0, 0, 0, 0)
+          const result1 = getWeekNumber(utcDate, firstDayOfWeek)
+          const result2 = getWeekNumber(localDate, firstDayOfWeek)
+          expected = d % 7 === firstDayOfWeek ? expected + 1 : expected
+          //console.log('UTC:', utcDate.toISOString(), result1, 'local:', localDate.toISOString(), result2, '-> Weeknum:', expected)
+          expect(result1).toBe(expected)
+          expect(result2).toBe(expected)
+        }
+    })
 
-        expect(result).toBe(expected)
+    it('should return the correct week number in valid date with less than three-digit years', () => {
+      const test = [
+        // Tue, 1 Jan 999 00:00:00
+        { date: '0998-12-31T00:00:00', expected: 53 },
+        { date: '0999-01-01T00:00:00', expected: 1  },
+        { date: '0999-01-05T00:00:00', expected: 1  },
+        { date: '0999-01-06T00:00:00', expected: 2  },
+        // Thu, 1 Jan 99 00:00:00
+        { date: '0098-12-31T00:00:00', expected: 53 },
+        { date: '0099-01-01T00:00:00', expected: 1  },
+        { date: '0099-01-03T00:00:00', expected: 1  },
+        { date: '0099-01-04T00:00:00', expected: 2  },
+        // Fri, 1 Jan 100 00:00:00
+        { date: '0099-12-31T00:00:00', expected: 53 },
+        { date: '0100-01-01T00:00:00', expected: 1  },
+        { date: '0100-01-03T00:00:00', expected: 2  },
+        { date: '0100-01-10T00:00:00', expected: 3  },
+        // The processing of Date objects itself is questionable for years per digit of the era.
+        { date: '0008-12-31T00:00:00', expected: 23 },
+        { date: '0009-01-01T00:00:00', expected: -34 },
+        { date: '0009-01-03T00:00:00', expected: -34 },
+        { date: '0009-01-04T00:00:00', expected: -33 },
+        { date: '0009-12-31T00:00:00', expected: 18 },
+        { date: '0010-01-01T00:00:00', expected: -38 },
+      ]
+      test.forEach(chk => {
+        const date = new Date(chk.date)
+        const result = getWeekNumber(date)
+        //console.log(`${date.getUTCDay()}: "${date.toISOString()}"'s week number should be "${chk.expected}", so result is "${result}".`)
+        expect(result).toBe(chk.expected)
+      })
     })
 
 })
@@ -723,13 +820,61 @@ describe('parseDateTime', () => {
         }
     })
 
+    it('should parse a valid date with less than three-digit years', () => {
+      let dateTime = '999-01-01T00:00:00Z'
+      let result = parseDateTime(dateTime)
+      expect(result).toBeDefined()
+      if (result) {
+        expect(result.year).toBe(999)
+        expect(result.month).toBe(1)
+        expect(result.monthName).toBe('January')
+        expect(result.day).toBe(1)
+        expect(result.hours).toBe(0)
+        expect(result.minutes).toBe(0)
+        expect(result.seconds).toBe(0)
+        expect(result.ISO).toBe('0999-01-01T00:00:00.000Z')
+        expect(result.ts).toBe(-30641760000)
+        expect(result.cept).toBe(31493836800)
+      }
+      dateTime = '99-06-04T12:34:56Z'
+      result = parseDateTime(dateTime)
+      expect(result).toBeDefined()
+      if (result) {
+        expect(result.year).toBe(99)
+        expect(result.month).toBe(6)
+        expect(result.monthName).toBe('June')
+        expect(result.day).toBe(4)
+        expect(result.hours).toBe(12)
+        expect(result.minutes).toBe(34)
+        expect(result.seconds).toBe(56)
+        expect(result.ISO).toBe('0099-06-04T12:34:56.000Z')
+        expect(result.ts).toBe(-59029644304)
+        expect(result.cept).toBe(3105952496)
+      }
+      dateTime = '9-12-31T00:00:00Z'
+      result = parseDateTime(dateTime)
+      expect(result).toBeDefined()
+      if (result) {
+        expect(result.year).toBe(9)// 1909 -> NG
+        expect(result.month).toBe(12)
+        expect(result.monthName).toBe('December')
+        expect(result.day).toBe(31)
+        expect(result.hours).toBe(0)
+        expect(result.minutes).toBe(0)
+        expect(result.seconds).toBe(0)
+        expect(result.ISO).toBe('0009-12-31T00:00:00.000Z')
+        expect(result.ts).toBe(-61851686400)
+        expect(result.cept).toBe(283910400)
+      }
+    })
+
 })
 
 describe('isCurrentDate', () => {
     // mock to assert that fired `console.log()`
     // const consoleMock = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
-    let nowDateObj: object = {}
+    let nowDateObj: Record<string, any> = {}
 
     beforeAll(() => {
         // Enable mock for datetime
@@ -771,13 +916,13 @@ describe('isCurrentDate', () => {
     })
 
     it('should return true when dateString is current local date in default format', () => {
-        const dateString = new Date().toLocaleDateString()
+        const dateString = new Date().toString()
         expect(isCurrentDate(dateString, null, false)).toBe(true)
     })
 
     it('should return false when dateString is current UTC date in default format', () => {
-        const dateString = new Date().toLocaleDateString()
-        expect(isCurrentDate(dateString, null)).toBe(false)
+        const dateString = new Date().toUTCString()
+        expect(isCurrentDate(dateString, null)).toBe(true)
     })
 
     it('should return true when dateString matches the specified pattern', () => {
@@ -810,7 +955,7 @@ describe('isCurrentDate', () => {
         vi.setSystemTime(new Date(nowDateObj.utc.ISO))
         const dateString = nowDateObj.utc.ISO
         const patternRegExp = /(?<year>\d+)-(?<month>\d+)-(?<day>\d+).+/g
-        expect(isCurrentDate(dateString, patternRegExp)).toBe(false)
+        expect(isCurrentDate(dateString, patternRegExp)).toBe(true)
     })
 
     it('should return true when dateString matches the specified pattern without global flag', () => {

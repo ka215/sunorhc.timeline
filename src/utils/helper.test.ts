@@ -10,8 +10,8 @@ describe('getBaseRowCoordinate', () => {
         minScaleWidth: 100,
         maxRows: 10,
         rowHeight: 50,
-        startDate: {},
-        endDate: {}
+        startDate: {} as Def.DateTimeObject,
+        endDate: {} as Def.DateTimeObject
     }
 
     const timelineOptions: Def.TimelineOptions = {
@@ -169,8 +169,8 @@ describe('getNodeHeight', () => {
         startDate: {} as Def.DateTimeObject,
         endDate: {} as Def.DateTimeObject,
     }
-    // minHeight = Math.min(50, 50) / 10 = 5
-    // maxHeight = 50 - 2 = 48
+    // minHeight = Math.min(range.minScaleWidth, range.rowHeight) / 10 = Math.min(50, 50) / 10 = 5
+    // maxHeight = range.rowHeight - 2 = 50 - 2 = 48
 
     afterEach(() => {
         range.minScaleWidth = 50
@@ -178,52 +178,78 @@ describe('getNodeHeight', () => {
     })
 
     it('should return correct height for size "xs"', () => {
-        expect(getNodeHeight('xs', range)).toBe(16) // Math.max(16, Math.floor(5 * 2.667) = 13) = 16
+        // xs: Math.min(8, Math.floor(minHeight * 1.3335))
+        expect(getNodeHeight('xs', range)).toBe(6) // Math.min(8, Math.floor(5 * 1.3335) = 6) = 6
         range.minScaleWidth = 100
         range.rowHeight = 100
-        expect(getNodeHeight('xs', range)).toBe(26) // Math.max(16, Math.floor(10 * 2.667) = 26) = 26
+        expect(getNodeHeight('xs', range)).toBe(8) // Math.min(8, Math.floor(10 * 1.3335) = 13) = 8
     })
 
     it('should return correct height for size "sm"', () => {
-        expect(getNodeHeight('sm', range)).toBe(22) // Math.max(22, Math.floor(5 * 3.667) = 18) = 22
+        // sm: Math.min(12, Math.floor(minHeight * 1.8335))
+        expect(getNodeHeight('sm', range)).toBe(9) // Math.min(12, Math.floor(5 * 1.8335) = 9) = 9
         range.minScaleWidth = 80
         range.rowHeight = 80
-        expect(getNodeHeight('sm', range)).toBe(29) // Math.max(22, Math.floor(8 * 3.667) = 29) = 29
+        expect(getNodeHeight('sm', range)).toBe(12) // Math.min(12, Math.floor(8 * 1.8335) = 14) = 12
     })
 
     it('should return correct height for size "md"', () => {
-        expect(getNodeHeight('md', range)).toBe(36) // Math.max(36, Math.floor(5 * 6) = 30) = 36
+        // md: Math.min(16, Math.floor(minHeight * 2.3428))
+        expect(getNodeHeight('md', range)).toBe(11) // Math.min(16, Math.floor(5 * 2.3428) = 11) = 11
         range.minScaleWidth = 80
         range.rowHeight = 100
-        expect(getNodeHeight('md', range)).toBe(48) // Math.max(36, Math.floor(8 * 6) = 48) = 48
+        expect(getNodeHeight('md', range)).toBe(16) // Math.min(16, Math.floor(8 * 2.3428) = 18) = 16
     })
 
     it('should return correct height for size "lg"', () => {
-        expect(getNodeHeight('lg', range)).toBe(48) // Math.max(48, Math.floor(50 * 0.6) = 30) = 48
+        // lg: Math.max(24, Math.floor(minHeight * 3.1628))
+        expect(getNodeHeight('lg', range)).toBe(24) // Math.max(24, Math.floor(5 * 3.1628) = 15) = 24
         range.minScaleWidth = 96
         range.rowHeight = 96
-        expect(getNodeHeight('lg', range)).toBe(57) // Math.max(48, Math.floor(50 * 0.6) = 57) = 57
+        expect(getNodeHeight('lg', range)).toBe(30) // Math.max(24, Math.floor(9.6 * 3.1628) = 30) = 30
     })
 
     it('should return correct height for size "xl"', () => {
-        expect(getNodeHeight('xl', range)).toBe(36) // Math.min(72, Math.floor(50 * 0.72) = 36, 48) = 36
+        // xl: Math.max(36, Math.floor(minHeight * 4.8989))
+        expect(getNodeHeight('xl', range)).toBe(36) // Math.max(36, Math.floor(5 * 4.8989) = 24) = 36
+        range.minScaleWidth = 80
+        range.rowHeight = 100
+        expect(getNodeHeight('xl', range)).toBe(39) // Math.max(36, Math.floor(8 * 4.8989) = 39) = 39
+        range.minScaleWidth = 96
+        range.rowHeight = 96
+        expect(getNodeHeight('xl', range)).toBe(47) // Math.max(36, Math.floor(9.6 * 4.8989) = 47) = 47
         range.minScaleWidth = 120
         range.rowHeight = 120
-        expect(getNodeHeight('xl', range)).toBe(72) // Math.min(72, Math.floor(120 * 0.72) = 86, 118) = 72
+        expect(getNodeHeight('xl', range)).toBe(58) // Math.max(36, Math.floor(12 * 4.8989) = 58) = 58
     })
 
     it('should return correct height for numeric size', () => {
-        expect(getNodeHeight(0, range)).toBe(0)
+        expect(getNodeHeight(0, range)).toBe(11) // the 0 handle as "md" 
         expect(getNodeHeight(1, range)).toBe(1)
+        expect(getNodeHeight(2e1, range)).toBe(20)
         expect(getNodeHeight(40, range)).toBe(40)
         expect(getNodeHeight(50, range)).toBe(48) // maxHeight = 48
+        range.minScaleWidth = 100
+        range.rowHeight = 100
+        expect(getNodeHeight(0, range)).toBe(16) // the 0 handle as "md" 
+        expect(getNodeHeight(50, range)).toBe(50) // maxHeight = 98
+    })
+
+    it('should return correct height for handling with positive decimals less than 1 as percentages', () => {
+        expect(getNodeHeight(0.333, range)).toBe(15) // maxHeight * 0.333 = 48 * 0.333 = 15 
+        expect(getNodeHeight(0.5, range)).toBe(24) // maxHeight * 0.5 = 48 * 0.5 = 24  
+        expect(getNodeHeight(.666, range)).toBe(31) // maxHeight * 0.666 = 48 * 0.666 = 31 
+        expect(getNodeHeight(0.98e-1, range)).toBe(4) // maxHeight * 0.098 = 48 * 0.666 = 4 
+        range.minScaleWidth = 100
+        range.rowHeight = 100
+        expect(getNodeHeight(0.5, range)).toBe(49) // maxHeight * 0.5 = 98 * 0.5 = 49  
     })
 
     it('should return default height for negative numeric size', () => {
-        expect(getNodeHeight(-1, range)).toBe(36) // Math.max(36, 50 / 10 * 6 = 30) = 36
+        expect(getNodeHeight(-1, range)).toBe(11) // negative number handle as "md"
         range.minScaleWidth = 100
         range.rowHeight = 100
-        expect(getNodeHeight(-1, range)).toBe(60) // Math.max(36, 100 / 10 * 6 = 60) = 60
+        expect(getNodeHeight(-1, range)).toBe(16) // Math.min(16, Math.floor(10 * 2.3428) = 23) = 16
     })
 
     it('should return maxHeight if numeric size is greater than maxHeight', () => {
@@ -235,14 +261,14 @@ describe('getNodeHeight', () => {
     })
 
     it('should return default height for invalid size', () => {
-        expect(getNodeHeight('invalid' as any, range)).toBe(36) // Math.max(36, 50 / 10 * 6 = 30) = 36
+        expect(getNodeHeight('invalid' as any, range)).toBe(11) // invalid size handle as "md"
         range.minScaleWidth = 100
         range.rowHeight = 100
-        expect(getNodeHeight('invalid' as any, range)).toBe(60) // Math.max(36, 100 / 10 * 6 = 60) = 60
+        expect(getNodeHeight('invalid' as any, range)).toBe(16) // Math.min(16, Math.floor(10 * 2.3428) = 23) = 16
     })
 
     it('should return correct height for default size when size is omitted', () => {
-        expect(getNodeHeight(undefined, range)).toBe(36) // The default value "md" is used.
+        expect(getNodeHeight(undefined, range)).toBe(11) // The default value "md" is used.
     })
 
 })

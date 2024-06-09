@@ -7,7 +7,7 @@
 
 import { Scale, LandmarkRole, SidebarRole, EventNode, Particles, Measures, RulerOptions, EventChecker } from '@/types/definitions'
 import { isEmptyObject, isURLOrPath, sprintf } from './common'
-import { addTime, parseDateTime } from './datetime'
+import { addTime, parseDateTime, isCurrentDate } from './datetime'
 import { setAtts, setStyles, setContent, getRect } from './dom'
 // For debug when development.
 import { devLogger } from './logger'
@@ -403,24 +403,27 @@ export const createRulerItems = (rulerOptions: RulerOptions): HTMLUListElement =
         const weekdays: string[] = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']// sun = 0
         //const particleKey = ensureEndsWithS(rulerOptions.scale)
         //const particle = rulerOptions.particles[particleKey]
-        let colspan: number = 0,
-            listItems: { [key: string]: any } = {},
-            key: string | undefined = undefined,
-            content: string | undefined = undefined
+        let colspan: number = 0
+        let listItems: { [key: string]: any } = {}
+        let key: string | undefined = undefined
+        let content: string | undefined = undefined
 
         for (let i = 0; i < rulerOptions.maxCols; i++) {
             const decorations = !!rulerOptions.filters ? rulerOptions.filters.decorations! : undefined 
             const monthNames = !!rulerOptions.filters ? rulerOptions.filters.monthNames! : undefined
             const dayNames = !!rulerOptions.filters ? rulerOptions.filters.dayNames! : undefined
-            const calcDate = addTime(rulerOptions.startDate.ts * 1000, i, rulerOptions.globalScale, rulerOptions.timezone)
-            const rulerItemDate = parseDateTime(new Date(calcDate), rulerOptions.timezone, monthNames, dayNames)
+            const calcDate = addTime(rulerOptions.startDate.ts * 1000 + rulerOptions.startDate.milliseconds, i, rulerOptions.globalScale, rulerOptions.timezone)
+            // The internal processing of ruler generation is done in UTC time.
+            const rulerItemDate = parseDateTime(new Date(calcDate), /*'UTC'*/rulerOptions.timezone, monthNames, dayNames, rulerOptions.firstDayOfWeek)
             colspan++
+            let isPresentTime: boolean = false
             let validScale = rulerOptions.scale.toLowerCase()
             validScale = (validScale.endsWith('s') ? validScale.slice(0, -1) : validScale) as Scale
             switch(validScale) {
                 case 'year':
-                    key = rulerItemDate?.y(4)
+                    key = rulerItemDate?.y(1)
                     content = rulerItemDate?.y(1)
+                    isPresentTime = isCurrentDate(rulerItemDate?.ISO as string, /^(?<year>\d+)-.*$/, rulerOptions.timezone === 'UTC')
                     break
                 case 'month':
                     key = `${rulerItemDate?.y(4)}-${rulerItemDate?.m(2)}`
@@ -429,6 +432,7 @@ export const createRulerItems = (rulerOptions: RulerOptions): HTMLUListElement =
                     } else {
                         content = rulerItemDate?.m(1)
                     }
+                    isPresentTime = isCurrentDate(rulerItemDate?.ISO as string, /^(?<year>\d+)-(?<month>\d+)-.*$/, rulerOptions.timezone === 'UTC')
                     break
                 case 'week':
                     key = `${rulerItemDate?.y(4)}-${rulerItemDate?.w(2)}`
@@ -438,6 +442,7 @@ export const createRulerItems = (rulerOptions: RulerOptions): HTMLUListElement =
                     key = `${rulerItemDate?.y(4)}-${rulerItemDate?.m(2)}-${rulerItemDate?.d(2)}`//,${rulerItemDate?.wd(3).toLowerCase()}`
                     key = `${key},${weekdays[new Date(key).getUTCDay()]}`
                     content = rulerItemDate?.d(1)
+                    isPresentTime = isCurrentDate(rulerItemDate?.ISO as string, /^(?<year>\d+)-(?<month>\d+)-(?<day>\d+)T.*$/, rulerOptions.timezone === 'UTC')
                     break
                 case 'weekday':
                     key = `${rulerItemDate?.y(4)}-${rulerItemDate?.m(2)}-${rulerItemDate?.d(2)}`//,${rulerItemDate?.wd(3).toLowerCase()}`
@@ -447,18 +452,22 @@ export const createRulerItems = (rulerOptions: RulerOptions): HTMLUListElement =
                     } else {
                         content = rulerItemDate?.wd()
                     }
+                    isPresentTime = isCurrentDate(rulerItemDate?.ISO as string, /^(?<year>\d+)-(?<month>\d+)-(?<day>\d+)T.*$/, rulerOptions.timezone === 'UTC')
                     break
                 case 'hour':
                     key = `${rulerItemDate?.y(4)}-${rulerItemDate?.m(2)}-${rulerItemDate?.d(2)}T${rulerItemDate?.h(2)}`
                     content = rulerItemDate?.h(1)
+                    isPresentTime = isCurrentDate(rulerItemDate?.ISO as string, /^(?<year>\d+)-(?<month>\d+)-(?<day>\d+)T(?<hours>\d+):.*$/, rulerOptions.timezone === 'UTC')
                     break
                 case 'minute':
                     key = `${rulerItemDate?.y(4)}-${rulerItemDate?.m(2)}-${rulerItemDate?.d(2)}T${rulerItemDate?.h(2)}:${rulerItemDate?.mi(2)}`
                     content = rulerItemDate?.mi(1)
+                    isPresentTime = isCurrentDate(rulerItemDate?.ISO as string, /^(?<year>\d+)-(?<month>\d+)-(?<day>\d+)T(?<hours>\d+):(?<minutes>\d+):.*$/, rulerOptions.timezone === 'UTC')
                     break
                 case 'second':
                     key = `${rulerItemDate?.y(4)}-${rulerItemDate?.m(2)}-${rulerItemDate?.d(2)}T${rulerItemDate?.h(2)}:${rulerItemDate?.mi(2)}:${rulerItemDate?.s(2)}`
                     content = rulerItemDate?.s(1)
+                    isPresentTime = isCurrentDate(rulerItemDate?.ISO as string, /^(?<year>\d+)-(?<month>\d+)-(?<day>\d+)T(?<hours>\d+):(?<minutes>\d+):(?<seconds>\d+).*$/, rulerOptions.timezone === 'UTC')
                     break
                 case 'millisecond':
                     key = `${rulerItemDate?.y(4)}-${rulerItemDate?.m(2)}-${rulerItemDate?.d(2)}T${rulerItemDate?.h(2)}:${rulerItemDate?.mi(2)}:${rulerItemDate?.s(2)}.${rulerItemDate?.ms(3)}`
@@ -476,7 +485,7 @@ export const createRulerItems = (rulerOptions: RulerOptions): HTMLUListElement =
                     listItems[key].colspan = colspan
                 } else {
                     colspan = 1
-                    listItems[key] = { colspan: colspan, content: content }
+                    listItems[key] = { colspan: colspan, content: content, presentTime: isPresentTime }
                 }
             }
         }
@@ -491,6 +500,9 @@ export const createRulerItems = (rulerOptions: RulerOptions): HTMLUListElement =
                     liAtts['style'] = `width: ${colspanWidth}px;`
                 } else {
                     liAtts['style'] = `width: auto;`
+                }
+                if (listItems[prop].presentTime) {
+                    liAtts['data-item-present-time'] = 'true'
                 }
                 if (rulerOptions.config.rowHeight) {
                     liAtts['style'] += ` --ruler-row-height: ${rulerOptions.config.rowHeight};`
@@ -541,10 +553,10 @@ export const sortEventNodes = <T extends EventNode>(records: T[]): T[] => {
  * Checks the status of the event data, then returns the result as a report object.
  *
  * @param {EventNode} eventNode 
- * @param {number} containerWidth
- * @param {number} containerHeight
- * @param {number} startRangeTime
- * @param {number} endRangeTime
+ * @param {number} containerWidth - The actual width of the container element with overflow area.
+ * @param {number} containerHeight - The actual height of the container element with overflow area.
+ * @param {number} startRangeTime - The start date timestamp of the timeline range.
+ * @param {number} endRangeTime - The end date timestamp of the timeline range.
  * @returns {EventChecker}
  */
 export const checkEventState = (eventNode: EventNode, containerWidth: number, containerHeight: number, startRangeTime: number, endRangeTime: number): EventChecker => {
@@ -561,7 +573,7 @@ export const checkEventState = (eventNode: EventNode, containerWidth: number, co
         startAfterRange: (eventNode.x! >= containerWidth) || (eventStartTime >= endRangeTime),
         endBeforeRange: (eventNode.x! + eventNode.w! <= 0) || (eventEndTime <= startRangeTime),
         endAfterRange: (eventNode.x! + eventNode.w! > containerWidth) || (eventEndTime > endRangeTime),
-        isOutOfRange: (eventNode.x! >= containerWidth) || (eventNode.x! + eventNode.w! <= 0),
+        isOutOfRange: (eventNode.x! >= containerWidth) || (eventNode.x! + (eventStartTime < eventEndTime ? eventNode.w! : 0) <= 0),
         eventLessThanRow: eventNode.y! < 0,
         eventExceedingRows: eventNode.y! >= containerHeight,
         isOutOfRows: (eventNode.y! < 0) || (eventNode.y! >= containerHeight),
@@ -598,11 +610,11 @@ export const placeEventNodes = (containerElement: HTMLDivElement, eventNodes: Ev
         }
         logger.log('placeEventNodes::%cenabled:%c', 'color:green;font-weight:600;', 'color:black;font-weight:400;', checker, evt)
         const eventNodeElement = document.createElement('div')
-        eventNodeElement.classList.add('sunorhc-timeline-event-node')
+        eventNodeElement.classList.add('sunorhc-timeline-event-node', 'preparing')
         setAtts(eventNodeElement, { 'data-event-id': evt.eventId!.toString() })
         const styles = [
-            `--event-node-height: ${evt.h || 8}px`,
-            `--event-node-width: ${evt.w || 8}px`,
+            `--event-node-height: ${evt.h || 16}px`,
+            `--event-node-width: ${evt.w || 16}px`,
             `--event-node-y: ${evt.y || 0}px`,
             `--event-node-x: ${evt.x || 0}px`,
             `--event-node-text-color: ${evt.textColor || 'inherit'}`,
@@ -630,5 +642,32 @@ export const placeEventNodes = (containerElement: HTMLDivElement, eventNodes: Ev
         fragment.append(eventNodeElement)
         containerElement.append(fragment)
     })
+    setTimeout(() => {
+        Array.from(containerElement.querySelectorAll('.sunorhc-timeline-event-node')).forEach((elm) => {
+            elm.classList.remove('preparing')
+        })
+    }, 100)
     //logger.log('placeEventNodes:', containerElement)
+}
+
+/**
+ * Place a marker to present time in the timeline.
+ * 
+ * @param {HTMLDivElement} timelineElement 
+ * @returns {void}
+ */
+export const showPresentTimeMarker = (timelineElement: HTMLDivElement): void => {
+    const presentTimeElement = timelineElement.querySelector('[data-ruler-grain="min"] > [data-item-present-time="true"]')
+    if (!presentTimeElement) {
+        return
+    }
+    const markerX     = (presentTimeElement as HTMLElement).offsetLeft
+    const markerWidth = (presentTimeElement as HTMLElement).offsetWidth - 1
+    const eventNodesContainer = timelineElement.querySelector('.sunorhc-timeline-nodes') as HTMLDivElement
+    const markerHeight = eventNodesContainer.offsetHeight - 2
+    //console.log('showPresentTimeMarker::', presentTimeElement, eventNodesContainer, markerX, markerWidth, markerHeight)
+    const marker = document.createElement('div')
+    marker.classList.add('present-time-marker')
+    setStyles(marker, `--marker-x: ${markerX}px; --marker-w: ${markerWidth}px; --marker-h: ${markerHeight}px;`)
+    eventNodesContainer.prepend(marker)
 }

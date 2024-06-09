@@ -90,7 +90,8 @@ export interface RulerConfig {
 
 export interface RulerRole {
   placement: RulerPlacement;
-  truncateLowers?: boolean;
+  truncateLowers?: boolean;// Whether to truncate rulers below the updated scale when zooming, default to false.
+  firstDayOfWeek?: number;// Weekday number 0 equal Sunday, default to 0 (American format).
   minGrainWidth?: number | string;
   filters?: RulerFilter;
   top?: RulerConfig;
@@ -142,16 +143,16 @@ export interface Layouts {
   outlined?: Outline;
   outlineCorner?: Corners;
   outlineStyle?: LineStyle;
-  hideScrollbar: boolean;// default is true.
+  hideScrollbar?: boolean;// Whether to hide scrollbars for overflow elements in the timeline element. Default to true if omitted.
   eventsBackground?: EventsBackground;
   width: number | string;
   height: number | string;
+  rtl?: boolean;// Whether the content direction within the timeline element is right-to-left. Default to false if omitted.
 }
 
 export interface Effects {
   presentTime: boolean;// default is false.
   defaultAlignment: Alignment;
-  //firstDayOfWeek: number;
   cacheExpiration: CacheExpiration;// Set an expiration time cached all events; a number is seconds from cached, always reset cache when initialize library if "always", ever cached at no-expires into specific storage if "none". Default is "always".
   hoverEvent: boolean;// default is false.
   onClickEvent: Action;
@@ -281,7 +282,8 @@ export interface RulerOptions {
   scale: Scale;
   order: number;
   minGrainWidth: number;
-  placement: RulerPlacement,
+  placement: RulerPlacement;
+  firstDayOfWeek: number;
   config: RulerConfig;
   filters: RulerFilter;
   maxCols: number;
@@ -324,4 +326,12 @@ export interface EventChecker {
   eventExceedingRows: boolean;
   isOutOfRows: boolean;
   isEnableEvent: boolean;
+}
+
+export interface ZoomScaleOptions {
+  prevScale?: Scale;
+  scale: Scale;
+  start: string | Date;// To be allowed the numeric string as timestamp.
+  end: string | Date;// To be allowed the numeric string as timestamp.
+  ruler?: RulerRole;
 }

@@ -1,5 +1,5 @@
 // <reference path="globals.d.ts" />
-import { Measures, EventNode, EventChecker, SidebarRole, RulerOptions } from '@/types/definitions'
+import { Measures, EventNode, EventChecker, SidebarRole, RulerOptions, DateTimeObject } from '@/types/definitions'
 import { convertToPixels, getParticles, createLandmarkElement, createSidebar, createSidebarItems, createRuler, createRulerItems, sortEventNodes, checkEventState } from './render'
 import { Window, Node } from 'happy-dom'
 
@@ -422,7 +422,7 @@ describe('createRuler', () => {
 
 })
 
-describe.skip('createRulerItems', () => {
+describe('createRulerItems', () => {
 
     const rulerOptions = {
         globalScale: 'day',
@@ -439,15 +439,13 @@ describe.skip('createRulerItems', () => {
         },
         filters: {
             decorations: {
-                year: { prefix: '西暦', suffix: '年' },
-                month: { suffix: '<span style="margin-left: 2px">月</span>' },
-                week: { replacer: '<small class="text-gray-500" style="margin-right: 2px">第</small>%s<small class="text-gray-500" style="margin-left: 2px">週</small>', suffix: '' },
-                hours: { suffix: '時' }
+                year: { prefix: 'A.D.' },
+                week: { replacer: '<small class="text-gray-500" style="margin-right: 2px">the</small>%s<small class="text-gray-500" style="margin-left: 2px">th</small>' },
             },
             monthFormat: 'numeric',
-            dayNames: [ '日曜', '月曜', '火曜', '水曜', '木曜', '金曜', '土曜' ],
+            dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
             abbreviateMonthNameLength: 2,
-            abbreviateDayNameLength: 1,
+            abbreviateDayNameLength: 2,
             fullStop: false,
             dayBackgroundColor: true
         },
@@ -488,7 +486,7 @@ describe.skip('createRulerItems', () => {
         const result = createRulerItems(rulerOptions)!
         // result.outerHTML:
         // <ul data-ruler-type="year" data-ruler-order="3" style="--min-grain-width: 48px;" data-ruler-grain="max" class="sunorhc-timeline-ruler-row last-order-row">
-        //   <li data-item-datetime="2024" data-item-colspan="31" style="width: 1488px; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;">西暦2024年</li>
+        //   <li data-item-datetime="2024" data-item-colspan="31" style="width: 1488px; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;">A.D.2024</li>
         // </ul>
 
         expect(result).toBeInstanceOf(HTMLUListElement)
@@ -500,7 +498,7 @@ describe.skip('createRulerItems', () => {
         expect(firstItem.dataset.itemDatetime).toBe(rulerOptions.startDate.year.toString())
         expect(firstItem.dataset.itemColspan).toBe(rulerOptions.maxCols.toString())
         expect(firstItem.dataset.itemColspan).toBe(rulerOptions.maxCols.toString())
-        expect(firstItem.textContent).toBe(`${rulerOptions.filters.decorations!.year!.prefix}${rulerOptions.startDate.year}${rulerOptions.filters.decorations!.year!.suffix}`)
+        expect(firstItem.textContent).toBe(`${rulerOptions.filters.decorations!.year!.prefix}${rulerOptions.startDate.year}`)
     })
 
     it('should create ruler items with correct attributes in month scale', () => {
@@ -509,9 +507,7 @@ describe.skip('createRulerItems', () => {
         const result = createRulerItems(rulerOptions)!
         // result.outerHTML:
         // <ul data-ruler-type="month" data-ruler-order="2" style="--min-grain-width: 48px;" data-ruler-grain="max" class="sunorhc-timeline-ruler-row last-order-row">
-        //   <li data-item-datetime="2024-05" data-item-colspan="31" style="width: 1488px; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;">
-        //     5<span style="margin-left: 2px">月</span>
-        //   </li>
+        //   <li data-item-datetime="2024-05" data-item-colspan="31" style="width: 1488px; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;">5</li>
         // </ul>
 
         expect(result).toBeInstanceOf(HTMLUListElement)
@@ -521,7 +517,7 @@ describe.skip('createRulerItems', () => {
         expect(result.childElementCount).toBe(1)
         const firstItem = result.children[0] as HTMLLIElement
         expect(firstItem.getAttribute('data-item-datetime')).toBe(`${rulerOptions.startDate.year}-${String(rulerOptions.startDate.month).padStart(2, '0')}`)
-        expect(firstItem.innerHTML).toEqual('5<span style="margin-left: 2px">月</span>')
+        expect(firstItem.innerHTML).toEqual('5')
     })
 
     it('should create ruler items with correct attributes in week scale that has day global scale', () => {
@@ -531,12 +527,12 @@ describe.skip('createRulerItems', () => {
         // result.outerHTML:
         // <ul data-ruler-type="week" data-ruler-order="1" style="--min-grain-width: 48px;" data-ruler-grain="min" class="sunorhc-timeline-ruler-row last-order-row">
         //   <li data-item-datetime="2024-18" data-item-colspan="5" style="width: 240px; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;">
-        //     <small class="text-gray-500" style="margin-right: 2px">第</small>18<small class="text-gray-500" style="margin-left: 2px">週</small>
+        //     <small class="text-gray-500" style="margin-right: 2px">the</small>18<small class="text-gray-500" style="margin-left: 2px">th</small>
         //   </li>
-        //   <li data-item-datetime="2024-19" data-item-colspan="7" style="width: 336px; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;"><small class="text-gray-500" style="margin-right: 2px">第</small>19<small class="text-gray-500" style="margin-left: 2px">週</small></li>
-        //   <li data-item-datetime="2024-20" data-item-colspan="7" style="width: 336px; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;"><small class="text-gray-500" style="margin-right: 2px">第</small>20<small class="text-gray-500" style="margin-left: 2px">週</small></li>
-        //   <li data-item-datetime="2024-21" data-item-colspan="7" style="width: 336px; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;"><small class="text-gray-500" style="margin-right: 2px">第</small>21<small class="text-gray-500" style="margin-left: 2px">週</small></li>
-        //   <li data-item-datetime="2024-22" data-item-colspan="5" style="width: 240px; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;"><small class="text-gray-500" style="margin-right: 2px">第</small>22<small class="text-gray-500" style="margin-left: 2px">週</small></li>
+        //   <li data-item-datetime="2024-19" data-item-colspan="7" style="width: 336px; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;"><small class="text-gray-500" style="margin-right: 2px">the</small>19<small class="text-gray-500" style="margin-left: 2px">th</small></li>
+        //   <li data-item-datetime="2024-20" data-item-colspan="7" style="width: 336px; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;"><small class="text-gray-500" style="margin-right: 2px">the</small>20<small class="text-gray-500" style="margin-left: 2px">th</small></li>
+        //   <li data-item-datetime="2024-21" data-item-colspan="7" style="width: 336px; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;"><small class="text-gray-500" style="margin-right: 2px">the</small>21<small class="text-gray-500" style="margin-left: 2px">th</small></li>
+        //   <li data-item-datetime="2024-22" data-item-colspan="5" style="width: 240px; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;"><small class="text-gray-500" style="margin-right: 2px">the</small>22<small class="text-gray-500" style="margin-left: 2px">th</small></li>
         // </ul>
 
         expect(result).toBeInstanceOf(HTMLUListElement)
@@ -549,7 +545,7 @@ describe.skip('createRulerItems', () => {
           expect(childElement.getAttribute('data-item-datetime')).toBe(`${rulerOptions.startDate.year}-${String(rulerOptions.startDate.weeks + i)}`)
           expect(Number(childElement.getAttribute('data-item-colspan'))).toBeGreaterThanOrEqual(1)
           expect(Number(childElement.getAttribute('data-item-colspan'))).toBeLessThanOrEqual(7)
-          expect(childElement.textContent).toEqual(expect.stringMatching(/^第\d+週$/))
+          expect(childElement.textContent).toEqual(expect.stringMatching(/^the\d+th$/))
         })
     })
 
@@ -608,11 +604,11 @@ describe.skip('createRulerItems', () => {
       const result = createRulerItems(rulerOptions)!
       // result.outerHTML:
       // <ul data-ruler-type="weekday" data-ruler-order="3" style="--min-grain-width: 48px;" data-ruler-grain="max" class="sunorhc-timeline-ruler-row last-order-row">
-      //   <li data-item-datetime="2024-05-01,wed" style="width: auto; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;">水</li>
-      //   <li data-item-datetime="2024-05-02,thu" style="width: auto; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;">木</li>
+      //   <li data-item-datetime="2024-05-01,wed" style="width: auto; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;">Me</li>
+      //   <li data-item-datetime="2024-05-02,thu" style="width: auto; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;">Je</li>
       //   ...
-      //   <li data-item-datetime="2024-05-30,thu" style="width: auto; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;">木</li>
-      //   <li data-item-datetime="2024-05-31,fri" style="width: auto; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;">金</li>
+      //   <li data-item-datetime="2024-05-30,thu" style="width: auto; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;">Je</li>
+      //   <li data-item-datetime="2024-05-31,fri" style="width: auto; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;">Ve</li>
       // </ul>
 
       expect(result).toBeInstanceOf(HTMLUListElement)
@@ -622,7 +618,7 @@ describe.skip('createRulerItems', () => {
       const regexString = `^${rulerOptions.startDate.year}-\\d{2}-\\d{2},\\w{3}$`
       Array.from(result.children).forEach((childElement) => {
         expect(childElement.getAttribute('data-item-datetime')).toEqual(expect.stringMatching(new RegExp(regexString)))
-        expect([ '日', '月', '火', '水', '木', '金', '土' ]).toContainEqual(childElement.textContent)
+        expect(['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa']).toContainEqual(childElement.textContent)
       })
   })
 
@@ -632,13 +628,13 @@ describe.skip('createRulerItems', () => {
     const result = createRulerItems(rulerOptions)!
     // result.outerHTML:
     // <ul data-ruler-type="hours" data-ruler-order="3" style="--min-grain-width: 48px;" data-ruler-grain="max" class="sunorhc-timeline-ruler-row last-order-row">
-    //   <li data-item-datetime="2024-05-01T00" style="width: auto; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;">0時</li>
-    //   <li data-item-datetime="2024-05-01T01" style="width: auto; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;">1時</li>
+    //   <li data-item-datetime="2024-05-01T00" style="width: auto; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;">0</li>
+    //   <li data-item-datetime="2024-05-01T01" style="width: auto; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;">1</li>
     //   ...
-    //   <li data-item-datetime="2024-05-01T23" style="width: auto; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;">23時</li>
-    //   <li data-item-datetime="2024-05-02T00" style="width: auto; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;">0時</li>
+    //   <li data-item-datetime="2024-05-01T23" style="width: auto; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;">23</li>
+    //   <li data-item-datetime="2024-05-02T00" style="width: auto; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;">0</li>
     //   ...
-    //   <li data-item-datetime="2024-05-02T06" style="width: auto; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;">6時</li>
+    //   <li data-item-datetime="2024-05-02T06" style="width: auto; --ruler-row-height: 1.5rem; --ruler-item-font: 1rem;">6</li>
     // </ul>
 
     expect(result).toBeInstanceOf(HTMLUListElement)
@@ -646,7 +642,7 @@ describe.skip('createRulerItems', () => {
     expect(result.childNodes).toHaveLength(rulerOptions.maxCols)
     const regexItems = [
       `^${rulerOptions.startDate.year}-${String(rulerOptions.startDate.month).padStart(2, '0')}-\\d{2}T\\d{2}$`,
-      `^\\d+${rulerOptions.filters.decorations!.hours!.suffix}$`,
+      `^\\d+$`,
     ]
     Array.from(result.children).forEach((childElement) => {
       expect(childElement.getAttribute('data-item-datetime')).toEqual(expect.stringMatching(new RegExp(regexItems[0])))
@@ -817,72 +813,101 @@ describe('sortEventNodes', () => {
 })
 
 describe('checkEventState', () => {
+  const containerWidth = 800
+  const containerHeight = 600
+  const startRangeTime = 0
+  const endRangeTime = 1000
 
-  it(`should correctly width and height of given container element`, () => {
-    const result = checkEventState({ x: 0, y: 0, w: 100, h: 100 } as EventNode, 800, 600)
-    expect(result.containerSize).toEqual({ width: 800, height: 600 })
-  })
-
-  const testCases: { describe?: string, eventNode: Partial<EventNode>, expected: Partial<EventChecker> }[] = [
-    { // 1
-      eventNode: { x: 0, y: 0, w: 100, h: 100 },
-      expected: { containerSize: { width: 800, height: 600 }, startBeforeRange: false, isEnableEvent: true }
+  const testCases: { description: string, eventNode: Partial<EventNode>, expected: Partial<EventChecker> }[] = [
+    {
+      description: 'should correctly width and height of given container element',
+      eventNode: { x: 0, y: 0, w: 100, h: 100, s: { ts: 0 } as DateTimeObject, e: { ts: 100 } as DateTimeObject },
+      expected: {
+        containerSize: { width: 800, height: 600 },
+        eventX: 0, eventY: 0, eventWidth: 100, eventHeight: 100, eventDisplayArea: 10000,
+        startBeforeRange: false, startAfterRange: false, endBeforeRange: false, endAfterRange: false,
+        isOutOfRange: false, eventLessThanRow: false, eventExceedingRows: false, isOutOfRows: false, isEnableEvent: true
+      }
     },
-    { // 2
-      eventNode: { x: -10, y: 100, w: 50, h: 50 },
-      expected: { startBeforeRange: true, isEnableEvent: true }
+    {
+      description: 'should detect event starting before the range without event ending',
+      eventNode: { x: -10, y: 100, w: 50, h: 50, s: { ts: -1 } as DateTimeObject },
+      expected: {
+        startBeforeRange: true, endBeforeRange: true, isEnableEvent: false,
+        isOutOfRange: true, isOutOfRows: false, eventLessThanRow: false, eventExceedingRows: false
+      }
     },
-    { // 3
-      eventNode: { x: 810, y: 100, w: 50, h: 50 },
-      expected: { startAfterRange: true, isEnableEvent: false }
+    {
+      description: 'should detect event starting before the range with event ending after the range',
+      eventNode: { x: -10, y: 100, w: 50, h: 50, s: { ts: -1 } as DateTimeObject, e: { ts: 51 } as DateTimeObject },
+      expected: {
+        startBeforeRange: true, endBeforeRange: false, isEnableEvent: true,
+        isOutOfRange: false, isOutOfRows: false, eventLessThanRow: false, eventExceedingRows: false
+      }
     },
-    { // 4
+    {
+      description: 'should detect event starting after the range',
+      eventNode: { x: 810, y: 100, w: 50, h: 50, s: { ts: 1001 } as DateTimeObject },
+      expected: {
+        startAfterRange: true, isEnableEvent: false, isOutOfRange: true
+      }
+    },
+    {
+      description: 'should detect event less than row',
       eventNode: { x: 100, y: -10, w: 50, h: 50 },
-      expected: { eventLessThanRow: true, isEnableEvent: false }
+      expected: {
+        eventLessThanRow: true, isEnableEvent: false, isOutOfRows: true
+      }
     },
-    { // 5
+    {
+      description: 'should detect event exceeding rows',
       eventNode: { x: 100, y: 610, w: 50, h: 50 },
-      expected: { eventExceedingRows: true, isEnableEvent: false }
+      expected: {
+        eventExceedingRows: true, isEnableEvent: false, isOutOfRows: true
+      }
     },
-    { // 6
+    {
+      description: 'should enable event within container',
       eventNode: { x: 100, y: 100, w: 50, h: 50 },
       expected: { isEnableEvent: true }
     },
-    { // 7: 
-      describe: 'should correctly check event state for full fill event in container area',
-      eventNode: { x: 0, y: 0, w: 800, h: 600 },
+    {
+      description: 'should correctly check event state for full fill event in container area',
+      eventNode: { x: 0, y: 0, w: 800, h: 600, s: { ts: 0 } as DateTimeObject, e: { ts: 1000 } as DateTimeObject },
       expected: { endBeforeRange: false, endAfterRange: false, isEnableEvent: true }
     },
-    { // 8: eventEnd == 0 to equal startRange, therefore visible event width is 0
-      describe: 'should be not enable event because an eventEnd equal startRange and visible event width is 0',
-      eventNode: { x: -10, y: 100, w: 10, h: 50 },
+    {
+      description: 'should not enable event because an eventEnd equal startRange and visible event width is 0',
+      eventNode: { x: -10, y: 100, w: 10, h: 50, e: { ts: 0 } as DateTimeObject },
       expected: { endBeforeRange: true, isOutOfRange: true, isEnableEvent: false }
     },
-    { // 9: 
-      eventNode: { x: 760, y: 100, w: 50, h: 50 },
+    {
+      description: 'should detect event ending after range',
+      eventNode: { x: 760, y: 100, w: 50, h: 50, e: { ts: 1001 } as DateTimeObject },
       expected: { endAfterRange: true, isEnableEvent: true }
     },
-    { // 10: eventStart == endRange, therefore visible event width is 0
-      describe: 'should be not enable event because an eventStart equal endRange and visible event width is 0',
-      eventNode: { x: 800, y: 100, w: 50, h: 50 },
+    {
+      description: 'should not enable event because eventStart equals endRange and visible event width is 0',
+      eventNode: { x: 800, y: 100, w: 50, h: 50, s: { ts: 1000 } as DateTimeObject },
       expected: { startAfterRange: true, isOutOfRange: true, isEnableEvent: false }
     },
-    { // 11
+    {
+      description: 'should detect event out of range and rows',
       eventNode: { x: 900, y: 700, w: 50, h: 50 },
       expected: { isOutOfRange: true, isOutOfRows: true, isEnableEvent: false }
     },
-    { // 12: eventRow(Y) == bottomRow, therefore visible event height is 0
-      describe: 'should be not enable event because an eventRow(Y) equal bottom of last row and visible event width is 0',
+    {
+      description: 'should not enable event because eventRow(Y) equals bottom of last row and visible event height is 0',
       eventNode: { x: 400, y: 600, w: 50, h: 50 },
       expected: { eventExceedingRows: true, isOutOfRows: true, isEnableEvent: false }
     }
   ]
 
-  testCases.forEach(({ describe, eventNode, expected }, index) => {
-    const describeText = describe || `should correctly check event state for case ${index + 1}`
-    it(describeText, () => {
-      const result = checkEventState(eventNode as EventNode, 800, 600)
+  testCases.forEach(({ description, eventNode, expected }) => {
+    it(description, () => {
+      const result = checkEventState(eventNode as EventNode, containerWidth, containerHeight, startRangeTime, endRangeTime)
       for (const key in expected) {
+        //console.log('!:', key, result[key as keyof EventChecker], expected[key as keyof EventChecker])
         expect(result[key as keyof EventChecker]).toEqual(expected[key as keyof EventChecker])
       }
     })

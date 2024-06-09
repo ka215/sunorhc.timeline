@@ -46,6 +46,7 @@
   --event-node-border-color-hovered: #{vars.$lightEventNodeHoverBorderColor}
   --tooltip-text-color: #{vars.$lightTooltipTextColor}
   --tooltip-bg-color: #{vars.$lightTooltipBgColor}
+  --marker-bg-color: #{vars.$lightMarkerBgColor}
   transition: .3s
   scroll-behavior: smooth
 
@@ -80,6 +81,8 @@
   --event-node-border-color-hovered: #{vars.$darkEventNodeHoverBorderColor}
   --tooltip-text-color: #{vars.$darkTooltipTextColor}
   --tooltip-bg-color: #{vars.$darkTooltipBgColor}
+  --marker-bg-color: #{vars.$darkMarkerBgColor}
+
 
 
 .sunorhc-timeline-container
@@ -119,12 +122,14 @@
 
   &[data-timeline-outline="true"],
   &[data-timeline-outlined="true"]
+    // When outline setting is "both" or "outside"
     padding: 0
     border: var(--outline-style, solid) 1px var(--border-color)
 
     .sunorhc-timeline-body
       &[data-timeline-outline="true"],
       &[data-timeline-outlined="true"]
+        // When outline setting is "both" only
         border-style: none !important
 
         .sunorhc-timeline-ruler
@@ -253,6 +258,7 @@
 
     &[data-timeline-outline="true"],
     &[data-timeline-outlined="true"]
+      // When outline setting is "inside" or "both"
       padding: 0
       border: var(--outline-style, solid) 1px var(--border-color)
       overflow: hidden
@@ -324,6 +330,12 @@
       
       .sunorhc-timeline-nodes
         top: 1px !important
+
+    &[data-timeline-outline="false"],
+    &[data-timeline-outlined="false"]
+      .sunorhc-timeline-main-canvas
+        border-right: var(--outline-style, solid) 1px transparent
+        border-left: var(--outline-style, solid) 1px transparent
 
     .sunorhc-timeline-sidebar
       box-sizing: border-box !important
@@ -612,9 +624,11 @@
         &[data-background="grid"]
           //background-image: linear-gradient(rgba(vars.$borderColor, 0.3) 1px, transparent 0), linear-gradient(90deg, rgba(vars.$borderColor, 0.3) 1px, vars.$noneColor 0)
           background-image: linear-gradient(var(--canvas-border) 1px, transparent 0), linear-gradient(90deg, var(--canvas-border) 1px, transparent 0)
-          background-size: var(--canvas-grid-width, 85.25px) var(--canvas-grid-height, 80px)
+          background-size: var(--canvas-grid-width) var(--canvas-grid-height)
+          //background-size: var(--canvas-grid-width, 85.25px) var(--canvas-grid-height, 80px)
           //background-size: 85.25px 80px // 1st is width of ruler cell, 2nd is height of sidebar row item
-          background-position: -0.5px -0.5px
+          background-position: var(--canvas-grid-interval, -0.5px) var(--canvas-grid-interval, -0.5px)
+          //background-position: -0.5px -0.5px
           background-repeat: repeat
 
         &[data-background="toned"]
@@ -628,7 +642,7 @@
           background-color: transparent
           //background-image: repeating-linear-gradient(0deg, var(--canvas-bg-even), var(--canvas-bg-even) calc(100% / var(--canvas-grid-rows)), var(--canvas-bg-odd) calc(100% / var(--canvas-grid-rows)), var(--canvas-bg-odd) calc(calc(100% / var(--canvas-grid-rows-half)) - 1px))
           background-image: repeating-linear-gradient(0deg, var(--canvas-bg-even), var(--canvas-bg-even) calc(100% / var(--canvas-grid-rows, 5)), var(--canvas-bg-odd) calc(100% / var(--canvas-grid-rows, 5)), var(--canvas-bg-odd) calc(calc(100% / var(--canvas-grid-rows-half, 2.5)) - 1px))
-          background-position: 0 -3px
+          background-position: 0 calc(var(--canvas-grid-rows-half) * -0.5px)
 
           &::after
             position: absolute
@@ -638,9 +652,10 @@
             height: 100%
             width: 100%
             background-image: linear-gradient(var(--canvas-border) 1px, transparent 0), linear-gradient(90deg, var(--canvas-border) 1px, transparent 0)
-            background-size: var(--canvas-grid-width, 85.25px) var(--canvas-grid-height, 80px)
+            background-size: var(--canvas-grid-width) var(--canvas-grid-height)
             //background-size: 85.25px 80px // 1st is width of ruler cell, 2nd is height of sidebar row item
-            background-position: -0.5px -0.5px
+            //background-position: -0.5px -0.5px
+            background-position: var(--canvas-grid-interval, -0.5px) var(--canvas-grid-interval, -0.5px)
             background-repeat: repeat
             z-index: 22
         
@@ -655,12 +670,17 @@
           align-items: center
           text-align: left
           vertical-align: middle
-          font-size: calc(var(--event-node-height, 16px) * 75%)
+          font-size: clamp(8px, calc(var(--event-node-height, 14px) * 0.7), 16px)
           color: var(--event-node-text-color)
           background-color: var(--event-node-bg-color)
           border: solid var(--event-node-border-width, 1px) var(--event-node-border-color)
           border-radius: var(--event-node-border-radius, 50%)
           z-index: var(--event-node-z-index, 25)
+          opacity: 1
+          transition: all 0.3s ease-out
+
+          &.preparing
+            opacity: 0
 
           &.bar-type
             border-radius: var(--event-node-border-radius, 10%)
@@ -681,6 +701,7 @@
             border: solid var(--event-node-border-width) var(--event-node-border-color-hovered)
 
           &> span
+            font-size: inherit
             overflow: hidden
             white-space: nowrap
             text-overflow: ellipsis
@@ -722,6 +743,48 @@
             top: var(--tooltip-y, 30px)
             left: var(--tooltip-x, 0)
 
+        .present-time-marker
+          position: absolute
+          display: inline-block
+          top: 0
+          left: var(--marker-x, -1px)
+          width: var(--marker-w, 0)
+          height: var(--marker-h, 0)
+          background-color: var(--marker-bg-color, rgba(#fffbeb, .25))
+          pointer-events: none
+          z-index: 21
+
+  &[dir="rtl"]
+    .sunorhc-timeline-body
+      &[data-timeline-outlined="true"]
+        .sunorhc-timeline-sidebar
+          &[data-sidebar-position="left"]
+            border-left: var(--outline-style, solid) 1px var(--border-color)
+            border-right: none
+
+          &[data-sidebar-position="right"]
+            border-left: none
+            border-right: var(--outline-style, solid) 1px var(--border-color)
+
+        .sunorhc-timeline-ruler
+          .sunorhc-timeline-ruler-row
+            li
+              border-left: var(--outline-style, solid) 1px var(--border-color)
+              border-right: none
+
+              &:last-child
+                border-left: none
+
+        .sunorhc-timeline-nodes
+          &[data-background="grid"]
+            background-position: 0 0
+
+          &[data-background="plaid"]
+            &::after
+              background-position: 0 0
+
+          .present-time-marker
+            left: calc(var(--marker-x, -1px) + 1px)
 
 // Extended Styles
 

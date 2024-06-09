@@ -30,6 +30,7 @@ const defaultOptions: Def.TimelineOptions = {
   ruler: {
     placement: 'both',
     //truncateLowers: false,
+    firstDayOfWeek: 0,
     minGrainWidth: '48px',
     top: {
       rows: [ 'day' ],
@@ -57,7 +58,6 @@ const defaultOptions: Def.TimelineOptions = {
     presentTime: false,
     defaultAlignment: 'latest',
     cacheExpiration: 'always',
-    //firstDayOfWeek: 0,
     hoverEvent: true,
     onClickEvent: 'normal',
   },
@@ -141,6 +141,12 @@ export class SunorhcTimeline implements Def.Timeline {
       console.error('Failed to create timeline:', error)
       // Hide the dispatcher element itself for injecting the timeline.
       Util.setStyles(instance.targetElement, { display: 'none' })
+    } finally {
+      // Add an instance to the global Window object.
+      if (!(window as Window).hasOwnProperty('SunorhcTimelineInstances')) {
+        window.SunorhcTimelineInstances = {}
+      }
+      window.SunorhcTimelineInstances[instance.elementId] = instance
     }
     return instance
   }
@@ -169,6 +175,12 @@ export class SunorhcTimeline implements Def.Timeline {
     // Second, it overrides the options passed in the constructor arguments.
     if (this.inputOptions && Util.isObject(this.inputOptions) && !Util.isEmptyObject(this.inputOptions)) {
       fixedOptions = Util.deepMergeObjects(fixedOptions, this.inputOptions)
+      if (this.inputOptions.start instanceof Date) {
+        fixedOptions.start = this.inputOptions.start
+      }
+      if (this.inputOptions.end instanceof Date) {
+        fixedOptions.end = this.inputOptions.end
+      }
     }
 
     // Finally, if an external configuration file is specified, it is fetched and overridden.
@@ -207,6 +219,9 @@ export class SunorhcTimeline implements Def.Timeline {
     if (!!this.options.layout.elevation) {
       containerAtts['data-timeline-elevation'] = this.options.layout.elevation.toString()
     }
+    if (!!this.options.layout.rtl) {
+      containerAtts['dir'] = this.options.layout.rtl ? 'rtl' : 'ltr'
+    }
     Util.setAtts(timelineContainer, containerAtts)
     const containerWidth  = this.options.layout.width || 'auto'
     const containerHeight = this.options.layout.height || 'auto'
@@ -233,15 +248,24 @@ export class SunorhcTimeline implements Def.Timeline {
       if (optionEndDate instanceof Error) {
         throw optionEndDate
       }
-      const startDate = Util.parseDateTime(optionStartDate, this.options.timezone)
-      const endDate   = Util.parseDateTime(optionEndDate, this.options.timezone)
+      const monthNames = this.options.ruler.filters?.monthNames ?? undefined
+      const dayNames = this.options.ruler.filters?.dayNames ?? undefined
+      const firstDayOfWeek = this.options.ruler.firstDayOfWeek || 0
+      const startDate = Util.parseDateTime(optionStartDate, this.options.timezone, monthNames, dayNames, firstDayOfWeek)
+      const endDate   = Util.parseDateTime(optionEndDate, this.options.timezone, monthNames, dayNames, firstDayOfWeek)
       // Calculate the maximum granularity number of the ruler from the start and end range based on the scale
       const maxParticles = Util.getParticles(optionStartDate, optionEndDate)
       const scaleParticle = Util.getParticles(optionStartDate, optionEndDate, this.options.scale) as number
 
       const targetRect = Util.getRect(this.targetElement)
-      //await Util.reflow(timelineContainer)
       const containerRect = Util.cloneObject(Util.getRect(timelineContainer)) as unknown as DOMRect
+
+      const optionSidebarWidth = Util.convertToPixels(this.options.sidebar.width)
+      const optionSidebarItemHeight = Util.convertToPixels(this.options.sidebar.itemHeight)
+      const rulerTopRows = this.options.ruler.top?.rows?.length || 0
+      const rulerBottomRows = this.options.ruler.bottom?.rows?.length || 0
+      const rulerTopRowHeight = Util.convertToPixels(this.options.ruler.top?.rowHeight) || 24
+      const rulerBottomRowHeight = Util.convertToPixels(this.options.ruler.bottom?.rowHeight) || 24
       let preMeasures = {
         // Datetime
         startDate: startDate,
@@ -258,22 +282,22 @@ export class SunorhcTimeline implements Def.Timeline {
         // Body layouts
         bodyHeight: undefined,// unknown at the time of execution of this process.
         // Sidebar layouts
-        sidebarWidth: Util.convertToPixels(this.options.sidebar.width),
-        sidebarHeight: Util.convertToPixels(this.options.sidebar.itemHeight) * this.options.sidebar.items.length,// = sidebar actual height (full items height)
+        sidebarWidth: optionSidebarWidth,
+        sidebarHeight: optionSidebarItemHeight * this.options.sidebar.items.length,// = sidebar actual height (full items height)
         sidebarVisibleHeight: undefined,// unknown at the time of execution of this process.
-        sidebarOffsetTop: /^(both|top)/i.test(this.options.ruler.placement) ? (this.options.ruler.top?.rows?.length || 0) * Util.convertToPixels(this.options.ruler.top?.rowHeight) : 0,
-        sidebarOffsetBottom: /^(both|bottom)/i.test(this.options.ruler.placement) ? (this.options.ruler.bottom?.rows?.length || 0) * Util.convertToPixels(this.options.ruler.bottom?.rowHeight) : 0,
-        sidebarItemHeight: Util.convertToPixels(this.options.sidebar.itemHeight),// one item height
+        sidebarOffsetTop: /^(both|top)/i.test(this.options.ruler.placement) ? (rulerTopRows * rulerTopRowHeight) : 0,
+        sidebarOffsetBottom: /^(both|bottom)/i.test(this.options.ruler.placement) ? (rulerBottomRows * rulerBottomRowHeight) : 0,
+        sidebarItemHeight: optionSidebarItemHeight,// one item height
         sidebarItems: this.options.sidebar.items.length,
         // Ruler layouts
         rulerVisibleWidth: containerRect.width - (/^both$/i.test(this.options.sidebar.placement)
-          ? Util.convertToPixels(this.options.sidebar.width) * 2
-          : /^(left|right)$/i.test(this.options.sidebar.placement) ? Util.convertToPixels(this.options.sidebar.width) : 0),
+          ? optionSidebarWidth * 2
+          : (/^(left|right)$/i.test(this.options.sidebar.placement) ? optionSidebarWidth : 0)),
         rulerActualWidth: Util.convertToPixels(this.options.ruler.minGrainWidth) * scaleParticle,
         rulerTopRows: (this.options.ruler.top?.rows?.length || 0),
         rulerBottomRows: (this.options.ruler.bottom?.rows?.length || 0),
-        rulerTopHeight: (this.options.ruler.top?.rows?.length || 0) * Util.convertToPixels(this.options.ruler.top?.rowHeight),
-        rulerBottomHeight: (this.options.ruler.bottom?.rows?.length || 0) * Util.convertToPixels(this.options.ruler.bottom?.rowHeight),
+        rulerTopHeight: (this.options.ruler.top?.rows?.length || 0) * rulerTopRowHeight,
+        rulerBottomHeight: (this.options.ruler.bottom?.rows?.length || 0) * rulerBottomRowHeight,
         rulerMaxCols: scaleParticle,
         /*
         test: {
@@ -382,6 +406,7 @@ export class SunorhcTimeline implements Def.Timeline {
               order: idx + 1,
               minGrainWidth: Util.convertToPixels(this.options.ruler.minGrainWidth),
               placement: key,
+              firstDayOfWeek: this.options.ruler.firstDayOfWeek,
               config: key === 'top' ? this.options.ruler.top : this.options.ruler.bottom,
               filters: this.options.ruler.filters,
               maxCols: referMeasurements.rulerMaxCols,
@@ -418,11 +443,16 @@ export class SunorhcTimeline implements Def.Timeline {
     //--canvas-border: rgba(209, 213, 219, 0.5);
     let nodesContainerHeight = /^(both|top)$/.test(this.options.ruler.placement) ? referMeasurements.rulerTopHeight : 0
     nodesContainerHeight += /^(both|bottom)$/.test(this.options.ruler.placement) ? referMeasurements.rulerBottomHeight : 0
+    const canvasGridWidth  = Math.floor(Util.convertToPixels(this.options.ruler.minGrainWidth))// - (0.016129 * (1 - Math.exp(-referMeasurements.rulerMaxCols / 100000)))) * 100000) / 100000
+    const canvasGridHeight = Math.floor(referMeasurements.sidebarItemHeight)// + (0.026 * (1 + Math.exp(referMeasurements.sidebarItems / 100000)))) * 100000) / 100000
+    const canvasGridInterval = -1//-0.5 * (1 - Math.exp(-referMeasurements.rulerMaxCols / 500))
     Util.setStyles(nodes, `
-      --canvas-grid-width: ${Util.convertToPixels(this.options.ruler.minGrainWidth) - 0.016129}px;
-      --canvas-grid-height: ${referMeasurements.sidebarItemHeight + 0.026}px;
+      --canvas-grid-width: ${canvasGridWidth}px;
+      --canvas-grid-height: ${canvasGridHeight}px;
+      --canvas-grid-cols: ${referMeasurements.rulerMaxCols};
       --canvas-grid-rows: ${referMeasurements.sidebarItems};
       --canvas-grid-rows-half: ${referMeasurements.sidebarItems / 2};
+      --canvas-grid-interval: ${canvasGridInterval}px;
       width: ${referMeasurements.rulerActualWidth}px;
       height: calc(100% - ${nodesContainerHeight}px);
     `)
@@ -453,6 +483,7 @@ export class SunorhcTimeline implements Def.Timeline {
     const nodesContainer = timelineContainer.querySelector('.sunorhc-timeline-nodes') as HTMLDivElement
     const timelineRulers: HTMLDivElement[] = Array.from(timelineContainer.querySelectorAll('.sunorhc-timeline-ruler'))
     let nodesContainerStyles: string[]
+    //console.log('!!!:', referMeasurements)
     if (referMeasurements.sidebarVisibleHeight < referMeasurements.sidebarHeight) {
       const updateStyles: string[] = [
         `--sidebar-max-width: ${referMeasurements.sidebarWidth}px`,
@@ -519,11 +550,19 @@ export class SunorhcTimeline implements Def.Timeline {
     timelineContainer.classList.remove('preparing')
   }
 
+  /**
+   * Optimizes the event node data retrieved and serve on timeline with saving as cache to web storage.
+   * If given true to argument will force clearing of any existing cache before retrieving the event node data.
+   * @param {boolean} forceClearCache 
+   * @returns {Promise<void>}
+   * @private
+   */
   private async serveEventNodes(forceClearCache: boolean = false): Promise<void> {
     const cacheKey = `${this.elementId}:cachedEvents`
     let result: any = null
     let eventIds: string[] = []
     if (forceClearCache) {
+      // This process is not yet implemented.
       this.logger.log('Force clear cache!')
 
     }
@@ -571,12 +610,15 @@ export class SunorhcTimeline implements Def.Timeline {
           if (checkedEventNode.hasOwnProperty('start')) {
             // Events without a start datetime is disabled.
             // Also, event with invalid start datetime that cannot be parsed are invalid too.
-            const parsedStartDate = Util.parseDateTime(checkedEventNode.start!, this.options.timezone)
+            const monthNames = this.options.ruler.filters?.monthNames ?? undefined
+            const dayNames = this.options.ruler.filters?.dayNames ?? undefined
+            const firstDayOfWeek = this.options.ruler.firstDayOfWeek || 0
+            const parsedStartDate = Util.parseDateTime(checkedEventNode.start!, this.options.timezone, monthNames, dayNames, firstDayOfWeek)
             if (!!parsedStartDate) {
               checkedEventNode.s = parsedStartDate
               //console.log('Allowed valid event:', checkedEventNode)
               // Calculate internal reference value of event node.
-              const finalEventNode = Util.optimizeEventNode(checkedEventNode, this.options, this.measurements)
+              const finalEventNode = Util.optimizeEventNode(checkedEventNode, this.options, this.measurements as Def.Measures)
               this.eventNodes.push(finalEventNode)
             }
           }
@@ -608,10 +650,12 @@ export class SunorhcTimeline implements Def.Timeline {
     } catch (error) {
       console.warn(error)
     } finally {
-      this.logger.log('serveEventNodes:', this.eventNodes, this.options.events)
       const nodesContainer: HTMLDivElement = this.targetElement.querySelector('.sunorhc-timeline-nodes')!
-      Util.placeEventNodes(nodesContainer, this.eventNodes)
-      //nodesContainer.append()
+      Util.placeEventNodes(nodesContainer, this.eventNodes as Def.EventNode[])
+      this.logger.log('serveEventNodes:', this.eventNodes, this.options.events, this.options.effects.presentTime)
+      if (this.options.effects.presentTime) {
+        Util.showPresentTimeMarker(this.targetElement)
+      }
       /* simulate reload
       if (this.test < 1) {
         this.test++
@@ -673,8 +717,7 @@ export class SunorhcTimeline implements Def.Timeline {
     if (referMeasurements.rulerActualWidth > referMeasurements.rulerVisibleWidth) {
       Util.dragScroll(this.targetElement)
 
-      //Util.doAlignment(this.targetElement, this.options.effects.defaultAlignment)
-      Util.doAlignment(this.targetElement, 'center')// test
+      Util.doAlignment(this.targetElement, this.options.effects.defaultAlignment)
     }
 
     // Vertical scrolling is required if the sidebar and main canvas area overflows.
@@ -682,15 +725,103 @@ export class SunorhcTimeline implements Def.Timeline {
       Util.wheelScroll(this.targetElement)
     }
 
+    if (this.options.zoomable) {
+      Util.dblclickZoom(this.targetElement, this.options)
+    }
+
+    //Util.onStickyRulerItems(this.targetElement)
 
     Util.onHoverTooltip(this.targetElement, this.eventNodes as Def.EventNodes)
 
   }
 
-  initialized(): void {
-    this.logger.log('Callbackable "initialized" hook:', this.options, this.targetElement)
+  // public methods
 
+  async initialized(callback?: (instance: Def.Timeline) => void): Promise<void> {
+    if (callback) {
+      // Fires after rendering container and before placing events.
+      this.logger.log('Callbackable "initialized" hook:')
+      await Promise.resolve(callback(this))
+    }
+  }
 
+  async reload(newOptions?: Partial<Def.TimelineOptions>, callback?: (instance: Def.Timeline) => void): Promise<void> {
+    this.logger.log('Called "reload"', this.targetElement)
+    // Keep container display size before and after reload.
+    const timelineRect = Util.getRect(this.targetElement) as DOMRect
+    const cachedStyles = Util.getAtts(this.targetElement, 'style')
+    Util.setStyles(this.targetElement, `min-width: ${timelineRect.width}px; min-height: ${timelineRect.height}px; ${cachedStyles}`)
+    // Remove all children in the timeline container element.
+    Util.setContent(this.targetElement, '', false)
+    try {
+      if (newOptions) {
+        //console.log('reload!!!:', newOptions)
+        const updateOptions = Util.deepMergeObjects(this.options, newOptions)
+        if (newOptions.hasOwnProperty('start') && newOptions.start instanceof Date) {
+          updateOptions.start = newOptions.start
+        }
+        if (newOptions.hasOwnProperty('end') && newOptions.end instanceof Date) {
+          updateOptions.end = newOptions.end
+        }
+        this.options = updateOptions
+      } else {
+        this.options = await Promise.resolve(this.initOptions())
+      }
+      this.measurements = await Promise.resolve(this.initMeasure())
+
+      // Render timeline component.
+      await Promise.resolve(this.render())
+
+      // Here is the "initialized" hook point immediately after initialization.
+      this.initialized()
+
+      // Load event nodes, cache them after parsing, and place them on the DOM.
+      await Promise.resolve(this.serveEventNodes())
+
+      // Registration of various event listeners.
+      this.registerEventListeners()
+
+      // Start monitoring rendering mode.
+      this.runChangeThemeWatcher()
+
+    } catch (error) {
+      console.error('Failed to create timeline:', error)
+      // Hide the dispatcher element itself for injecting the timeline.
+      Util.setStyles(this.targetElement, { display: 'none' })
+    } finally {
+      // Util.setStyles(this.targetElement, cachedStyles as string)
+      if (callback) {
+        // Fires after reload?
+        await Promise.resolve(callback(this))
+      }
+    }
+  }
+
+  async align(alignment: Def.Alignment, callback?: (instance: Def.Timeline) => void): Promise<void> {
+    Util.doAlignment(this.targetElement, alignment)
+    if (callback) {
+      // Fires after alignment.
+      await Promise.resolve(callback(this))
+    }
+  }
+
+  async zoom(
+    newScaleOptions: Def.ZoomScaleOptions,
+    callback?: (instance: Def.Timeline) => void
+  ): Promise<void> {
+    if (
+      typeof newScaleOptions !== 'object' ||
+      typeof newScaleOptions.scale !== 'string' ||
+      (typeof newScaleOptions.start !== 'string' && !(newScaleOptions.start instanceof Date))
+    ) {
+      return Promise.reject(new Error('Invalid zoom option.'))
+    }
+    console.log('zoom!!!:', this.options.scale, '->', newScaleOptions.scale, newScaleOptions)
+    this.reload({ start: newScaleOptions.start, end: newScaleOptions.end, scale: newScaleOptions.scale, ruler: newScaleOptions.ruler })
+    if (callback) {
+      // Fires after zoom?
+      await Promise.resolve(callback(this))
+    }
   }
 
 }

@@ -1,11 +1,13 @@
 // Helper methods dedicated to Sunorhc.Timeline library.
 // Methods:
-// optimizeEventNode 
+// getBaseRowCoordinate, getBaseX, getPreciseX, getNodeHeight, optimizeEventNode, findEvents,
+// saveToStorage, loadFromStorage, removeToStorage, 
 
 import LZString from 'lz-string'
 import { Scale, PointerSize, StorageType, EventNode, TimelineOptions, Measures, StageRange, DateTimeObject } from '@/types/definitions'
 import { isEmptyObject, inRange, hash, deepCloneObject } from './common'
-import { getWeekNumber, parseDateTime } from './datetime'
+import { getWeekNumber, parseDateTime, toValidScale } from './datetime'
+//import { getRect } from './dom'
 //import { serialize, deserialize } from './serialization'
 
 /**
@@ -59,6 +61,7 @@ export const getBaseRowCoordinate = (obj: Partial<EventNode>, range: StageRange,
  * @param {number} endRangeTimestamp - Container range end timestamp value (unit: seconds)
  * @param {number} rangeWidth - Width of container range (unit: pixels)
  * @returns {number} - Horizontal position of the specified timestamp in the container range (unit: pixels)
+ * @deprecated This method will be removed in the next major release. Use `getPreciseX` instead.
  */
 export const getBaseX = (
     eventTimestamp: number,
@@ -96,7 +99,9 @@ export const getBaseX = (
  * @returns {number}
  */
 export const getPreciseX = (dateObj: DateTimeObject, scale: Scale, range: StageRange): number => {
-    if (isEmptyObject(range) || range.width <= 0 || (range.hasOwnProperty('endDate') && range.startDate.ts === range.endDate.ts)) {
+    if (isEmptyObject(range) || range.width <= 0 || (
+        range.hasOwnProperty('endDate') && (range.startDate.ts * 1000 + range.startDate.milliseconds) === (range.endDate.ts * 1000 + range.endDate.milliseconds)
+    )) {
         throw new Error('Could not get the coordinate due to illegal range.')
     }
     const scaleWidth = range.minScaleWidth
@@ -105,10 +110,10 @@ export const getPreciseX = (dateObj: DateTimeObject, scale: Scale, range: StageR
     let scalePerMilliseconds: number = 0
     let preciseX: number = -1
 
-    if (dateObj.ts < range.startDate.ts) {
+    if ((dateObj.ts * 1000 + dateObj.milliseconds) < (range.startDate.ts * 1000 + range.startDate.milliseconds)) {
         // Event timestamp is before the start range timestamp.
         preciseX = 0
-    } else if (dateObj.ts > range.endDate.ts) {
+    } else if ((dateObj.ts * 1000 + dateObj.milliseconds) > (range.endDate.ts * 1000 + range.endDate.milliseconds)) {
         // Event timestamp is after the end range timestamp.
         preciseX = range.width
     }
@@ -261,7 +266,7 @@ export const getPreciseX = (dateObj: DateTimeObject, scale: Scale, range: StageR
                 const baseX = scaleWidth * i
                 const baseDate = new Date(Date.UTC(range.startDate.year, range.startDate.month - 1, range.startDate.day, range.startDate.hours, range.startDate.minutes, range.startDate.seconds, nowMillisecond))
                 if (dateObj.year === baseDate.getUTCFullYear() && dateObj.month === baseDate.getUTCMonth() + 1 && dateObj.day === baseDate.getUTCDate() && dateObj.hours === baseDate.getUTCHours() && dateObj.minutes === baseDate.getUTCMinutes() && dateObj.seconds === baseDate.getUTCSeconds() && dateObj.milliseconds === baseDate.getUTCMilliseconds()) {
-                    //console.log(`getPX!!!?::${dateObj.ISO}:`, baseDate.getUTCFullYear(), baseDate.getUTCMonth() + 1, baseDate.getUTCDate(), baseDate.getUTCHours(), nowHour, baseX)
+                    console.log(`getPX!!!?::${dateObj.ISO}:`, nowMillisecond, baseX, baseDate.toISOString(), preciseX)
                     relativeX = baseX
                     break
                 }
@@ -289,25 +294,31 @@ export const getNodeHeight = (size: PointerSize | undefined = 'md', range: Stage
 
     switch (sizeStr.toLowerCase()) {
         case 'xs':
-            nodeHeight = Math.max(16, Math.floor(minHeight * 2.667))
+            nodeHeight = Math.min(8, Math.floor(minHeight * 1.3335))
             break
         case 'sm':
-            nodeHeight = Math.max(22, Math.floor(minHeight * 3.667))
+            nodeHeight = Math.min(12, Math.floor(minHeight * 1.8335))
             break
         case 'lg':
-            nodeHeight = Math.max(48, Math.floor(range.rowHeight * 0.6))
+            nodeHeight = Math.max(24, Math.floor(minHeight * 3.1628))
             break
         case 'xl':
-            nodeHeight = Math.min(72, Math.floor(range.rowHeight * 0.72), maxHeight)
+            nodeHeight = Math.max(36, Math.floor(minHeight * 4.8989))
             break
         default:
-            if (/^\d+$/.test(sizeStr)) {
-                nodeHeight = Math.min(parseInt(sizeStr, 10), maxHeight)
+            if (/^[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?$/.test(sizeStr)) {
+                const sizeNumber = Number(sizeStr)
+                if (sizeNumber <= 0) {
+                    nodeHeight = Math.min(16, Math.floor(minHeight * 2.3428))
+                } else {
+                    nodeHeight = sizeNumber < 1 ? Math.floor(sizeNumber * maxHeight) : Math.min(sizeNumber, maxHeight)
+                }
             } else {
-                nodeHeight = Math.max(36, minHeight * 6)
+                nodeHeight = Math.min(16, Math.floor(minHeight * 2.3428))
             }
             break
     }
+    //console.log(`size!!!::${sizeStr}:`, minHeight, maxHeight, nodeHeight)
     return Math.round(nodeHeight * 1000) / 1000
 }
 
@@ -358,16 +369,19 @@ export const optimizeEventNode = (
 
     //newObj.x = startBaseX + getPreciseX(newObj.s!, globalScale, range/*.minScaleWidth*/)
     newObj.x = getPreciseX(newObj.s!, globalScale, range)
-    //console.log(`startX::${newObj.eventId}:`, range.width, range.minScaleWidth, startBaseX, newObj.x)
+    //console.log(`startX!!!::${newObj.eventId}:`, newObj)
 
     newObj.h = Math.floor((getNodeHeight(newObj.size || 'md', range)) * 1000) / 1000
     if (!newObj.hasOwnProperty('end')) {
-        newObj.h = Math.floor(newObj.h / 2 * 1000) / 1000
+        newObj.h = Math.floor(newObj.h * 1000) / 1000
     }
     newObj.y = Math.floor((startBaseY + Math.floor((range.rowHeight - newObj.h) / 2)) * 1000) / 1000
 
     if (newObj.hasOwnProperty('end')) {
-        const parsedEndDate = parseDateTime(newObj.end!, options.timezone)
+        const monthNames = options.ruler.filters?.monthNames ?? undefined
+        const dayNames = options.ruler.filters?.dayNames ?? undefined
+        const firstDayOfWeek = options.ruler.firstDayOfWeek || 0
+        const parsedEndDate = parseDateTime(newObj.end!, options.timezone, monthNames, dayNames, firstDayOfWeek)
         if (!!parsedEndDate) {
             // The bar-typed event node with start and end datetime.
             newObj.e = parsedEndDate
@@ -375,8 +389,10 @@ export const optimizeEventNode = (
             //newObj.extends.endBaseX = endBaseX
             //const endX = (endBaseX - newObj.x >= range.minScaleWidth ? endBaseX - range.minScaleWidth : endBaseX) + getPreciseX(newObj.e!, globalScale, range.minScaleWidth)
             const endX = getPreciseX(newObj.e!, globalScale, range/*.minScaleWidth*/)
-            //console.log(`!!!::${newObj.eventId}:`, startBaseX, newObj.x, endX, 'width:', endX - newObj.x)
-            if (newObj.e.ts > newObj.s.ts) {
+            const startDateOfMilliseconds = newObj.s.ts * 1000 + newObj.s.milliseconds
+            const endDateOfMilliseconds = newObj.e.ts * 1000 + newObj.e.milliseconds
+            //console.log(`!!!::${newObj.eventId}:`, startBaseX, newObj.x, endX, 'width:', endX - newObj.x, endDateOfMilliseconds, startDateOfMilliseconds)
+            if (endDateOfMilliseconds > startDateOfMilliseconds) {
                 if (endX >= range.width) {
                     newObj.w = Math.round((range.width - newObj.x) * 1000) / 1000
                 //} else if (endX > 0) {
@@ -410,6 +426,68 @@ export const optimizeEventNode = (
 
     //console.log(`optimizeEventNode::${newObj.eventId}:`, newObj, range, newObj.x, newObj.y, newObj.w, newObj.h)
     return newObj as Partial<EventNode>
+}
+
+export const findEvents = (targetElementId: string, conditions: { [key: string]: any }, fromCache: boolean | undefined = false): any => {
+    const targetElement = document.getElementById(targetElementId)!
+    const eventNodeCollection = targetElement.querySelectorAll('.sunorhc-timeline-event-node')!
+    if (eventNodeCollection.length == 0) {
+        return []
+    }
+    let eventNodes: Record<string, any>[] = []
+    Array.from(eventNodeCollection).forEach((elm: Element): void => {
+        const eventNode = elm as HTMLElement
+        eventNodes.push({
+            id: eventNode.dataset!.eventId,
+            type: eventNode.classList.contains('bar-type') ? 'bar' : 'pointer',
+            x: eventNode.offsetLeft,
+            y: eventNode.offsetTop,
+            w: eventNode.offsetWidth,
+            h: eventNode.offsetHeight,
+        })
+    })
+    let matches: any = null
+    for (const key in conditions) {
+        //console.log('findEvents:!!!:', eventNodes, key, conditions[key])
+        switch(key.toLowerCase()) {
+            case 'latest':
+                if (conditions[key]) {
+                    matches = { id: null, a: 0 }
+                    eventNodes.forEach((item) => {
+                        // The event with the largest end is the latest.
+                        if (matches.a <= item.x + item.w) {
+                            matches = { id: item.id, a: item.x + item.w }
+                        }
+                    })
+                }
+                break
+            case 'id':
+                if (conditions[key]) {
+                    const pattern = new RegExp(`^(EventNode:)?${conditions[key]}$`, 'i')
+                    matches = eventNodes.filter((item) => pattern.test(item.id))
+                }
+                matches = Array.isArray(matches) && matches.length > 0 ? matches[0] : null
+                break
+            default:
+                break
+        }
+    }
+    //console.log('findEvents:!!!:', matches, conditions, fromCache)
+    if (!!matches && !isEmptyObject(matches)) {
+        return targetElement.querySelector(`.sunorhc-timeline-event-node[data-event-id="${matches.id}"]`)
+    } else {
+        return matches
+    }
+}
+
+export const truncateLowerScales = (scale: Scale, scaleCollection: string[]): string[] => {
+    const scaleIndex = [ 'year', 'month', 'week', 'weekday', 'day', 'hour', 'minute', 'second', 'millisecond' ]
+    const scaleIndexBounds = scaleIndex.findIndex(v => v === scale)
+    const remainScales = scaleCollection.filter((scaleStr: string) => {
+        return scaleIndexBounds >= scaleIndex.findIndex(v => v === toValidScale(scaleStr))
+    })
+    console.log('truncateLowerScales!!!::', scale, scaleCollection, scaleIndexBounds, remainScales)
+    return remainScales
 }
 
 /**

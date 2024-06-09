@@ -1,0 +1,16 @@
+[
+    { "start": "164-05-01",  "end": "164-05-31",  "row": 1, "label": "第1波", "backgroundColor": "#dcfce7", "borderColor": "#22c55e", "size": "0.5" },
+    { "start": "165-06-20",  "end": "165-09-30",  "row": 2, "label": "第2波", "size": "lg" },
+    { "start": "166-03-20",  "end": "166-06-15",  "row": 3, "label": "第4波（α株）", "backgroundColor": "#dcfce7", "borderColor": "#22c55e", "size": 80 },
+    { "start": "166-06-20",  "end": "166-11",     "row": 4, "label": "第5波（Δ株）", "size": "0.5" },
+    { "start": "167-01",     "end": "167-05-30",  "row": 1, "label": "第6波（BA2）", "size": "0.5" },
+    { "start": "168-12",     "end": "169-08-15",  "row": 2, "label": "test1", "size": 3e1 },
+    { "start": "164-06",     "end": "165-01",     "row": 2, "label": "test2", "size": "xl" },
+    { "start": "2023-11",                         "row": 3, "label": "test3", "size": 6 },
+    { "start": "2024-1",                          "row": 3, "label": "test4", "size": "xs" },
+    { "start": "2024-3-15",                       "row": 3, "label": "test5", "size": "sm" },
+    { "start": "2024-6",                          "row": 3, "label": "test6", "size": "md" },
+    { "start": "2024-9",                          "row": 3, "label": "test7", "size": "lg" },
+    { "start": "2024-12-15",                         "row": 3, "label": "test8", "size": "xl" },
+    { "start": "2016-01",    "end": "2030-01",    "row": 6, "label": "test9", "size": 0.5 }
+]
