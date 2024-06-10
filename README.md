@@ -12,9 +12,13 @@ We use Vite for development and builds, Vitest for coverage testing, lz-string f
 
 More details will be coming soon, so stay tuned!
 
+## Demo Build
+
+[Mock-up version](https://ka215.github.io/sunorhc.timeline/)
+
 ## Coverage
 
-[Latest coverages on 10 June, 2024](https://ka215.github.io/sunorhc.timeline/coverage/)
+[Latest coverages on 11 June, 2024](https://ka215.github.io/sunorhc.timeline/coverage/)
 
 ## Contributors
 
