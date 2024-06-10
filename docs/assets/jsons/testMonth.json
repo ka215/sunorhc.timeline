@@ -1,0 +1,18 @@
+[
+    { "start": "2023-12-01 12:00",  "end": "2023-12-31 6:00",  "row": 1, "label": "test1 <b style=\"color:#4ade80;\">Ok!</b>", "backgroundColor": "#dcfce7", "borderColor": "#22c55e", "size": "xl" },
+    { "start": "2024-01-01 00:00",  "end": "2024-01-31 23:59", "row": 2, "label": "test2", "size": "xs" },
+    { "start": "2024-02-01 00:00",  "end": "2024-02-29 0:00",  "row": 3, "label": "test3 <b style=\"color:#4ade80;\">Ok!</b>", "backgroundColor": "#dcfce7", "borderColor": "#22c55e" },
+    { "start": "2024-03-01 00:00",  "end": "2024-04-01 0:00",  "row": 6, "label": "test4" },
+    { "start": "2024-04-01 00:00",  "end": "2024-05-01 0:00",  "row": 4, "label": "test5" },
+    { "start": "2024-05-01 00:00",  "end": "2024-06-01 0:00",  "row": 5, "label": "test6" },
+    { "start": "2024-06-01 00:00",  "end": "2024-07-01 0:00",  "row": 6, "label": "test7" },
+    { "start": "2024-07-01 00:00",  "end": "2024-08-01 0:00",  "row": 2, "label": "test8" },
+    { "start": "2023-12-15 00:00",  "end": "2024-01-20 0:00",  "row": 3, "label": "test9 <b style=\"color:#4ade80;\">Ok!</b>", "backgroundColor": "#dcfce7", "borderColor": "#22c55e" },
+    { "start": "2024-05-01 00:00",  "end": "2024-07-01 0:00",  "row": 1, "label": "test10" },
+    { "start": "2024-05-20 00:00",  "end": "2024-08-01 0:00",  "row": 4, "label": "test11 <b style=\"color:#4ade80;\">Ok!</b>", "backgroundColor": "#dcfce7", "borderColor": "#22c55e" },
+    { "start": "2023-10-10 00:00",  "end": "2023-12-01 0:00",  "row": 2, "label": "test12" },
+    { "start": "2023-10-20 00:00",  "end": "2023-12-21 16:12:11",  "row": 4, "label": "test13" },
+    { "start": "2024-11-03 10:37:40.123", "end": "2024-12-25 23:59:59.999",  "row": 2, "label": "test14" },
+    { "start": "2024-7-24 11:22:33.444", "end": "2024-11-30 23:59:59.999",  "row": 3, "label": "test15" },
+    { "start": "2024-9-23 00:00:00", "end": "2024-9-23 23:59:59",  "row": 5, "label": "test16" }
+]

@@ -10,8 +10,8 @@ import { isEmptyObject, isURLOrPath, sprintf } from './common'
 import { addTime, parseDateTime, isCurrentDate } from './datetime'
 import { setAtts, setStyles, setContent, getRect } from './dom'
 // For debug when development.
-import { devLogger } from './logger'
-const logger = devLogger()
+//import { devLogger } from './logger'
+//const logger = devLogger()
 
 /**
  * Converts CSS size values to pixels.
@@ -224,10 +224,10 @@ export const createSidebar = (position: string, measurements: Measures): HTMLDiv
         'data-sidebar-max-width': measurements.sidebarWidth.toString(),
         'data-sidebar-max-height': measurements.sidebarHeight.toString(),
     })
-    setStyles(sidebarElement, `
-        --sidebar-max-width: ${measurements.sidebarWidth}px;
-        margin-top: ${measurements.sidebarOffsetTop}px;
-        margin-bottom: ${measurements.sidebarOffsetBottom}px;
+    setStyles(sidebarElement, `\
+        --sidebar-max-width: ${measurements.sidebarWidth}px; \
+        margin-top: ${measurements.sidebarOffsetTop}px; \
+        margin-bottom: ${measurements.sidebarOffsetBottom}px; \
     `)
 
     return sidebarElement

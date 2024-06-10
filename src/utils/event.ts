@@ -3,8 +3,8 @@
 // dragScroll, wheelScroll, doAlignment
 
 import { Scale, EventNodes, EventNode, TimelineOptions } from '@/types/definitions'
-import { getRect, setAtts, setContent, setStyles, wrapChildNodes } from './dom'
-import { findEvents, truncateLowerScales } from './helper'
+import { getRect, setContent, setStyles } from './dom'
+import { findEvents, truncateLowerRulerItems } from './helper'
 import { toValidScale, parseDateTime } from './datetime'
 
 /**
@@ -243,7 +243,7 @@ export const doAlignment = (timelineElement: HTMLDivElement, position: string | 
             break
         case 'latest':
             // Place focus on the most recent event node.
-            const latestEvent = findEvents(timelineElement.id, { latest: true }, false)
+            const latestEvent = findEvents(timelineElement.id, { latest: true })
             if (latestEvent) {
                 latestEvent.dispatchEvent(new MouseEvent('mouseover', { bubbles: true, cancelable: true, view: window }))
                 targetElement.scrollTo({ top: 0, left: latestEvent.offsetLeft, behavior: 'smooth' })
@@ -251,7 +251,7 @@ export const doAlignment = (timelineElement: HTMLDivElement, position: string | 
             break
         default:
             // Places focus on the event node with the specified event ID.
-            const targetEvent = findEvents(timelineElement.id, { id: position }, false)
+            const targetEvent = findEvents(timelineElement.id, { id: position })
             if (targetEvent) {
                 targetEvent.dispatchEvent(new MouseEvent('mouseover', { bubbles: true, cancelable: true, view: window }))
                 targetElement.scrollTo({ top: 0, left: targetEvent.offsetLeft, behavior: 'smooth' })
@@ -260,6 +260,7 @@ export const doAlignment = (timelineElement: HTMLDivElement, position: string | 
     }
 }
 
+/*
 export const onStickyRulerItems = (timelineElement: HTMLDivElement): void => {
     const overflowContainer = timelineElement.querySelector('.sunorhc-timeline-main-canvas')! as HTMLDivElement
     if (overflowContainer.offsetWidth > overflowContainer.scrollWidth) {
@@ -281,12 +282,13 @@ export const onStickyRulerItems = (timelineElement: HTMLDivElement): void => {
             const stickyRulerItem = rulerItem as HTMLLIElement
             const initialOffsetLeft = Number(stickyRulerItem.dataset.initialOffsetLeft)
             const stickyLeft = Math.floor((visibleWidth - (stickyRulerItem.firstChild as HTMLSpanElement)!.offsetWidth) / 2)
-            const stickyPosition = Math.max(/*initialOffsetLeft,*/ stickyLeft, scrollLeft)
+            const stickyPosition = Math.max(/*initialOffsetLeft,* / stickyLeft, scrollLeft)
             //stickyRulerItem.style.position = 'relative'
             //stickyRulerItem.style.left = `${stickyPosition}px`
         })
     })
 }
+*/
 
 /**
  * Register the event listeners to display a tooltip on mouseover on an event node.
@@ -552,10 +554,10 @@ export const dblclickZoom = (timelineElement: HTMLDivElement, timelineOptions: T
         }
         if (timelineOptions.ruler.hasOwnProperty('truncateLowers') && timelineOptions.ruler.truncateLowers) {
             if (newRulerOptions.hasOwnProperty('top') && newRulerOptions.top!.rows.length > 0) {
-                newRulerOptions.top!.rows = truncateLowerScales(zoomToScale as Scale, newRulerOptions.top!.rows)
+                newRulerOptions.top!.rows = truncateLowerRulerItems(zoomToScale as Scale, newRulerOptions.top!.rows)
             }
             if (newRulerOptions.hasOwnProperty('bottom') && newRulerOptions.bottom!.rows.length > 0) {
-                newRulerOptions.bottom!.rows = truncateLowerScales(zoomToScale as Scale, newRulerOptions.bottom!.rows)
+                newRulerOptions.bottom!.rows = truncateLowerRulerItems(zoomToScale as Scale, newRulerOptions.bottom!.rows)
             }
         }
 
@@ -572,12 +574,12 @@ export const dblclickZoom = (timelineElement: HTMLDivElement, timelineOptions: T
         }
     }
 
-    if (timelineOptions.debug) {
-        zoomableBaseContainer.querySelector<HTMLDivElement>('.sunorhc-timeline-nodes')?.addEventListener('mousemove', (e: MouseEvent) => {
-            //const toDateStr = toDateFromOffsetX(e.offsetX, timelineOptions.scale)
-            //console.log('offsetX: %s -> date: %s', e.offsetX, toDateStr)
-        })
-    }
+    /*
+    zoomableBaseContainer.querySelector<HTMLDivElement>('.sunorhc-timeline-nodes')?.addEventListener('mousemove', (e: MouseEvent) => {
+        const toDateStr = toDateFromOffsetX(e.offsetX, timelineOptions.scale)
+        console.log('offsetX: %s -> date: %s', e.offsetX, toDateStr)
+    })
+    */
 
     zoomableElements.forEach(zoomableElement => {
         (zoomableElement as HTMLElement)!.addEventListener('dblclick', (e: MouseEvent) => {

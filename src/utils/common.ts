@@ -316,7 +316,7 @@ export const deepMergeObjects = <T extends Record<string, any>, U extends Record
                     result[key] = deepMergeObjects({}, obj2[key])
                 }
             } else {
-                result[key] = obj2[key]
+                result[key] = obj2[key] as any
             }
         }
     }

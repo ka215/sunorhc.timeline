@@ -33,6 +33,11 @@ export interface LandmarkRole {
   textClass?: string;
 }
 
+export interface Sidebars {
+  left?: HTMLDivElement;
+  right?: HTMLDivElement;
+}
+
 export interface SidebarItem {
   // siid: string;// System internal value as unique sidebar item id.
   type: SidebarItemType;// for the "avatar" type, you can set only an image or for an image with text, and for the "image" type, you can set a caption text in addition to the background image; defaults to "text"
@@ -65,6 +70,11 @@ export interface DecorationFormat {
     suffix?: string;
     replacer?: string;
   } | undefined
+}
+
+export interface Rulers {
+  top?: HTMLDivElement;
+  bottom?: HTMLDivElement;
 }
 
 export interface RulerFilter {
@@ -204,7 +214,7 @@ export interface TimelineOptions {
   extends?: ExtendedOptions;
 }
 
-export interface Timeline {
+export interface TimelineBaseClass {
   elementId: string;
   targetElement: HTMLDivElement;
   fragmentNode: DocumentFragment;

@@ -1,6 +1,6 @@
 // Helper methods dedicated to Sunorhc.Timeline library.
 // Methods:
-// getBaseRowCoordinate, getBaseX, getPreciseX, getNodeHeight, optimizeEventNode, findEvents,
+// getBaseRowCoordinate, getBaseX, getPreciseX, getNodeHeight, optimizeEventNode, findEvents, truncateLowerRulerItems, 
 // saveToStorage, loadFromStorage, removeToStorage, 
 
 import LZString from 'lz-string'
@@ -362,7 +362,7 @@ export const optimizeEventNode = (
     }
 
     const startBaseY = getBaseRowCoordinate(newObj, range, options)
-    const startBaseX = getBaseX(newObj.s!.ts, range.sts!, range.ets!, range.width, range.minScaleWidth)
+    //const startBaseX = getBaseX(newObj.s!.ts, range.sts!, range.ets!, range.width, range.minScaleWidth)
 
     //newObj.extends = {}
     //newObj.extends.startBaseX = startBaseX
@@ -428,7 +428,7 @@ export const optimizeEventNode = (
     return newObj as Partial<EventNode>
 }
 
-export const findEvents = (targetElementId: string, conditions: { [key: string]: any }, fromCache: boolean | undefined = false): any => {
+export const findEvents = (targetElementId: string, conditions: { [key: string]: any }/*, fromCache: boolean | undefined = false*/): any => {
     const targetElement = document.getElementById(targetElementId)!
     const eventNodeCollection = targetElement.querySelectorAll('.sunorhc-timeline-event-node')!
     if (eventNodeCollection.length == 0) {
@@ -480,13 +480,21 @@ export const findEvents = (targetElementId: string, conditions: { [key: string]:
     }
 }
 
-export const truncateLowerScales = (scale: Scale, scaleCollection: string[]): string[] => {
+/**
+ * reduce an array of scale collections with scales truncation lewer than specific scale.
+ * 
+ * @param {Scale} scale - The scale of the base point that separates the upper and lower.
+ * @param {string[]} scaleCollection - An array containing multiple scale strings that assumes the rows property 
+ *                                     of the RulerConfig interface.
+ * @returns {string[]} - An array of scale collections with reduced lower scales.
+ */
+export const truncateLowerRulerItems = (scale: Scale, scaleCollection: string[]): string[] => {
     const scaleIndex = [ 'year', 'month', 'week', 'weekday', 'day', 'hour', 'minute', 'second', 'millisecond' ]
     const scaleIndexBounds = scaleIndex.findIndex(v => v === scale)
     const remainScales = scaleCollection.filter((scaleStr: string) => {
         return scaleIndexBounds >= scaleIndex.findIndex(v => v === toValidScale(scaleStr))
     })
-    console.log('truncateLowerScales!!!::', scale, scaleCollection, scaleIndexBounds, remainScales)
+    console.log('truncateLowerRulerItems!!!::', scale, scaleCollection, scaleIndexBounds, remainScales)
     return remainScales
 }
 

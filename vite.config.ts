@@ -17,13 +17,21 @@ export default defineConfig({
         emptyOutDir: true,
         manifest: true,
         lib: {
-            entry: path.resolve(__dirname, 'src/sunorhc-timeline.ts'),
-            name: 'Sunorhc.Timeline',
-            fileName: (format) => `sunorhc-timeline.${format}.js`
+            entry: path.resolve(__dirname, 'src/main.ts'),
+            name: 'Sunorhc',
+            formats: ['es', 'umd'],
+            fileName: (format) => `SunorhcTimeline.${format}.js`
         },
         rollupOptions: {
-            external: ['pino'],
-            // input: [ 'src/index.html', ],
+            external: [
+                'pino',
+                path.resolve(__dirname, 'src/dispatcher.ts'),
+                path.resolve(__dirname, 'src/SunorhcTimelineTester.ts'),
+                path.resolve(__dirname, 'src/tester.ts'),
+                /^.+(dispatcher|SunorhcTimelineTester|tester)\.ts$/,
+                /test/,
+            ],
+            //input: [ 'src/index.html', ],
             output: {
                 globals: {
                     pino: 'pino',
@@ -55,13 +63,18 @@ export default defineConfig({
     test: {
         globals: true,
         environment: 'happy-dom',
-        //setupFiles: ['./vitest.setup.ts'],// for using jest-dom
-        include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+        setupFiles: ['./vitest.setup.ts'],// for using jest-dom
+        include: [
+            'test/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+            //'src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'
+        ],
+        //exclude: ['test/**/_*'],
         coverage: {
             provider: 'v8',// or 'istanbul'
             reporter: ['text', 'json', 'html'],
             reportsDirectory: 'docs/coverage',
             exclude: [
+                'docs/**/*',
                 'mock/**/*',
                 'public/**/*',
                 'src/**/_*',

@@ -367,7 +367,7 @@ export const reflow = async (targetElement: HTMLElement): Promise<HTMLElement> =
     })
 }
 
-type CallbackFunction = (mutation: MutationRecord, observer: MutationObserver) => void
+export type CallbackFunction = (mutation: MutationRecord, observer: MutationObserver) => void
 
 /**
  * Watches the specified element.

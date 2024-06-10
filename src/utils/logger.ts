@@ -1,72 +1,27 @@
-import pino, { Logger } from 'pino'
-//import winston, { Logger } from 'winston'
-/*
-export class LoggerService {
-    private logger: Logger
-    private debug: boolean
+//import pino, { Logger } from 'pino'
 
-    constructor(debug: boolean = false) {
-        this.debug = debug
-        
-        const transports = []
-        
-        if (process.env.NODE_ENV === 'development') {
-            transports.push(new winston.transports.Console({
-                format: winston.format.combine(
-                    winston.format.colorize(),
-                    winston.format.simple()
-                ),
-            }))
-        }
-        
-        transports.push(new winston.transports.File({ filename: 'app.log' }))
-        
-        this.logger = winston.createLogger({
-            level: 'info',
-            format: winston.format.combine(
-                winston.format.timestamp(),
-                winston.format.json()
-            ),
-            transports
-        })
-    }
-
-    log(...message: any[]) {
-        if (this.debug) {
-            this.logger.info(message.join(', '))
-        }
-    }
-
-    error(...message: any[]) {
-        if (this.debug) {
-            this.logger.error(message.join(', '))
-        }
-    }
-
-    info(...message: any[]) {
-        if (this.debug) {
-            this.logger.info(message.join(', '))
-        }
-    }
-
-    // other log level...
-}
-*/
 interface LoggerOptions {
     debug: boolean;
     logFilePath?: string;
 }
 
+// Stub for external logger module not provided.
+class LoggerStub {
+    trace(...args: any[]): void { console.trace(...args) }
+    debug(...args: any[]): void { console.debug(...args) }
+    info(...args:  any[]): void { console.info(...args) }
+    error(...args: any[]): void { console.error(...args) }
+}
+
 export class LoggerService {
-    private logger: Logger
+    private logger: any // for switching pino.Logger or LoggerStub
     private debug: boolean
 
     constructor(options: LoggerOptions) {
         this.debug = options.debug
-
         const transports = []
 
-        if (this.debug) {
+        if (options.debug) {
             transports.push({
                 target: 'pino-pretty',
                 options: {
@@ -87,12 +42,18 @@ export class LoggerService {
             })
         }
 
-        this.logger = pino({
-            level: this.debug ? 'trace' : 'info',
-            transport: {
-                targets: transports,
-            },
-        })
+        try {
+            const pino = require('pino')
+            this.logger = pino({
+                level: this.debug ? 'trace' : 'info',
+                transport: {
+                    targets: transports,
+                },
+            })
+        } catch (error) {
+            //console.error('Failed to load pino:', error)
+            this.logger = new LoggerStub()
+        }
     }
 
     log(...message: unknown[]): void {

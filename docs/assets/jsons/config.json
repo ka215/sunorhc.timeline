@@ -1,0 +1,43 @@
+{
+    "type": "bar",
+    "start": "2024-04-28",
+    "sidebar": {
+        "placement": "left",
+        "items": [
+            { "type": "avatar", "label": "Lorem Ipsum", "src": "/avatar_example.png", "action": "./", "onClick": true, "textOverflow": false, "textPosition": "center", "textColor": "cyan" },
+            { "type": "text",   "label": "Sie können mit \"textOverflow\" umgehen, wenn die Beschriftung von Langtext überlaufen könnte.", "textOverflow": true, "textColor": "violet" },
+            { "type": "text",   "label": "Vollständiger Text wird angezeigt, wenn \"textOverflow\" falsch ist.", "textOverflow": false, "textPosition": "bottom right", "textColor": "teal", "textStyles": "font-size: 9.5pt; line-height: 1.4;" }
+        ]
+    },
+    "ruler": {
+        "placement": "both",
+        "filters": {
+            "decorations": {
+                "year": { "prefix": "n. Chr. " },
+                "week": { "suffix": "." }
+            },
+            "monthFormat": "name",
+            "monthNames": [ "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember" ],
+            "dayNames": [ "Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag" ],
+            "abbreviateMonthNameLength": 3,
+            "abbreviateDayNameLength": 2,
+            "fullStop": true,
+            "dayBackgroundColor": true
+        },
+        "top": { "rows": [ "year", "month", "day", "weekday" ] },
+        "bottom": { "rows": [ "day", "week" ] }
+    },
+    "layout": {
+        "elevation": 1,
+        "outlined": "inside",
+        "outlineCorner": "rounded",
+        "outlineStyle": "dotted",
+        "hideScrollbar": true,
+        "eventsBackground": "grid",
+        "width": "auto",
+        "height": "auto"
+    },
+    "theme": {
+        "hookChangeModeClass": "darkmode--activated"
+    }
+}
