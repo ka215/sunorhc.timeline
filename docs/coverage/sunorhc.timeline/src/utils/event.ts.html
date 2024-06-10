@@ -1,0 +1,1849 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for sunorhc.timeline/src/utils/event.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">sunorhc.timeline/src/utils</a> event.ts</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">36.05% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>212/588</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">72.5% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>29/40</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">70% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>7/10</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">36.05% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>212/588</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line low'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a>
+<a name='L120'></a><a href='#L120'>120</a>
+<a name='L121'></a><a href='#L121'>121</a>
+<a name='L122'></a><a href='#L122'>122</a>
+<a name='L123'></a><a href='#L123'>123</a>
+<a name='L124'></a><a href='#L124'>124</a>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a>
+<a name='L149'></a><a href='#L149'>149</a>
+<a name='L150'></a><a href='#L150'>150</a>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a>
+<a name='L181'></a><a href='#L181'>181</a>
+<a name='L182'></a><a href='#L182'>182</a>
+<a name='L183'></a><a href='#L183'>183</a>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a>
+<a name='L186'></a><a href='#L186'>186</a>
+<a name='L187'></a><a href='#L187'>187</a>
+<a name='L188'></a><a href='#L188'>188</a>
+<a name='L189'></a><a href='#L189'>189</a>
+<a name='L190'></a><a href='#L190'>190</a>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a>
+<a name='L202'></a><a href='#L202'>202</a>
+<a name='L203'></a><a href='#L203'>203</a>
+<a name='L204'></a><a href='#L204'>204</a>
+<a name='L205'></a><a href='#L205'>205</a>
+<a name='L206'></a><a href='#L206'>206</a>
+<a name='L207'></a><a href='#L207'>207</a>
+<a name='L208'></a><a href='#L208'>208</a>
+<a name='L209'></a><a href='#L209'>209</a>
+<a name='L210'></a><a href='#L210'>210</a>
+<a name='L211'></a><a href='#L211'>211</a>
+<a name='L212'></a><a href='#L212'>212</a>
+<a name='L213'></a><a href='#L213'>213</a>
+<a name='L214'></a><a href='#L214'>214</a>
+<a name='L215'></a><a href='#L215'>215</a>
+<a name='L216'></a><a href='#L216'>216</a>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a>
+<a name='L224'></a><a href='#L224'>224</a>
+<a name='L225'></a><a href='#L225'>225</a>
+<a name='L226'></a><a href='#L226'>226</a>
+<a name='L227'></a><a href='#L227'>227</a>
+<a name='L228'></a><a href='#L228'>228</a>
+<a name='L229'></a><a href='#L229'>229</a>
+<a name='L230'></a><a href='#L230'>230</a>
+<a name='L231'></a><a href='#L231'>231</a>
+<a name='L232'></a><a href='#L232'>232</a>
+<a name='L233'></a><a href='#L233'>233</a>
+<a name='L234'></a><a href='#L234'>234</a>
+<a name='L235'></a><a href='#L235'>235</a>
+<a name='L236'></a><a href='#L236'>236</a>
+<a name='L237'></a><a href='#L237'>237</a>
+<a name='L238'></a><a href='#L238'>238</a>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a>
+<a name='L243'></a><a href='#L243'>243</a>
+<a name='L244'></a><a href='#L244'>244</a>
+<a name='L245'></a><a href='#L245'>245</a>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a>
+<a name='L248'></a><a href='#L248'>248</a>
+<a name='L249'></a><a href='#L249'>249</a>
+<a name='L250'></a><a href='#L250'>250</a>
+<a name='L251'></a><a href='#L251'>251</a>
+<a name='L252'></a><a href='#L252'>252</a>
+<a name='L253'></a><a href='#L253'>253</a>
+<a name='L254'></a><a href='#L254'>254</a>
+<a name='L255'></a><a href='#L255'>255</a>
+<a name='L256'></a><a href='#L256'>256</a>
+<a name='L257'></a><a href='#L257'>257</a>
+<a name='L258'></a><a href='#L258'>258</a>
+<a name='L259'></a><a href='#L259'>259</a>
+<a name='L260'></a><a href='#L260'>260</a>
+<a name='L261'></a><a href='#L261'>261</a>
+<a name='L262'></a><a href='#L262'>262</a>
+<a name='L263'></a><a href='#L263'>263</a>
+<a name='L264'></a><a href='#L264'>264</a>
+<a name='L265'></a><a href='#L265'>265</a>
+<a name='L266'></a><a href='#L266'>266</a>
+<a name='L267'></a><a href='#L267'>267</a>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a>
+<a name='L271'></a><a href='#L271'>271</a>
+<a name='L272'></a><a href='#L272'>272</a>
+<a name='L273'></a><a href='#L273'>273</a>
+<a name='L274'></a><a href='#L274'>274</a>
+<a name='L275'></a><a href='#L275'>275</a>
+<a name='L276'></a><a href='#L276'>276</a>
+<a name='L277'></a><a href='#L277'>277</a>
+<a name='L278'></a><a href='#L278'>278</a>
+<a name='L279'></a><a href='#L279'>279</a>
+<a name='L280'></a><a href='#L280'>280</a>
+<a name='L281'></a><a href='#L281'>281</a>
+<a name='L282'></a><a href='#L282'>282</a>
+<a name='L283'></a><a href='#L283'>283</a>
+<a name='L284'></a><a href='#L284'>284</a>
+<a name='L285'></a><a href='#L285'>285</a>
+<a name='L286'></a><a href='#L286'>286</a>
+<a name='L287'></a><a href='#L287'>287</a>
+<a name='L288'></a><a href='#L288'>288</a>
+<a name='L289'></a><a href='#L289'>289</a>
+<a name='L290'></a><a href='#L290'>290</a>
+<a name='L291'></a><a href='#L291'>291</a>
+<a name='L292'></a><a href='#L292'>292</a>
+<a name='L293'></a><a href='#L293'>293</a>
+<a name='L294'></a><a href='#L294'>294</a>
+<a name='L295'></a><a href='#L295'>295</a>
+<a name='L296'></a><a href='#L296'>296</a>
+<a name='L297'></a><a href='#L297'>297</a>
+<a name='L298'></a><a href='#L298'>298</a>
+<a name='L299'></a><a href='#L299'>299</a>
+<a name='L300'></a><a href='#L300'>300</a>
+<a name='L301'></a><a href='#L301'>301</a>
+<a name='L302'></a><a href='#L302'>302</a>
+<a name='L303'></a><a href='#L303'>303</a>
+<a name='L304'></a><a href='#L304'>304</a>
+<a name='L305'></a><a href='#L305'>305</a>
+<a name='L306'></a><a href='#L306'>306</a>
+<a name='L307'></a><a href='#L307'>307</a>
+<a name='L308'></a><a href='#L308'>308</a>
+<a name='L309'></a><a href='#L309'>309</a>
+<a name='L310'></a><a href='#L310'>310</a>
+<a name='L311'></a><a href='#L311'>311</a>
+<a name='L312'></a><a href='#L312'>312</a>
+<a name='L313'></a><a href='#L313'>313</a>
+<a name='L314'></a><a href='#L314'>314</a>
+<a name='L315'></a><a href='#L315'>315</a>
+<a name='L316'></a><a href='#L316'>316</a>
+<a name='L317'></a><a href='#L317'>317</a>
+<a name='L318'></a><a href='#L318'>318</a>
+<a name='L319'></a><a href='#L319'>319</a>
+<a name='L320'></a><a href='#L320'>320</a>
+<a name='L321'></a><a href='#L321'>321</a>
+<a name='L322'></a><a href='#L322'>322</a>
+<a name='L323'></a><a href='#L323'>323</a>
+<a name='L324'></a><a href='#L324'>324</a>
+<a name='L325'></a><a href='#L325'>325</a>
+<a name='L326'></a><a href='#L326'>326</a>
+<a name='L327'></a><a href='#L327'>327</a>
+<a name='L328'></a><a href='#L328'>328</a>
+<a name='L329'></a><a href='#L329'>329</a>
+<a name='L330'></a><a href='#L330'>330</a>
+<a name='L331'></a><a href='#L331'>331</a>
+<a name='L332'></a><a href='#L332'>332</a>
+<a name='L333'></a><a href='#L333'>333</a>
+<a name='L334'></a><a href='#L334'>334</a>
+<a name='L335'></a><a href='#L335'>335</a>
+<a name='L336'></a><a href='#L336'>336</a>
+<a name='L337'></a><a href='#L337'>337</a>
+<a name='L338'></a><a href='#L338'>338</a>
+<a name='L339'></a><a href='#L339'>339</a>
+<a name='L340'></a><a href='#L340'>340</a>
+<a name='L341'></a><a href='#L341'>341</a>
+<a name='L342'></a><a href='#L342'>342</a>
+<a name='L343'></a><a href='#L343'>343</a>
+<a name='L344'></a><a href='#L344'>344</a>
+<a name='L345'></a><a href='#L345'>345</a>
+<a name='L346'></a><a href='#L346'>346</a>
+<a name='L347'></a><a href='#L347'>347</a>
+<a name='L348'></a><a href='#L348'>348</a>
+<a name='L349'></a><a href='#L349'>349</a>
+<a name='L350'></a><a href='#L350'>350</a>
+<a name='L351'></a><a href='#L351'>351</a>
+<a name='L352'></a><a href='#L352'>352</a>
+<a name='L353'></a><a href='#L353'>353</a>
+<a name='L354'></a><a href='#L354'>354</a>
+<a name='L355'></a><a href='#L355'>355</a>
+<a name='L356'></a><a href='#L356'>356</a>
+<a name='L357'></a><a href='#L357'>357</a>
+<a name='L358'></a><a href='#L358'>358</a>
+<a name='L359'></a><a href='#L359'>359</a>
+<a name='L360'></a><a href='#L360'>360</a>
+<a name='L361'></a><a href='#L361'>361</a>
+<a name='L362'></a><a href='#L362'>362</a>
+<a name='L363'></a><a href='#L363'>363</a>
+<a name='L364'></a><a href='#L364'>364</a>
+<a name='L365'></a><a href='#L365'>365</a>
+<a name='L366'></a><a href='#L366'>366</a>
+<a name='L367'></a><a href='#L367'>367</a>
+<a name='L368'></a><a href='#L368'>368</a>
+<a name='L369'></a><a href='#L369'>369</a>
+<a name='L370'></a><a href='#L370'>370</a>
+<a name='L371'></a><a href='#L371'>371</a>
+<a name='L372'></a><a href='#L372'>372</a>
+<a name='L373'></a><a href='#L373'>373</a>
+<a name='L374'></a><a href='#L374'>374</a>
+<a name='L375'></a><a href='#L375'>375</a>
+<a name='L376'></a><a href='#L376'>376</a>
+<a name='L377'></a><a href='#L377'>377</a>
+<a name='L378'></a><a href='#L378'>378</a>
+<a name='L379'></a><a href='#L379'>379</a>
+<a name='L380'></a><a href='#L380'>380</a>
+<a name='L381'></a><a href='#L381'>381</a>
+<a name='L382'></a><a href='#L382'>382</a>
+<a name='L383'></a><a href='#L383'>383</a>
+<a name='L384'></a><a href='#L384'>384</a>
+<a name='L385'></a><a href='#L385'>385</a>
+<a name='L386'></a><a href='#L386'>386</a>
+<a name='L387'></a><a href='#L387'>387</a>
+<a name='L388'></a><a href='#L388'>388</a>
+<a name='L389'></a><a href='#L389'>389</a>
+<a name='L390'></a><a href='#L390'>390</a>
+<a name='L391'></a><a href='#L391'>391</a>
+<a name='L392'></a><a href='#L392'>392</a>
+<a name='L393'></a><a href='#L393'>393</a>
+<a name='L394'></a><a href='#L394'>394</a>
+<a name='L395'></a><a href='#L395'>395</a>
+<a name='L396'></a><a href='#L396'>396</a>
+<a name='L397'></a><a href='#L397'>397</a>
+<a name='L398'></a><a href='#L398'>398</a>
+<a name='L399'></a><a href='#L399'>399</a>
+<a name='L400'></a><a href='#L400'>400</a>
+<a name='L401'></a><a href='#L401'>401</a>
+<a name='L402'></a><a href='#L402'>402</a>
+<a name='L403'></a><a href='#L403'>403</a>
+<a name='L404'></a><a href='#L404'>404</a>
+<a name='L405'></a><a href='#L405'>405</a>
+<a name='L406'></a><a href='#L406'>406</a>
+<a name='L407'></a><a href='#L407'>407</a>
+<a name='L408'></a><a href='#L408'>408</a>
+<a name='L409'></a><a href='#L409'>409</a>
+<a name='L410'></a><a href='#L410'>410</a>
+<a name='L411'></a><a href='#L411'>411</a>
+<a name='L412'></a><a href='#L412'>412</a>
+<a name='L413'></a><a href='#L413'>413</a>
+<a name='L414'></a><a href='#L414'>414</a>
+<a name='L415'></a><a href='#L415'>415</a>
+<a name='L416'></a><a href='#L416'>416</a>
+<a name='L417'></a><a href='#L417'>417</a>
+<a name='L418'></a><a href='#L418'>418</a>
+<a name='L419'></a><a href='#L419'>419</a>
+<a name='L420'></a><a href='#L420'>420</a>
+<a name='L421'></a><a href='#L421'>421</a>
+<a name='L422'></a><a href='#L422'>422</a>
+<a name='L423'></a><a href='#L423'>423</a>
+<a name='L424'></a><a href='#L424'>424</a>
+<a name='L425'></a><a href='#L425'>425</a>
+<a name='L426'></a><a href='#L426'>426</a>
+<a name='L427'></a><a href='#L427'>427</a>
+<a name='L428'></a><a href='#L428'>428</a>
+<a name='L429'></a><a href='#L429'>429</a>
+<a name='L430'></a><a href='#L430'>430</a>
+<a name='L431'></a><a href='#L431'>431</a>
+<a name='L432'></a><a href='#L432'>432</a>
+<a name='L433'></a><a href='#L433'>433</a>
+<a name='L434'></a><a href='#L434'>434</a>
+<a name='L435'></a><a href='#L435'>435</a>
+<a name='L436'></a><a href='#L436'>436</a>
+<a name='L437'></a><a href='#L437'>437</a>
+<a name='L438'></a><a href='#L438'>438</a>
+<a name='L439'></a><a href='#L439'>439</a>
+<a name='L440'></a><a href='#L440'>440</a>
+<a name='L441'></a><a href='#L441'>441</a>
+<a name='L442'></a><a href='#L442'>442</a>
+<a name='L443'></a><a href='#L443'>443</a>
+<a name='L444'></a><a href='#L444'>444</a>
+<a name='L445'></a><a href='#L445'>445</a>
+<a name='L446'></a><a href='#L446'>446</a>
+<a name='L447'></a><a href='#L447'>447</a>
+<a name='L448'></a><a href='#L448'>448</a>
+<a name='L449'></a><a href='#L449'>449</a>
+<a name='L450'></a><a href='#L450'>450</a>
+<a name='L451'></a><a href='#L451'>451</a>
+<a name='L452'></a><a href='#L452'>452</a>
+<a name='L453'></a><a href='#L453'>453</a>
+<a name='L454'></a><a href='#L454'>454</a>
+<a name='L455'></a><a href='#L455'>455</a>
+<a name='L456'></a><a href='#L456'>456</a>
+<a name='L457'></a><a href='#L457'>457</a>
+<a name='L458'></a><a href='#L458'>458</a>
+<a name='L459'></a><a href='#L459'>459</a>
+<a name='L460'></a><a href='#L460'>460</a>
+<a name='L461'></a><a href='#L461'>461</a>
+<a name='L462'></a><a href='#L462'>462</a>
+<a name='L463'></a><a href='#L463'>463</a>
+<a name='L464'></a><a href='#L464'>464</a>
+<a name='L465'></a><a href='#L465'>465</a>
+<a name='L466'></a><a href='#L466'>466</a>
+<a name='L467'></a><a href='#L467'>467</a>
+<a name='L468'></a><a href='#L468'>468</a>
+<a name='L469'></a><a href='#L469'>469</a>
+<a name='L470'></a><a href='#L470'>470</a>
+<a name='L471'></a><a href='#L471'>471</a>
+<a name='L472'></a><a href='#L472'>472</a>
+<a name='L473'></a><a href='#L473'>473</a>
+<a name='L474'></a><a href='#L474'>474</a>
+<a name='L475'></a><a href='#L475'>475</a>
+<a name='L476'></a><a href='#L476'>476</a>
+<a name='L477'></a><a href='#L477'>477</a>
+<a name='L478'></a><a href='#L478'>478</a>
+<a name='L479'></a><a href='#L479'>479</a>
+<a name='L480'></a><a href='#L480'>480</a>
+<a name='L481'></a><a href='#L481'>481</a>
+<a name='L482'></a><a href='#L482'>482</a>
+<a name='L483'></a><a href='#L483'>483</a>
+<a name='L484'></a><a href='#L484'>484</a>
+<a name='L485'></a><a href='#L485'>485</a>
+<a name='L486'></a><a href='#L486'>486</a>
+<a name='L487'></a><a href='#L487'>487</a>
+<a name='L488'></a><a href='#L488'>488</a>
+<a name='L489'></a><a href='#L489'>489</a>
+<a name='L490'></a><a href='#L490'>490</a>
+<a name='L491'></a><a href='#L491'>491</a>
+<a name='L492'></a><a href='#L492'>492</a>
+<a name='L493'></a><a href='#L493'>493</a>
+<a name='L494'></a><a href='#L494'>494</a>
+<a name='L495'></a><a href='#L495'>495</a>
+<a name='L496'></a><a href='#L496'>496</a>
+<a name='L497'></a><a href='#L497'>497</a>
+<a name='L498'></a><a href='#L498'>498</a>
+<a name='L499'></a><a href='#L499'>499</a>
+<a name='L500'></a><a href='#L500'>500</a>
+<a name='L501'></a><a href='#L501'>501</a>
+<a name='L502'></a><a href='#L502'>502</a>
+<a name='L503'></a><a href='#L503'>503</a>
+<a name='L504'></a><a href='#L504'>504</a>
+<a name='L505'></a><a href='#L505'>505</a>
+<a name='L506'></a><a href='#L506'>506</a>
+<a name='L507'></a><a href='#L507'>507</a>
+<a name='L508'></a><a href='#L508'>508</a>
+<a name='L509'></a><a href='#L509'>509</a>
+<a name='L510'></a><a href='#L510'>510</a>
+<a name='L511'></a><a href='#L511'>511</a>
+<a name='L512'></a><a href='#L512'>512</a>
+<a name='L513'></a><a href='#L513'>513</a>
+<a name='L514'></a><a href='#L514'>514</a>
+<a name='L515'></a><a href='#L515'>515</a>
+<a name='L516'></a><a href='#L516'>516</a>
+<a name='L517'></a><a href='#L517'>517</a>
+<a name='L518'></a><a href='#L518'>518</a>
+<a name='L519'></a><a href='#L519'>519</a>
+<a name='L520'></a><a href='#L520'>520</a>
+<a name='L521'></a><a href='#L521'>521</a>
+<a name='L522'></a><a href='#L522'>522</a>
+<a name='L523'></a><a href='#L523'>523</a>
+<a name='L524'></a><a href='#L524'>524</a>
+<a name='L525'></a><a href='#L525'>525</a>
+<a name='L526'></a><a href='#L526'>526</a>
+<a name='L527'></a><a href='#L527'>527</a>
+<a name='L528'></a><a href='#L528'>528</a>
+<a name='L529'></a><a href='#L529'>529</a>
+<a name='L530'></a><a href='#L530'>530</a>
+<a name='L531'></a><a href='#L531'>531</a>
+<a name='L532'></a><a href='#L532'>532</a>
+<a name='L533'></a><a href='#L533'>533</a>
+<a name='L534'></a><a href='#L534'>534</a>
+<a name='L535'></a><a href='#L535'>535</a>
+<a name='L536'></a><a href='#L536'>536</a>
+<a name='L537'></a><a href='#L537'>537</a>
+<a name='L538'></a><a href='#L538'>538</a>
+<a name='L539'></a><a href='#L539'>539</a>
+<a name='L540'></a><a href='#L540'>540</a>
+<a name='L541'></a><a href='#L541'>541</a>
+<a name='L542'></a><a href='#L542'>542</a>
+<a name='L543'></a><a href='#L543'>543</a>
+<a name='L544'></a><a href='#L544'>544</a>
+<a name='L545'></a><a href='#L545'>545</a>
+<a name='L546'></a><a href='#L546'>546</a>
+<a name='L547'></a><a href='#L547'>547</a>
+<a name='L548'></a><a href='#L548'>548</a>
+<a name='L549'></a><a href='#L549'>549</a>
+<a name='L550'></a><a href='#L550'>550</a>
+<a name='L551'></a><a href='#L551'>551</a>
+<a name='L552'></a><a href='#L552'>552</a>
+<a name='L553'></a><a href='#L553'>553</a>
+<a name='L554'></a><a href='#L554'>554</a>
+<a name='L555'></a><a href='#L555'>555</a>
+<a name='L556'></a><a href='#L556'>556</a>
+<a name='L557'></a><a href='#L557'>557</a>
+<a name='L558'></a><a href='#L558'>558</a>
+<a name='L559'></a><a href='#L559'>559</a>
+<a name='L560'></a><a href='#L560'>560</a>
+<a name='L561'></a><a href='#L561'>561</a>
+<a name='L562'></a><a href='#L562'>562</a>
+<a name='L563'></a><a href='#L563'>563</a>
+<a name='L564'></a><a href='#L564'>564</a>
+<a name='L565'></a><a href='#L565'>565</a>
+<a name='L566'></a><a href='#L566'>566</a>
+<a name='L567'></a><a href='#L567'>567</a>
+<a name='L568'></a><a href='#L568'>568</a>
+<a name='L569'></a><a href='#L569'>569</a>
+<a name='L570'></a><a href='#L570'>570</a>
+<a name='L571'></a><a href='#L571'>571</a>
+<a name='L572'></a><a href='#L572'>572</a>
+<a name='L573'></a><a href='#L573'>573</a>
+<a name='L574'></a><a href='#L574'>574</a>
+<a name='L575'></a><a href='#L575'>575</a>
+<a name='L576'></a><a href='#L576'>576</a>
+<a name='L577'></a><a href='#L577'>577</a>
+<a name='L578'></a><a href='#L578'>578</a>
+<a name='L579'></a><a href='#L579'>579</a>
+<a name='L580'></a><a href='#L580'>580</a>
+<a name='L581'></a><a href='#L581'>581</a>
+<a name='L582'></a><a href='#L582'>582</a>
+<a name='L583'></a><a href='#L583'>583</a>
+<a name='L584'></a><a href='#L584'>584</a>
+<a name='L585'></a><a href='#L585'>585</a>
+<a name='L586'></a><a href='#L586'>586</a>
+<a name='L587'></a><a href='#L587'>587</a>
+<a name='L588'></a><a href='#L588'>588</a>
+<a name='L589'></a><a href='#L589'>589</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// DOM event helper methods
+// Methods:
+// dragScroll, wheelScroll, doAlignment
+&nbsp;
+import { Scale, EventNodes, EventNode, TimelineOptions } from '@/types/definitions'
+import { getRect, setAtts, setContent, setStyles, wrapChildNodes } from './dom'
+import { findEvents, truncateLowerScales } from './helper'
+import { toValidScale, parseDateTime } from './datetime'
+&nbsp;
+/**
+ * Register event listeners that scroll by dragging when the main canvas of the timeline overflows.
+ *  
+ * @param {HTMLDivElement} timelineElement - Element containing an instance of the timeline.
+ */
+export const dragScroll = (timelineElement: HTMLDivElement): void =&gt; {
+    const scrollableElement: HTMLDivElement = timelineElement.querySelector('.sunorhc-timeline-main-canvas')!
+    // Elements to synchronize with main canvas scrolling.
+    const scrollableSidebarElements: HTMLDivElement[] = Array.from(timelineElement.querySelectorAll('.sunorhc-timeline-sidebar[data-sidebar-overflow="true"]')!)
+&nbsp;
+    // Handle scrolling the based main canvas element.
+    if (scrollableElement) {
+        let isDown = false
+        let startX: number
+        let startY: number
+        let scrollLeft: number
+        let scrollTop: number
+&nbsp;
+        const startDragging = (clientX: number, clientY: number) =&gt; {
+            isDown = true
+            // The added class does not affect the operation, but is assigned for checking the status on the DOM.
+            scrollableElement.classList.add('draggable')
+            if (scrollableSidebarElements.length &gt; 0) {
+                scrollableSidebarElements.forEach(elm =&gt; elm.classList.add('draggable'))
+            }
+            startX = clientX - scrollableElement.offsetLeft
+            startY = clientY - scrollableElement.offsetTop
+            scrollLeft = scrollableElement.scrollLeft
+            scrollTop = scrollableElement.scrollTop
+        }
+&nbsp;
+        const stopDragging = () =&gt; {
+            isDown = false
+            scrollableElement.classList.remove('draggable')
+            if (scrollableSidebarElements.length &gt; 0) {
+                scrollableSidebarElements.forEach(elm =&gt; elm.classList.remove('draggable'))
+            }
+        }
+&nbsp;
+        const handleDragging = (clientX: number, clientY: number) =&gt; {
+            if (!isDown) <span class="branch-0 cbranch-no" title="branch not covered" >return</span>
+            const x = clientX - scrollableElement.offsetLeft
+            const y = clientY - scrollableElement.offsetTop
+            const walkX = x - startX
+            const walkY = y - startY
+            scrollableElement.scrollLeft = scrollLeft - walkX
+            //console.log('handleDragging:', scrollableElement, scrollableSidebarElements)
+            // Scroll synchronization of sidebar elements is vertical only.
+            if (scrollableSidebarElements.length &gt; 0) {
+                scrollableElement.scrollTop = scrollTop - walkY
+                scrollableSidebarElements.forEach(elm =&gt; elm.scrollTop = scrollTop - walkY)
+            }
+        }
+&nbsp;
+        // Mouse events
+        scrollableElement.addEventListener('mousedown', (e: MouseEvent) =&gt; {
+            startDragging(e.pageX, e.pageY)
+        })
+&nbsp;
+        scrollableElement.addEventListener('mouseleave', () =&gt; {
+            stopDragging()
+        })
+&nbsp;
+        scrollableElement.addEventListener('mouseup', () =&gt; {
+            stopDragging()
+        })
+&nbsp;
+        scrollableElement.addEventListener('mousemove', (e: MouseEvent) =&gt; {
+            if (!isDown) <span class="branch-0 cbranch-no" title="branch not covered" >return</span>
+            e.preventDefault()
+            handleDragging(e.pageX, e.pageY)
+        })
+&nbsp;
+        // Touch events
+        scrollableElement.addEventListener('touchstart', (e: TouchEvent) =&gt; {
+<span class="cstat-no" title="statement not covered" >            const touch = e.touches[0]</span>
+<span class="cstat-no" title="statement not covered" >            startDragging(touch.clientX, touch.clientY)</span>
+        })
+&nbsp;
+        scrollableElement.addEventListener('touchend', () =&gt; {
+<span class="cstat-no" title="statement not covered" >            stopDragging()</span>
+        })
+&nbsp;
+        scrollableElement.addEventListener('touchcancel', () =&gt; {
+<span class="cstat-no" title="statement not covered" >            stopDragging()</span>
+        })
+&nbsp;
+        scrollableElement.addEventListener('touchmove', (e: TouchEvent) =&gt; {
+<span class="cstat-no" title="statement not covered" >            if (!isDown) return</span>
+<span class="cstat-no" title="statement not covered" >            e.preventDefault()</span>
+<span class="cstat-no" title="statement not covered" >            const touch = e.touches[0]</span>
+<span class="cstat-no" title="statement not covered" >            handleDragging(touch.clientX, touch.clientY)</span>
+        })
+    }
+}
+&nbsp;
+/**
+ * Register event listeners that scroll by mouse wheeling with sync main canvas when the sidebar of the timeline overflows.
+ * 
+ * @param {HTMLDivElement} timelineElement - Element containing an instance of the timeline.
+ */
+export const wheelScroll = (timelineElement: HTMLDivElement): void =&gt; {
+    const wheelableBaseElement: HTMLDivElement = timelineElement.querySelector('.sunorhc-timeline-main-canvas')!
+    // Elements to synchronize with main canvas wheel scrolling.
+    const wheelableSidebarElements: HTMLDivElement[] = Array.from(timelineElement.querySelectorAll('.sunorhc-timeline-sidebar[data-sidebar-overflow="true"]')!)
+    const wheelableElements: HTMLDivElement[] = [wheelableBaseElement, ...wheelableSidebarElements]
+    //console.log('Called wheelScroll', wheelableElements)
+&nbsp;
+    const toggleWheelableClass = (isEnable: boolean): void =&gt; {
+        wheelableElements.forEach(elm =&gt; {
+            if (isEnable) {
+                elm.classList.add('wheelable')
+            } else {
+                elm.classList.remove('wheelable')
+            }
+        })
+    }
+&nbsp;
+    // Handle wheel scrolling the based main canvas element.
+    if (wheelableBaseElement) {
+        let isFocused = false
+&nbsp;
+        wheelableElements.forEach(elm =&gt; {
+            elm.addEventListener('mouseenter', () =&gt; {
+                isFocused = true
+                toggleWheelableClass(isFocused)
+            })
+&nbsp;
+            elm.addEventListener('mouseleave', () =&gt; {
+                isFocused = false
+                toggleWheelableClass(isFocused)
+            })
+&nbsp;
+            elm.addEventListener('wheel', (e: WheelEvent) =&gt; {
+                if (!isFocused) return
+                e.preventDefault()
+                Array.from(timelineElement.querySelectorAll('.wheelable')!).forEach(wheelableElm =&gt; {
+                    if (wheelableElm instanceof HTMLElement) {
+                        //console.log('Do wheel scrolling!', elm.outerHTML)
+                        wheelableElm.scrollBy({ top: e.deltaY, left: e.deltaX, behavior: 'smooth' })
+                    }
+                })
+            })
+&nbsp;
+            // Touch events
+            let touchStartY: number
+            let touchStartX: number
+&nbsp;
+            elm.addEventListener('touchstart', (e: TouchEvent) =&gt; {
+<span class="cstat-no" title="statement not covered" >                const touch = e.touches[0]</span>
+<span class="cstat-no" title="statement not covered" >                touchStartX = touch.clientX</span>
+<span class="cstat-no" title="statement not covered" >                touchStartY = touch.clientY</span>
+            })
+&nbsp;
+            elm.addEventListener('touchmove', (e: TouchEvent) =&gt; {
+<span class="cstat-no" title="statement not covered" >                if (e.touches.length !== 1) return</span>
+<span class="cstat-no" title="statement not covered" >                const touch = e.touches[0]</span>
+<span class="cstat-no" title="statement not covered" >                const touchEndX = touch.clientX</span>
+<span class="cstat-no" title="statement not covered" >                const touchEndY = touch.clientY</span>
+<span class="cstat-no" title="statement not covered" >                const deltaX = touchStartX - touchEndX</span>
+<span class="cstat-no" title="statement not covered" >                const deltaY = touchStartY - touchEndY</span>
+<span class="cstat-no" title="statement not covered" >                Array.from(timelineElement.querySelectorAll('.wheelable')!).forEach(wheelableElm =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                    if (wheelableElm instanceof HTMLElement) {</span>
+<span class="cstat-no" title="statement not covered" >                        wheelableElm.scrollBy({ top: deltaY, left: deltaX, behavior: 'smooth' })</span>
+<span class="cstat-no" title="statement not covered" >                    }</span>
+<span class="cstat-no" title="statement not covered" >                })</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >                touchStartX = touchEndX</span>
+<span class="cstat-no" title="statement not covered" >                touchStartY = touchEndY</span>
+            })
+&nbsp;
+            elm.addEventListener('touchend', () =&gt; {
+<span class="cstat-no" title="statement not covered" >                // Optionally handle touch end if needed</span>
+            })
+&nbsp;
+            elm.addEventListener('touchcancel', () =&gt; {
+<span class="cstat-no" title="statement not covered" >                // Optionally handle touch cancel if needed</span>
+            })
+        })
+    }
+}
+&nbsp;
+/**
+ * Event handler to move the horizontal position of the main canvas of the timeline to the specified position.
+ * 
+ * @param {HTMLDivElement} timelineElement - Element containing an instance of the timeline.
+ * @param {Alignment} position 
+ */
+export const doAlignment = (timelineElement: HTMLDivElement, position: string | number): void =&gt; {
+    // type Alignment = number | 'left' | 'begin' | 'center' | 'right' | 'end' | 'current' | 'currently' | 'latest';
+    if (!timelineElement || !/^(\d+|left|begin|center|right|end|current(|ly)|latest)$/.test(String(position))) {
+        return
+    }
+    // `fullWidth` must be the entire scrollable width of the target element.
+    const fullWidth = (timelineElement.querySelector('.sunorhc-timeline-nodes')! as HTMLDivElement).scrollWidth
+    const targetElement: HTMLDivElement = timelineElement.querySelector('.sunorhc-timeline-main-canvas')!
+    // `visibleWidth` is the visible layout width of the target element.
+    // This is an "offsetWidth", so this value includes the element's width, padding, border, and vertical scrollbar (if present).
+    const visibleWidth = targetElement.offsetWidth
+    console.log('Called doAlignment:', position, fullWidth, visibleWidth)
+&nbsp;
+    switch(position) {
+<span class="branch-0 cbranch-no" title="branch not covered" >        case 'left':</span>
+<span class="branch-0 cbranch-no" title="branch not covered" >        case 'begin':</span>
+<span class="cstat-no" title="statement not covered" >            // Align to the starting point (left edge) of the ruler.</span>
+<span class="cstat-no" title="statement not covered" >            if (targetElement.scrollLeft &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >                targetElement.scrollTo({ top: 0, left: 0, behavior: 'smooth' })</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >            break</span>
+        case 'center':
+            // Align with the center of the ruler.
+            if (targetElement.scrollLeft &gt; 0) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
+<span class="cstat-no" title="statement not covered" >                // Initialize scroll start position. (for the Mozilla browser etc.)</span>
+<span class="cstat-no" title="statement not covered" >                targetElement.scrollTo({ left: 0 })</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+            const toLeft = Math.abs((visibleWidth / 2) - (fullWidth / 2))
+            targetElement.scrollBy({ top: 0, left: toLeft, behavior: 'smooth' })
+            break
+<span class="branch-0 cbranch-no" title="branch not covered" >        case 'right':</span>
+<span class="branch-0 cbranch-no" title="branch not covered" >        case 'end':</span>
+<span class="cstat-no" title="statement not covered" >            // Align to the ending point (right edge) of the ruler.</span>
+<span class="cstat-no" title="statement not covered" >            if (targetElement.scrollLeft &lt; fullWidth) {</span>
+<span class="cstat-no" title="statement not covered" >                targetElement.scrollTo({ top: 0, left: fullWidth, behavior: 'smooth' })</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >            break</span>
+<span class="branch-0 cbranch-no" title="branch not covered" >        case 'current':</span>
+<span class="branch-0 cbranch-no" title="branch not covered" >        case 'currently':</span>
+<span class="cstat-no" title="statement not covered" >            // Centers that point of the ruler when contains the current datetime.</span>
+<span class="cstat-no" title="statement not covered" >            const currentPositionElement = timelineElement.querySelector('[data-ruler-grain="min"] &gt; [data-item-present-time="true"]') as HTMLElement</span>
+<span class="cstat-no" title="statement not covered" >            if (currentPositionElement) {</span>
+<span class="cstat-no" title="statement not covered" >                targetElement.scrollTo({ top: 0, left: currentPositionElement.offsetLeft, behavior: 'smooth' })</span>
+<span class="cstat-no" title="statement not covered" >                currentPositionElement.dispatchEvent(new MouseEvent('mouseover', { bubbles: true, cancelable: true, view: window }))</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >            break</span>
+<span class="branch-0 cbranch-no" title="branch not covered" >        case 'latest':</span>
+<span class="cstat-no" title="statement not covered" >            // Place focus on the most recent event node.</span>
+<span class="cstat-no" title="statement not covered" >            const latestEvent = findEvents(timelineElement.id, { latest: true }, false)</span>
+<span class="cstat-no" title="statement not covered" >            if (latestEvent) {</span>
+<span class="cstat-no" title="statement not covered" >                latestEvent.dispatchEvent(new MouseEvent('mouseover', { bubbles: true, cancelable: true, view: window }))</span>
+<span class="cstat-no" title="statement not covered" >                targetElement.scrollTo({ top: 0, left: latestEvent.offsetLeft, behavior: 'smooth' })</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >            break</span>
+<span class="branch-0 cbranch-no" title="branch not covered" >        default:</span>
+<span class="cstat-no" title="statement not covered" >            // Places focus on the event node with the specified event ID.</span>
+<span class="cstat-no" title="statement not covered" >            const targetEvent = findEvents(timelineElement.id, { id: position }, false)</span>
+<span class="cstat-no" title="statement not covered" >            if (targetEvent) {</span>
+<span class="cstat-no" title="statement not covered" >                targetEvent.dispatchEvent(new MouseEvent('mouseover', { bubbles: true, cancelable: true, view: window }))</span>
+<span class="cstat-no" title="statement not covered" >                targetElement.scrollTo({ top: 0, left: targetEvent.offsetLeft, behavior: 'smooth' })</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >            break</span>
+    }
+}
+&nbsp;
+export const onStickyRulerItems = <span class="fstat-no" title="function not covered" >(timelineElement: HTMLDivElement): void =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    const overflowContainer = timelineElement.querySelector('.sunorhc-timeline-main-canvas')! as HTMLDivElement</span>
+<span class="cstat-no" title="statement not covered" >    if (overflowContainer.offsetWidth &gt; overflowContainer.scrollWidth) {</span>
+<span class="cstat-no" title="statement not covered" >        return</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" >    const rulerItems = overflowContainer.querySelectorAll('.sunorhc-timeline-ruler-row &gt; li[data-item-colspan]')</span>
+<span class="cstat-no" title="statement not covered" >    console.log('onStickyRulerItems:', rulerItems, overflowContainer.offsetWidth, overflowContainer.scrollWidth)</span>
+<span class="cstat-no" title="statement not covered" >    Array.from(rulerItems).forEach((rulerItem) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        const stickyRulerItem = rulerItem as HTMLLIElement</span>
+<span class="cstat-no" title="statement not covered" >        wrapChildNodes(stickyRulerItem, 'span')</span>
+<span class="cstat-no" title="statement not covered" >        stickyRulerItem.classList.add('sticky-ruler-item')</span>
+<span class="cstat-no" title="statement not covered" >        setAtts(stickyRulerItem, { 'data-initial-offset-left': stickyRulerItem.offsetLeft.toString() })</span>
+<span class="cstat-no" title="statement not covered" >    })</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    overflowContainer.addEventListener('scroll', () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        const scrollLeft = overflowContainer.scrollLeft</span>
+<span class="cstat-no" title="statement not covered" >        const visibleWidth = overflowContainer.offsetWidth - 2</span>
+<span class="cstat-no" title="statement not covered" >        Array.from(rulerItems).forEach((rulerItem) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            const stickyRulerItem = rulerItem as HTMLLIElement</span>
+<span class="cstat-no" title="statement not covered" >            const initialOffsetLeft = Number(stickyRulerItem.dataset.initialOffsetLeft)</span>
+<span class="cstat-no" title="statement not covered" >            const stickyLeft = Math.floor((visibleWidth - (stickyRulerItem.firstChild as HTMLSpanElement)!.offsetWidth) / 2)</span>
+<span class="cstat-no" title="statement not covered" >            const stickyPosition = Math.max(/*initialOffsetLeft,*/ stickyLeft, scrollLeft)</span>
+<span class="cstat-no" title="statement not covered" >            //stickyRulerItem.style.position = 'relative'</span>
+<span class="cstat-no" title="statement not covered" >            //stickyRulerItem.style.left = `${stickyPosition}px`</span>
+<span class="cstat-no" title="statement not covered" >        })</span>
+<span class="cstat-no" title="statement not covered" >    })</span>
+<span class="cstat-no" title="statement not covered" >}</span>
+&nbsp;
+/**
+ * Register the event listeners to display a tooltip on mouseover on an event node.
+ * 
+ * @param {HTMLDivElement} timelineElement 
+ * @param {EventNodes} eventNodes 
+ */
+export const onHoverTooltip = <span class="fstat-no" title="function not covered" >(timelineElement: HTMLDivElement, eventNodes: EventNodes): void =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    let isShownTooltip = false</span>
+<span class="cstat-no" title="statement not covered" >    const fragment: DocumentFragment = document.createDocumentFragment()</span>
+<span class="cstat-no" title="statement not covered" >    const timelineMainCanvas: HTMLDivElement = timelineElement.querySelector('.sunorhc-timeline-main-canvas')!</span>
+<span class="cstat-no" title="statement not covered" >    //const eventNodesCanvas: HTMLDivElement = timelineElement.querySelector('.sunorhc-timeline-nodes')!</span>
+<span class="cstat-no" title="statement not covered" >    const eventNodeElements: HTMLDivElement[] = Array.from(timelineElement.querySelectorAll('.sunorhc-timeline-event-node')!)</span>
+<span class="cstat-no" title="statement not covered" >    const containerRect = getRect(timelineMainCanvas) as DOMRect</span>
+<span class="cstat-no" title="statement not covered" >    eventNodeElements.forEach((eventNode: HTMLDivElement) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        eventNode.addEventListener('mouseleave', (e: MouseEvent) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            const selfElement = e.target! as HTMLDivElement</span>
+<span class="cstat-no" title="statement not covered" >            const tooltipElement = selfElement.querySelector('.tooltip')! as HTMLDivElement</span>
+<span class="cstat-no" title="statement not covered" >            if (tooltipElement) {</span>
+<span class="cstat-no" title="statement not covered" >                selfElement.removeChild(tooltipElement)</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >            isShownTooltip = false</span>
+<span class="cstat-no" title="statement not covered" >        })</span>
+<span class="cstat-no" title="statement not covered" >        eventNode.addEventListener('mouseover', (e: MouseEvent) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            if (isShownTooltip) return</span>
+<span class="cstat-no" title="statement not covered" >            e.preventDefault()</span>
+<span class="cstat-no" title="statement not covered" >            const selfElement = e.target! as HTMLDivElement</span>
+<span class="cstat-no" title="statement not covered" >            const eventId = selfElement.dataset!.eventId</span>
+<span class="cstat-no" title="statement not covered" >            const matchedEventNodes = (eventNodes as EventNode[]).filter((item: any) =&gt; item.eventId === eventId)</span>
+<span class="cstat-no" title="statement not covered" >            if (matchedEventNodes.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >                const eventNode = matchedEventNodes.shift()!</span>
+<span class="cstat-no" title="statement not covered" >                const eventNodeElementRect = getRect(selfElement) as DOMRect</span>
+<span class="cstat-no" title="statement not covered" >                const tooltipElement = document.createElement('div')</span>
+<span class="cstat-no" title="statement not covered" >                tooltipElement.classList.add('tooltip')</span>
+<span class="cstat-no" title="statement not covered" >                setStyles(tooltipElement, { top: `${(eventNodeElementRect.height / -2)}px`, left: `${(eventNodeElementRect.width / -2)}px` })</span>
+<span class="cstat-no" title="statement not covered" >                // &lt;li&gt;StartBaseX: ${eventNode.extends?.startBaseX ?? 'Undefined'}, EndBaseX: ${eventNode.extends?.endBaseX ?? 'Undefined'}&lt;/li&gt;\</span>
+<span class="cstat-no" title="statement not covered" >                setContent(tooltipElement, `&lt;ul&gt;\</span>
+<span class="cstat-no" title="statement not covered" >                &lt;li&gt;${eventNode.start} ～ ${eventNode.end || 'Undefined'}&lt;li&gt;\</span>
+<span class="cstat-no" title="statement not covered" >                &lt;li&gt;X: ${eventNode.x}, Width:&amp;nbsp; ${eventNode.w || 'Undefined'}&lt;/li&gt;\</span>
+<span class="cstat-no" title="statement not covered" >                &lt;li&gt;Y: ${eventNode.y}, Height: ${eventNode.h || 'Undefined'}&lt;/li&gt;\</span>
+<span class="cstat-no" title="statement not covered" >                &lt;li&gt;EventId: &lt;span style="color:#f87171;font-weight:600;"&gt;${eventNode.eventId}&lt;/span&gt;&lt;/li&gt;\</span>
+<span class="cstat-no" title="statement not covered" >                &lt;li&gt;${eventNode.label || 'Untitled'}&lt;/li&gt;\</span>
+<span class="cstat-no" title="statement not covered" >                &lt;/ul&gt;`, false)</span>
+<span class="cstat-no" title="statement not covered" >                fragment.append(tooltipElement)</span>
+<span class="cstat-no" title="statement not covered" >                selfElement.append(fragment)</span>
+<span class="cstat-no" title="statement not covered" >                const tooltipRect = getRect(tooltipElement) as DOMRect</span>
+<span class="cstat-no" title="statement not covered" >                let tooltipX = (tooltipRect.width - eventNodeElementRect.width) / -2</span>
+<span class="cstat-no" title="statement not covered" >                if (eventNode.x! &lt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >                    if (eventNode.w! + eventNode.x! &gt; timelineMainCanvas.offsetWidth) {</span>
+<span class="cstat-no" title="statement not covered" >                        tooltipX = (e.pageX + containerRect.left + timelineMainCanvas.scrollLeft) / 2 - eventNode.x!</span>
+<span class="cstat-no" title="statement not covered" >                    } else {</span>
+<span class="cstat-no" title="statement not covered" >                        tooltipX = eventNodeElementRect.width - ((tooltipRect.width - e.pageX) / -2)</span>
+<span class="cstat-no" title="statement not covered" >                    }</span>
+<span class="cstat-no" title="statement not covered" >                }</span>
+<span class="cstat-no" title="statement not covered" >                let tooltipY = eventNode.h || eventNodeElementRect.height</span>
+<span class="cstat-no" title="statement not covered" >                //console.log('onHoverTooltip::X:', tooltipX, eventNode.x, eventNode.w, eventNodeElementRect.x, eventNodeElementRect.width, tooltipRect.x, mouseX, mouseY, timelineMainCanvas.offsetWidth, tooltipX)</span>
+<span class="cstat-no" title="statement not covered" >                //console.log('onHoverTooltip::Y:', tooltipY, eventNode.y, eventNode.h, eventNodeElementRect.y, eventNodeElementRect.height, tooltipRect.y, tooltipRect.height)</span>
+<span class="cstat-no" title="statement not covered" >                //console.log('onHoverTooltip:', eventNode, canvasRect, eventNodeElementRect, tooltipRect, tooltipX, tooltipY, e.pageX, e.pageY, eventNode.x!)</span>
+<span class="cstat-no" title="statement not covered" >                setStyles(tooltipElement, `--tooltip-y: ${tooltipY}px; --tooltip-x: ${tooltipX}px;`)</span>
+<span class="cstat-no" title="statement not covered" >                //await Promise.resolve(setStyles(tooltipElement, `--tooltip-y: ${tooltipY}px; --tooltip-x: ${tooltipX}px;`))</span>
+<span class="cstat-no" title="statement not covered" >                //.then(() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                    tooltipElement.classList.add('shown')</span>
+<span class="cstat-no" title="statement not covered" >                    isShownTooltip = true</span>
+<span class="cstat-no" title="statement not covered" >                //})</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >        })</span>
+<span class="cstat-no" title="statement not covered" >    })</span>
+<span class="cstat-no" title="statement not covered" >}</span>
+&nbsp;
+export const dblclickZoom = <span class="fstat-no" title="function not covered" >(timelineElement: HTMLDivElement, timelineOptions: TimelineOptions): void =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    const zoomableBaseContainer: HTMLDivElement = timelineElement.querySelector('.sunorhc-timeline-main-canvas')!</span>
+<span class="cstat-no" title="statement not covered" >    const zoomableElements = [</span>
+<span class="cstat-no" title="statement not covered" >        ...Array.from(zoomableBaseContainer.querySelectorAll('.sunorhc-timeline-ruler')),</span>
+<span class="cstat-no" title="statement not covered" >        zoomableBaseContainer.querySelector('.sunorhc-timeline-nodes'),</span>
+<span class="cstat-no" title="statement not covered" >    ]</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    const toDateFromOffsetX = (offsetX: number, scale: string): string =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        const containerElement = zoomableBaseContainer.querySelector('.sunorhc-timeline-nodes')!</span>
+<span class="cstat-no" title="statement not covered" >        const perX = offsetX / containerElement.clientWidth</span>
+<span class="cstat-no" title="statement not covered" >        const parsedStartDate = parseDateTime(timelineOptions.start, timelineOptions.timezone)</span>
+<span class="cstat-no" title="statement not covered" >        const parsedEndDate   = parseDateTime(timelineOptions.end, timelineOptions.timezone)</span>
+<span class="cstat-no" title="statement not covered" >        const rangeTimes = parsedEndDate!.ts - parsedStartDate!.ts</span>
+<span class="cstat-no" title="statement not covered" >        const targetTime = (perX * rangeTimes + parsedStartDate!.ts) * 1000</span>
+<span class="cstat-no" title="statement not covered" >        const baseDate = new Date(targetTime)</span>
+<span class="cstat-no" title="statement not covered" >        const pad = (num: number, size: number): string =&gt; String(num).padStart(size, '0')</span>
+<span class="cstat-no" title="statement not covered" >        const year = baseDate.getUTCFullYear()</span>
+<span class="cstat-no" title="statement not covered" >        const month = pad(baseDate.getUTCMonth() + 1, 2)</span>
+<span class="cstat-no" title="statement not covered" >        const date = pad(baseDate.getUTCDate(), 2)</span>
+<span class="cstat-no" title="statement not covered" >        const hour = pad(baseDate.getUTCHours(), 2)</span>
+<span class="cstat-no" title="statement not covered" >        const minute = pad(baseDate.getUTCMinutes(), 2)</span>
+<span class="cstat-no" title="statement not covered" >        const second = pad(baseDate.getUTCSeconds(), 2)</span>
+<span class="cstat-no" title="statement not covered" >        const millisecond = pad(baseDate.getUTCMilliseconds(), 3)</span>
+<span class="cstat-no" title="statement not covered" >        let dateStr: string = ''</span>
+<span class="cstat-no" title="statement not covered" >        switch(scale) {</span>
+<span class="cstat-no" title="statement not covered" >            case 'year':</span>
+<span class="cstat-no" title="statement not covered" >                dateStr = year.toString()</span>
+<span class="cstat-no" title="statement not covered" >                break</span>
+<span class="cstat-no" title="statement not covered" >            case 'month':</span>
+<span class="cstat-no" title="statement not covered" >                dateStr = `${year}-${month}`</span>
+<span class="cstat-no" title="statement not covered" >                break</span>
+<span class="cstat-no" title="statement not covered" >            case 'week':</span>
+<span class="cstat-no" title="statement not covered" >            case 'weekday':</span>
+<span class="cstat-no" title="statement not covered" >            case 'day':</span>
+<span class="cstat-no" title="statement not covered" >                dateStr = `${year}-${month}-${date}`</span>
+<span class="cstat-no" title="statement not covered" >                break</span>
+<span class="cstat-no" title="statement not covered" >            case 'hour':</span>
+<span class="cstat-no" title="statement not covered" >                dateStr = `${year}-${month}-${date}T${hour}`</span>
+<span class="cstat-no" title="statement not covered" >                break</span>
+<span class="cstat-no" title="statement not covered" >            case 'minute':</span>
+<span class="cstat-no" title="statement not covered" >                dateStr = `${year}-${month}-${date}T${hour}:${minute}`</span>
+<span class="cstat-no" title="statement not covered" >                break</span>
+<span class="cstat-no" title="statement not covered" >            case 'second':</span>
+<span class="cstat-no" title="statement not covered" >                dateStr = `${year}-${month}-${date}T${hour}:${minute}:${second}`</span>
+<span class="cstat-no" title="statement not covered" >                break</span>
+<span class="cstat-no" title="statement not covered" >            case 'millisecond':</span>
+<span class="cstat-no" title="statement not covered" >                dateStr = `${year}-${month}-${date}T${hour}:${minute}:${second}.${millisecond}`</span>
+<span class="cstat-no" title="statement not covered" >                break</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >        return dateStr</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    const doZoom = (evt: MouseEvent) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        const targetElement = evt.target as HTMLElement</span>
+<span class="cstat-no" title="statement not covered" >        const clientX = evt.pageX // Absolute X coordinates of the entire visible page.</span>
+<span class="cstat-no" title="statement not covered" >        const clientY = evt.pageY // Absolute Y coordinates of the entire visible page.</span>
+<span class="cstat-no" title="statement not covered" >        const offsetX = evt.offsetX // Relative X coordinates on the zoomableBaseContainer element.</span>
+<span class="cstat-no" title="statement not covered" >        const offsetY = evt.offsetY // Relative Y coordinates on the zoomableBaseContainer element.</span>
+<span class="cstat-no" title="statement not covered" >        console.log('zoomReady!!::', targetElement.nodeName, clientX, clientY, offsetX, offsetY, evt, zoomableBaseContainer.clientWidth)</span>
+<span class="cstat-no" title="statement not covered" >        </span>
+<span class="cstat-no" title="statement not covered" >        let newStartDate: string = ''</span>
+<span class="cstat-no" title="statement not covered" >        let newEndDate: string = 'auto'</span>
+<span class="cstat-no" title="statement not covered" >        let previousScale: string | boolean = ''</span>
+<span class="cstat-no" title="statement not covered" >        let zoomToScale: string = ''</span>
+<span class="cstat-no" title="statement not covered" >        let newMinGrainWidth = Number(timelineOptions.ruler.minGrainWidth)</span>
+<span class="cstat-no" title="statement not covered" >        if (targetElement.nodeName === 'LI') {</span>
+<span class="cstat-no" title="statement not covered" >            // Zoom to the scale range of the ruler item that is double-clicked.</span>
+<span class="cstat-no" title="statement not covered" >            newStartDate = targetElement.dataset.itemDatetime || ''</span>
+<span class="cstat-no" title="statement not covered" >            previousScale = toValidScale(targetElement.parentElement?.dataset.rulerType || '')</span>
+<span class="cstat-no" title="statement not covered" >            if (!previousScale) {</span>
+<span class="cstat-no" title="statement not covered" >                previousScale = timelineOptions.scale</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >            //console.log('zoomToScale!!!::', newStartDate, newEndDate, previousScale)</span>
+<span class="cstat-no" title="statement not covered" >        } else {</span>
+<span class="cstat-no" title="statement not covered" >            // Zooms to the scale range of the minimum ruler grain to which the X-axis of the double-clicked node canvas belongs.</span>
+<span class="cstat-no" title="statement not covered" >            previousScale = timelineOptions.scale</span>
+<span class="cstat-no" title="statement not covered" >            newStartDate = toDateFromOffsetX(offsetX, previousScale)</span>
+<span class="cstat-no" title="statement not covered" >            console.log('zoomToSetting!!!::', newStartDate, newEndDate, previousScale)</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >        let matches = null</span>
+<span class="cstat-no" title="statement not covered" >        let baseDate = null</span>
+<span class="cstat-no" title="statement not covered" >        let amount = null</span>
+<span class="cstat-no" title="statement not covered" >        switch(previousScale) {</span>
+<span class="cstat-no" title="statement not covered" >            case 'year':</span>
+<span class="cstat-no" title="statement not covered" >                // newStartDate: /^(?&lt;year&gt;\d{1,4})$/</span>
+<span class="cstat-no" title="statement not covered" >                zoomToScale = 'month'</span>
+<span class="cstat-no" title="statement not covered" >                newStartDate = `${newStartDate}-01-01T00:00:00.000`</span>
+<span class="cstat-no" title="statement not covered" >                newMinGrainWidth = Math.ceil(zoomableBaseContainer.clientWidth / 12)</span>
+<span class="cstat-no" title="statement not covered" >                break</span>
+<span class="cstat-no" title="statement not covered" >            case 'month':</span>
+<span class="cstat-no" title="statement not covered" >                // newStartDate: /^(?&lt;year&gt;\d{1,4})-(?&lt;month&gt;\d{2})$/</span>
+<span class="cstat-no" title="statement not covered" >                zoomToScale = 'day'</span>
+<span class="cstat-no" title="statement not covered" >                matches = /^(?&lt;year&gt;\d{1,4})-(?&lt;month&gt;\d{2})$/.exec(newStartDate)</span>
+<span class="cstat-no" title="statement not covered" >                if (!!matches &amp;&amp; matches.groups) {</span>
+<span class="cstat-no" title="statement not covered" >                    const { year, month } = matches.groups</span>
+<span class="cstat-no" title="statement not covered" >                    const oneDay = new Date(new Date(Date.UTC(Number(year), Number(month), 1, 0, 0, 0)).getTime() - 1)</span>
+<span class="cstat-no" title="statement not covered" >                    const monthDays = oneDay.getUTCDate()</span>
+<span class="cstat-no" title="statement not covered" >                    console.log('!!!:', matches, oneDay, monthDays)</span>
+<span class="cstat-no" title="statement not covered" >                    newMinGrainWidth = Math.ceil(zoomableBaseContainer.clientWidth / monthDays)</span>
+<span class="cstat-no" title="statement not covered" >                    newEndDate = `${newStartDate}-${monthDays}T23:59:59.999`</span>
+<span class="cstat-no" title="statement not covered" >                } else {</span>
+<span class="cstat-no" title="statement not covered" >                    newMinGrainWidth = Math.ceil(zoomableBaseContainer.clientWidth / 30)</span>
+<span class="cstat-no" title="statement not covered" >                }</span>
+<span class="cstat-no" title="statement not covered" >                newStartDate = `${newStartDate}-01T00:00:00.000`</span>
+<span class="cstat-no" title="statement not covered" >                break</span>
+<span class="cstat-no" title="statement not covered" >            case 'week':</span>
+<span class="cstat-no" title="statement not covered" >                // newStartDate: /^(?&lt;year&gt;\d{1,4})-(?&lt;week&gt;\d{2})$/</span>
+<span class="cstat-no" title="statement not covered" >                zoomToScale = 'day'</span>
+<span class="cstat-no" title="statement not covered" >                matches = /^(?&lt;year&gt;\d{1,4})-(?&lt;week&gt;\d{2})$/.exec(newStartDate)</span>
+<span class="cstat-no" title="statement not covered" >                if (!!matches &amp;&amp; matches.groups) {</span>
+<span class="cstat-no" title="statement not covered" >                    const { year, week } = matches.groups</span>
+<span class="cstat-no" title="statement not covered" >                    let weeknumber = 1</span>
+<span class="cstat-no" title="statement not covered" >                    for (let d = 1; d &lt;= Number(week) * 7; d++) {</span>
+<span class="cstat-no" title="statement not covered" >                        const oneDay = new Date(Date.UTC(Number(year), 0, d, 0, 0, 0))</span>
+<span class="cstat-no" title="statement not covered" >                        if (oneDay.getUTCDay() === timelineOptions.ruler.firstDayOfWeek) {</span>
+<span class="cstat-no" title="statement not covered" >                            weeknumber++</span>
+<span class="cstat-no" title="statement not covered" >                            if (weeknumber === Number(week)) {</span>
+<span class="cstat-no" title="statement not covered" >                                newStartDate = oneDay.toISOString().replace(/Z$/, '')</span>
+<span class="cstat-no" title="statement not covered" >                                newEndDate = `${year}-${String(oneDay.getUTCMonth() + 1).padStart(2, '0')}-${String(oneDay.getUTCDate() + 6).padStart(2, '0')}T23:59:59.999`</span>
+<span class="cstat-no" title="statement not covered" >                                break</span>
+<span class="cstat-no" title="statement not covered" >                            }</span>
+<span class="cstat-no" title="statement not covered" >                        }</span>
+<span class="cstat-no" title="statement not covered" >                    }</span>
+<span class="cstat-no" title="statement not covered" >                }</span>
+<span class="cstat-no" title="statement not covered" >                newMinGrainWidth = Math.ceil(zoomableBaseContainer.clientWidth / 7)</span>
+<span class="cstat-no" title="statement not covered" >                break</span>
+<span class="cstat-no" title="statement not covered" >            case 'weekday':</span>
+<span class="cstat-no" title="statement not covered" >            case 'day':</span>
+<span class="cstat-no" title="statement not covered" >                // newStartDate: /^(?&lt;year&gt;\d{1,4})-(?&lt;month&gt;\d{2})-(?&lt;day&gt;\d{2}),(?&lt;weekday&gt;\w{3})$/</span>
+<span class="cstat-no" title="statement not covered" >                zoomToScale = 'hour'</span>
+<span class="cstat-no" title="statement not covered" >                baseDate = newStartDate.replace(/(,\w+)$/, '')</span>
+<span class="cstat-no" title="statement not covered" >                newStartDate = `${baseDate}T00:00:00.000`</span>
+<span class="cstat-no" title="statement not covered" >                matches = /^(?&lt;year&gt;\d{1,4})-(?&lt;month&gt;\d{2})-(?&lt;day&gt;\d{2})$/.exec(baseDate)</span>
+<span class="cstat-no" title="statement not covered" >                if (!!matches &amp;&amp; matches.groups) {</span>
+<span class="cstat-no" title="statement not covered" >                    const { year, month, day } = matches.groups</span>
+<span class="cstat-no" title="statement not covered" >                    amount = Number(day) + 1</span>
+<span class="cstat-no" title="statement not covered" >                    newEndDate = `${year}-${month.padStart(2, '0')}-${String(amount).padStart(2, '0')}T00:00:00.000`</span>
+<span class="cstat-no" title="statement not covered" >                }</span>
+<span class="cstat-no" title="statement not covered" >                newMinGrainWidth = 60// Math.ceil(zoomableBaseContainer.clientWidth / 24)</span>
+<span class="cstat-no" title="statement not covered" >                break</span>
+<span class="cstat-no" title="statement not covered" >            case 'hour':</span>
+<span class="cstat-no" title="statement not covered" >                // newStartDate: /^(?&lt;year&gt;\d{1,4})-(?&lt;month&gt;\d{2})-(?&lt;day&gt;\d{2})T(?&lt;hours&gt;\d{2})$/</span>
+<span class="cstat-no" title="statement not covered" >                zoomToScale = 'minute'</span>
+<span class="cstat-no" title="statement not covered" >                baseDate = newStartDate</span>
+<span class="cstat-no" title="statement not covered" >                newStartDate = `${baseDate}:00:00.000`</span>
+<span class="cstat-no" title="statement not covered" >                matches = /^(?&lt;year&gt;\d{1,4})-(?&lt;month&gt;\d{2})-(?&lt;day&gt;\d{2})T(?&lt;hours&gt;\d{2})$/.exec(baseDate)</span>
+<span class="cstat-no" title="statement not covered" >                if (!!matches &amp;&amp; matches.groups) {</span>
+<span class="cstat-no" title="statement not covered" >                    const { year, month, day, hours } = matches.groups</span>
+<span class="cstat-no" title="statement not covered" >                    amount = Number(hours) + 1</span>
+<span class="cstat-no" title="statement not covered" >                    newEndDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${String(amount).padStart(2, '0')}:00:00.000`</span>
+<span class="cstat-no" title="statement not covered" >                }</span>
+<span class="cstat-no" title="statement not covered" >                newMinGrainWidth = Math.ceil(zoomableBaseContainer.clientWidth / 60)</span>
+<span class="cstat-no" title="statement not covered" >                break</span>
+<span class="cstat-no" title="statement not covered" >            case 'minute':</span>
+<span class="cstat-no" title="statement not covered" >                // newStartDate: /^(?&lt;year&gt;\d{1,4})-(?&lt;month&gt;\d{2})-(?&lt;day&gt;\d{2})T(?&lt;hours&gt;\d{2}):(?&lt;minutes&gt;\d{2})$/</span>
+<span class="cstat-no" title="statement not covered" >                zoomToScale = 'second'</span>
+<span class="cstat-no" title="statement not covered" >                baseDate = newStartDate</span>
+<span class="cstat-no" title="statement not covered" >                newStartDate = `${baseDate}:00.000`</span>
+<span class="cstat-no" title="statement not covered" >                matches = /^(?&lt;year&gt;\d{1,4})-(?&lt;month&gt;\d{2})-(?&lt;day&gt;\d{2})T(?&lt;hours&gt;\d{2}):(?&lt;minutes&gt;\d{2})$/.exec(baseDate)</span>
+<span class="cstat-no" title="statement not covered" >                if (!!matches &amp;&amp; matches.groups) {</span>
+<span class="cstat-no" title="statement not covered" >                    const { year, month, day, hours, minutes } = matches.groups</span>
+<span class="cstat-no" title="statement not covered" >                    amount = Number(minutes) + 1</span>
+<span class="cstat-no" title="statement not covered" >                    newEndDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${hours.padStart(2, '0')}:${String(amount).padStart(2, '0')}:00.000`</span>
+<span class="cstat-no" title="statement not covered" >                }</span>
+<span class="cstat-no" title="statement not covered" >                newMinGrainWidth = Math.ceil(zoomableBaseContainer.clientWidth / 60)</span>
+<span class="cstat-no" title="statement not covered" >                break</span>
+<span class="cstat-no" title="statement not covered" >            case 'second':</span>
+<span class="cstat-no" title="statement not covered" >                // newStartDate: /^(?&lt;year&gt;\d{1,4})-(?&lt;month&gt;\d{2})-(?&lt;day&gt;\d{2})T(?&lt;hours&gt;\d{2}):(?&lt;minutes&gt;\d{2}):(?&lt;seconds&gt;\d{2})$/</span>
+<span class="cstat-no" title="statement not covered" >                zoomToScale = 'millisecond'</span>
+<span class="cstat-no" title="statement not covered" >                baseDate = newStartDate</span>
+<span class="cstat-no" title="statement not covered" >                newStartDate = `${baseDate}.000`</span>
+<span class="cstat-no" title="statement not covered" >                matches = /^(?&lt;year&gt;\d{1,4})-(?&lt;month&gt;\d{2})-(?&lt;day&gt;\d{2})T(?&lt;hours&gt;\d{2}):(?&lt;minutes&gt;\d{2}):(?&lt;seconds&gt;\d{2})$/.exec(baseDate)</span>
+<span class="cstat-no" title="statement not covered" >                if (!!matches &amp;&amp; matches.groups) {</span>
+<span class="cstat-no" title="statement not covered" >                    const { year, month, day, hours, minutes, seconds } = matches.groups</span>
+<span class="cstat-no" title="statement not covered" >                    amount = Number(seconds) + 1</span>
+<span class="cstat-no" title="statement not covered" >                    newEndDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:${String(amount).padStart(2, '0')}.000`</span>
+<span class="cstat-no" title="statement not covered" >                }</span>
+<span class="cstat-no" title="statement not covered" >                newMinGrainWidth = Math.ceil(zoomableBaseContainer.clientWidth / 1000)</span>
+<span class="cstat-no" title="statement not covered" >                break</span>
+<span class="cstat-no" title="statement not covered" >            case 'millisecond':</span>
+<span class="cstat-no" title="statement not covered" >                // newStartDate: /^(?&lt;year&gt;\d{1,4})-(?&lt;month&gt;\d{2})-(?&lt;day&gt;\d{2})T(?&lt;hours&gt;\d{2}):(?&lt;minutes&gt;\d{2}):(?&lt;seconds&gt;\d{2})\.(?&lt;milliseconds&gt;\d{3})$/</span>
+<span class="cstat-no" title="statement not covered" >            default:</span>
+<span class="cstat-no" title="statement not covered" >                // Do not zoom at this scale.</span>
+<span class="cstat-no" title="statement not covered" >                zoomToScale = timelineOptions.scale</span>
+<span class="cstat-no" title="statement not covered" >                break</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >        newStartDate += timelineOptions.timezone === 'UTC' ? 'Z' : ''</span>
+<span class="cstat-no" title="statement not covered" >        newEndDate += newEndDate !== 'auto' &amp;&amp; timelineOptions.timezone === 'UTC' ? 'Z' : ''</span>
+<span class="cstat-no" title="statement not covered" >        const newRulerOptions = { ...timelineOptions.ruler }</span>
+<span class="cstat-no" title="statement not covered" >        if (zoomToScale !== 'millisecond') {</span>
+<span class="cstat-no" title="statement not covered" >            newRulerOptions.minGrainWidth = !!newMinGrainWidth &amp;&amp; newMinGrainWidth &lt; 48 ? 48 : newMinGrainWidth</span>
+<span class="cstat-no" title="statement not covered" >        } else {</span>
+<span class="cstat-no" title="statement not covered" >            newRulerOptions.minGrainWidth = !!newMinGrainWidth &amp;&amp; newMinGrainWidth &lt; 30 ? 30 : newMinGrainWidth</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >        if (timelineOptions.ruler.hasOwnProperty('truncateLowers') &amp;&amp; timelineOptions.ruler.truncateLowers) {</span>
+<span class="cstat-no" title="statement not covered" >            if (newRulerOptions.hasOwnProperty('top') &amp;&amp; newRulerOptions.top!.rows.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >                newRulerOptions.top!.rows = truncateLowerScales(zoomToScale as Scale, newRulerOptions.top!.rows)</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >            if (newRulerOptions.hasOwnProperty('bottom') &amp;&amp; newRulerOptions.bottom!.rows.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >                newRulerOptions.bottom!.rows = truncateLowerScales(zoomToScale as Scale, newRulerOptions.bottom!.rows)</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        const zoomOptions = {</span>
+<span class="cstat-no" title="statement not covered" >            prevScale: previousScale,</span>
+<span class="cstat-no" title="statement not covered" >            scale: zoomToScale,</span>
+<span class="cstat-no" title="statement not covered" >            start: newStartDate,</span>
+<span class="cstat-no" title="statement not covered" >            end: newEndDate,</span>
+<span class="cstat-no" title="statement not covered" >            ruler: newRulerOptions,</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >        console.log('Before Zoom!!!::', zoomOptions, timelineOptions.ruler)</span>
+<span class="cstat-no" title="statement not covered" >        if ((window as Window).hasOwnProperty('SunorhcTimelineInstances')) {</span>
+<span class="cstat-no" title="statement not covered" >            window.SunorhcTimelineInstances[timelineElement.id].zoom(zoomOptions)</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    if (timelineOptions.debug) {</span>
+<span class="cstat-no" title="statement not covered" >        zoomableBaseContainer.querySelector&lt;HTMLDivElement&gt;('.sunorhc-timeline-nodes')?.addEventListener('mousemove', (e: MouseEvent) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            //const toDateStr = toDateFromOffsetX(e.offsetX, timelineOptions.scale)</span>
+<span class="cstat-no" title="statement not covered" >            //console.log('offsetX: %s -&gt; date: %s', e.offsetX, toDateStr)</span>
+<span class="cstat-no" title="statement not covered" >        })</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    zoomableElements.forEach(zoomableElement =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        (zoomableElement as HTMLElement)!.addEventListener('dblclick', (e: MouseEvent) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            doZoom(e)</span>
+<span class="cstat-no" title="statement not covered" >        })</span>
+<span class="cstat-no" title="statement not covered" >    })</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >}</span>
+&nbsp;</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2024-06-10T02:11:51.236Z
+            </div>
+        <script src="../../../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../../../sorter.js"></script>
+        <script src="../../../block-navigation.js"></script>
+    </body>
+</html>
+    

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>190/190</span>
+                <span class='fraction'>198/198</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">98.11% </span>
+                <span class="strong">98.14% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>365/372</span>
+                <span class='fraction'>370/377</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">82.72% </span>
+                <span class="strong">81.41% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>91/110</span>
+                <span class='fraction'>92/113</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>190/190</span>
+                <span class='fraction'>198/198</span>
             </div>
         
             
@@ -253,7 +253,15 @@
 <a name='L188'></a><a href='#L188'>188</a>
 <a name='L189'></a><a href='#L189'>189</a>
 <a name='L190'></a><a href='#L190'>190</a>
-<a name='L191'></a><a href='#L191'>191</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -423,29 +431,44 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">302x</span>
-<span class="cline-any cline-yes">302x</span>
-<span class="cline-any cline-yes">302x</span>
-<span class="cline-any cline-yes">302x</span>
-<span class="cline-any cline-yes">302x</span>
-<span class="cline-any cline-yes">302x</span>
-<span class="cline-any cline-yes">330x</span>
-<span class="cline-any cline-yes">328x</span>
-<span class="cline-any cline-yes">328x</span>
-<span class="cline-any cline-yes">328x</span>
-<span class="cline-any cline-yes">267x</span>
-<span class="cline-any cline-yes">267x</span>
-<span class="cline-any cline-yes">330x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">307x</span>
+<span class="cline-any cline-yes">307x</span>
+<span class="cline-any cline-yes">307x</span>
+<span class="cline-any cline-yes">307x</span>
+<span class="cline-any cline-yes">307x</span>
+<span class="cline-any cline-yes">307x</span>
+<span class="cline-any cline-yes">336x</span>
+<span class="cline-any cline-yes">334x</span>
+<span class="cline-any cline-yes">334x</span>
+<span class="cline-any cline-yes">334x</span>
+<span class="cline-any cline-yes">272x</span>
+<span class="cline-any cline-yes">272x</span>
+<span class="cline-any cline-yes">336x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">330x</span>
-<span class="cline-any cline-yes">302x</span>
-<span class="cline-any cline-yes">302x</span>
-<span class="cline-any cline-yes">302x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import * as Def from '../types/definitions'
-&nbsp;
+<span class="cline-any cline-yes">336x</span>
+<span class="cline-any cline-yes">307x</span>
+<span class="cline-any cline-yes">307x</span>
+<span class="cline-any cline-yes">307x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// Methods for validating option objects with user input.
 // Validator Objects:
+// validatorLandmarkRole, validatorSidebarItem, validatorSidebarRole, validatorRulerFilter, validatorRulerConfig,
+// validatorRulerRole, validatorRelationConfig, validatorEventNode, validatorLayouts, validatorEffects,
+// validatorThemeConfig, validatorTimelineOptions 
+// Methods:
+// validateTimelineOptions
+&nbsp;
+import * as Def from '../types/definitions'
+&nbsp;
 &nbsp;
 type OptionValidators&lt;T&gt; = {
     //[K in string as keyof T]?: (v: T[K]) =&gt; T;
@@ -513,6 +536,7 @@ export const validatorRulerConfig: OptionValidators&lt;Def.RulerConfig&gt; = {
 export const validatorRulerRole: OptionValidators&lt;Def.RulerRole&gt; = {
     placement:      (v: Def.RulerPlacement | undefined): Def.RulerPlacement =&gt; !v || typeof v !== 'string' || !/^(both|top|bottom|none)$/i.test(v) ? 'both' : v.toLowerCase() as Def.RulerPlacement,
     truncateLowers: (v: boolean | undefined): boolean =&gt; typeof v === 'boolean' ? v : false,
+    firstDayOfWeek: <span class="fstat-no" title="function not covered" >(v: number | undefined): number =&gt; !v || typeof v !== 'number' ? 0 : (v &gt; 6 ? 6 : (v &lt; 0 ? 0 : Math.floor(v))),// default to 0 (equal Sunday)</span>
     minGrainWidth:  (v: number | string | undefined): number | string =&gt; !v || !/^(number|string)$/.test(typeof v) ? '48px' : (/^\d+(|px)$/.test(String(v)) ? v : '48px'),
     filters:        (v: Def.RulerFilter | undefined): Def.RulerFilter | undefined =&gt; !v || typeof v !== 'object' ? undefined : validateTimelineOptions&lt;Def.RulerFilter&gt;(v, validatorRulerFilter) as Def.RulerFilter,
     top:            (v: Def.RulerConfig | undefined): Def.RulerConfig =&gt; !v || typeof v !== 'object' ? { rows: [ 'day' ] } : validateTimelineOptions&lt;Def.RulerConfig&gt;(v, validatorRulerConfig) as Def.RulerConfig,
@@ -535,10 +559,10 @@ export const validatorEventNode: OptionValidators&lt;Def.EventNode&gt; = {
     y: <span class="fstat-no" title="function not covered" >(v: number | undefined): number | undefined =&gt; v || undefined,</span>
     w: <span class="fstat-no" title="function not covered" >(v: number | undefined): number | undefined =&gt; v || undefined,</span>
     h: <span class="fstat-no" title="function not covered" >(v: number | undefined): number | undefined =&gt; v || undefined,</span>
-    s: <span class="fstat-no" title="function not covered" >(v: Record&lt;string, any&gt; | undefined): Record&lt;string, any&gt; | undefined =&gt; v || undefined,</span>
-    e: <span class="fstat-no" title="function not covered" >(v: Record&lt;string, any&gt; | undefined): Record&lt;string, any&gt; | undefined =&gt; v || undefined,</span>
+    s: <span class="fstat-no" title="function not covered" >(v: Def.DateTimeObject | undefined): Def.DateTimeObject | undefined =&gt; v || undefined,</span>
+    e: <span class="fstat-no" title="function not covered" >(v: Def.DateTimeObject | undefined): Def.DateTimeObject | undefined =&gt; v || undefined,</span>
     start: (v: string | undefined): string =&gt; !v || typeof v !== 'string' ? '' : v,
-    end: (v: string | undefined): string =&gt; !v || typeof v !== 'string' ? '' : v,
+    end: (v: string | undefined): string | undefined =&gt; !v || typeof v !== 'string' ? undefined : v,
     row: (v: number | undefined): number =&gt; !v || typeof v !== 'number' ? 0 : v,
     group: (v: string | undefined): string | undefined =&gt; !v || typeof v !== 'string' ? undefined : v,
     label: (v: string | undefined): string | undefined =&gt; !v || typeof v !== 'string' ? undefined : v,
@@ -550,7 +574,7 @@ export const validatorEventNode: OptionValidators&lt;Def.EventNode&gt; = {
     classes: (v: string | undefined): string | undefined =&gt; !v || typeof v !== 'string' ? undefined : v,
     styles: (v: string | undefined): string | undefined =&gt; !v || typeof v !== 'string' ? undefined : v,
     image: (v: string | undefined): string | undefined =&gt; !v || typeof v !== 'string' ? undefined : v,
-    size: (v: Def.PointerSize | undefined): Def.PointerSize =&gt; !v || !/^(string|number)$/.test(typeof v) ? 'md' : (/^(\d+|xs|sm|md|lg|xl)$/i.test(String(v)) ? v : 'md'),
+    size: (v: Def.PointerSize | undefined): Def.PointerSize =&gt; !v || !/^(string|number)$/.test(typeof v) ? 'md' : (/^(([+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?)|xs|sm|md|lg|xl)$/i.test(String(v)) ? v : 'md'),
     remote: (v: boolean | undefined): boolean =&gt; !v || typeof v !== 'boolean' ? false : v,
     expiration: (v: Def.CacheExpiration | undefined): Def.CacheExpiration =&gt; !v || !/^(string|number)$/.test(typeof v) ? 'always' : (/^(\d+|always|none)$/i.test(String(v)) ? v : 'always'),
     relation: (v: Def.RelationConfig | undefined): Def.RelationConfig | undefined =&gt; !v || typeof v !== 'object' ? undefined : validateTimelineOptions&lt;Def.RelationConfig&gt;(v, validatorRelationConfig) as Def.RelationConfig,
@@ -567,12 +591,13 @@ export const validatorLayouts: OptionValidators&lt;Def.Layouts&gt; = {
     eventsBackground: (v: Def.EventsBackground | undefined): Def.EventsBackground =&gt; !v || typeof v !== 'string' || !/^(striped|grid|toned|plaid|none)$/.test(v) ? 'plaid' : String(v) as Def.EventsBackground,
     width:         (v: number | string | undefined): number | string =&gt; !v || !/^(number|string)$/.test(typeof v) ? 'auto' : (typeof v === 'number' ? v : (/^(\d+(px|%|vw)|auto|inherit|(max|min|fit)-content)$/.test(v) ? v : 'auto')),
     height:        (v: number | string | undefined): number | string =&gt; !v || !/^(number|string)$/.test(typeof v) ? 'auto' : (typeof v === 'number' ? v : (/^(\d+(px|%|vh)|auto|inherit|(max|min|fit)-content)$/.test(v) ? v : 'auto')),
+    rtl:          <span class="fstat-no" title="function not covered" >(v: boolean | undefined): boolean =&gt; typeof v === 'boolean' ? v : false,</span>
 }
 &nbsp;
 export const validatorEffects: OptionValidators&lt;Def.Effects&gt; = {
     presentTime:      (v: boolean | undefined): boolean =&gt; typeof v === 'boolean' ? v : false,
     defaultAlignment: (v: Def.Alignment | undefined): Def.Alignment =&gt; !v || !/^(string|number)$/.test(typeof v) || !/^(\d+|left|begin|center|right|end|current(|ly)|latest)$/i.test(String(v)) ? 'latest' : (typeof v === 'string' ? v.toLowerCase() : v) as Def.Alignment,
-    //firstDayOfWeek:   (v: number | undefined): number =&gt; !v || typeof v !== 'number' ? 0 : (v &gt; 6 ? 6 : (v &lt; 0 ? 0 : Math.floor(v))),// default to 0 (equal Sunday)
+    cacheExpiration:  (v: Def.CacheExpiration | undefined): Def.CacheExpiration =&gt; !v || !/^(string|number)$/.test(typeof v) || !/^(\d+|always|none)$/i.test(String(v)) ? 'always' : v as Def.CacheExpiration,
     hoverEvent:       (v: boolean | undefined): boolean =&gt; typeof v === 'boolean' ? v : false,
     onClickEvent:     (v: Def.Action | undefined): Def.Action =&gt; !v || typeof v !== 'string' || !/^(normal|modal|custom|none)$/i.test(v) ? 'normal' : v as Def.Action,
     //stripedGridRow:   (v: boolean | number | string | undefined): boolean | undefined =&gt; !v || !/^(boolean|number|string)$/.test(typeof v) ? undefined : /^(0|1|false|true)$/i.test(String(v)) ? /^(1|true)$/i.test(String(v)) : false,
@@ -593,7 +618,6 @@ export const validatorTimelineOptions: OptionValidators&lt;Def.TimelineOptions&g
     end:        (v: string | Date | undefined): string | Date =&gt; v || 'auto',
     timezone:   (v: string | undefined): string =&gt; v || 'UTC',
     //type:       (v: string | undefined): FixedType =&gt; !v || typeof v !== 'string' || !/^(bar|point|mixed)$/i.test(v) ? 'mixed' : v.toLowerCase() as FixedType,
-    //scale:      (v: string | undefined): Scale =&gt; !v || typeof v !== 'string' || !/^(millennium|century|decade|lustrum|year|month|week|(week|)day|(quarter|half|)-?hour|minute|second|millisecond)$/i.test(v) ? 'day' : v.toLowerCase() as Scale,
     scale:      (v: Def.Scale | undefined): Def.Scale =&gt; !v || typeof v !== 'string' || !/^(year|month|week|(week|)day|hour|minute|second|millisecond)$/i.test(v) ? 'day' : v.toLowerCase() as Def.Scale,
     file:       (v: string | null | undefined): string | undefined =&gt; !v ? undefined : (typeof v === 'string' ? <span class="branch-0 cbranch-no" title="branch not covered" >v : undefined),</span>
     header:     (v: Def.LandmarkRole | undefined): Def.LandmarkRole =&gt; !v || typeof v !== 'object' ? { display: false } : validateTimelineOptions&lt;Def.LandmarkRole&gt;(v, validatorLandmarkRole) as Def.LandmarkRole,
@@ -604,7 +628,7 @@ export const validatorTimelineOptions: OptionValidators&lt;Def.TimelineOptions&g
     events:     (v: Def.EventNodes | undefined): Def.EventNodes =&gt; !v || !/^(string|object)$/.test(typeof v) ? [] : (Array.isArray(v) ? v.map((node: Def.EventNode) =&gt; validateTimelineOptions&lt;Def.EventNode&gt;(node, validatorEventNode) as Def.EventNode<span class="branch-0 cbranch-no" title="branch not covered" >) as Def.EventNodes : (typeof v === 'string' ? v as Def.EventNodes : [])),</span>
     //layout:     (v: Layouts | undefined): Layouts =&gt; !v || typeof v !== 'object' ? { elevation: 0, outlined: 'inside', hideScrollbar: true, width: 'auto', height: 'auto' } as Layouts : validateTimelineOptions&lt;Layouts&gt;(v, validatorLayouts) as Layouts,
     layout:     (v: Def.Layouts | undefined): Def.Layouts | undefined =&gt; !v || typeof v !== 'object' ? undefined : validateTimelineOptions&lt;Def.Layouts&gt;(v, validatorLayouts) as Def.Layouts,
-    effects:    (v: Def.Effects | undefined): Def.Effects =&gt; !v || typeof v !== 'object' ? { presentTime: false, defaultAlignment: 'latest', hoverEvent: true, onClickEvent: 'normal' } : validateTimelineOptions&lt;Def.Effects&gt;(v, validatorEffects) as Def.Effects,
+    effects:    (v: Def.Effects | undefined): Def.Effects =&gt; !v || typeof v !== 'object' ? { presentTime: false, defaultAlignment: 'latest', cacheExpiration: 'always', hoverEvent: true, onClickEvent: 'normal' } : validateTimelineOptions&lt;Def.Effects&gt;(v, validatorEffects) as Def.Effects,
     theme:      (v: Def.ThemeConfig | undefined): Def.ThemeConfig | undefined =&gt; !v || typeof v !== 'object' ? undefined : validateTimelineOptions&lt;Def.ThemeConfig&gt;(v, validatorThemeConfig) as Def.ThemeConfig,
     useStorage: (v: Def.StorageType | undefined): Def.StorageType =&gt; !v || typeof v !== 'string' || !/^(session|local)Storage$/i.test(v) ? 'sessionStorage' : v as Def.StorageType,
     zoomable:   (v: boolean | undefined): boolean =&gt; typeof v === 'boolean' ? v : false,
@@ -640,7 +664,7 @@ export const validateTimelineOptions = &lt;T&gt;(obj: T, validatorObj?: OptionVa
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-22T05:48:27.596Z
+                at 2024-06-10T02:11:51.236Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -605,10 +605,10 @@ export const placeEventNodes = (containerElement: HTMLDivElement, eventNodes: Ev
         const checker = checkEventState(evt, containerWidth, containerHeight, startRangeTime, endRangeTime)
         if (!checker.isEnableEvent) {
             // Skip handling of an event out of range of the timeline.
-            logger.log('placeEventNodes::%caborted:%c', 'color:brown;font-weight:600;', 'color:black;font-weight:400;', checker, evt)
+            //logger.log('placeEventNodes::%caborted:%c', 'color:brown;font-weight:600;', 'color:black;font-weight:400;', checker, evt)
             return
         }
-        logger.log('placeEventNodes::%cenabled:%c', 'color:green;font-weight:600;', 'color:black;font-weight:400;', checker, evt)
+        //logger.log('placeEventNodes::%cenabled:%c', 'color:green;font-weight:600;', 'color:black;font-weight:400;', checker, evt)
         const eventNodeElement = document.createElement('div')
         eventNodeElement.classList.add('sunorhc-timeline-event-node', 'preparing')
         setAtts(eventNodeElement, { 'data-event-id': evt.eventId!.toString() })

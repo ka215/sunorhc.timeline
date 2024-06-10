@@ -60,6 +60,7 @@ export default defineConfig({
         coverage: {
             provider: 'v8',// or 'istanbul'
             reporter: ['text', 'json', 'html'],
+            reportsDirectory: 'docs/coverage',
             exclude: [
                 'mock/**/*',
                 'public/**/*',
@@ -67,10 +68,6 @@ export default defineConfig({
                 'postcss.config.cjs',
             ],
             all: true,
-            //statements: 90,
-            //branches: 90,
-            //functions: 90,
-            //lines: 90,
         },
     }
 })

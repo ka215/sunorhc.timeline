@@ -68,7 +68,7 @@ export const getStartOfYearInTimeZone = (year: number, timeZone: string = 'UTC')
  * @param {string | undefined} timeZone
  * @returns {number}
  */
-export const getWeekNumber = (date: Date, firstDayOfWeek: number = 0/*, timeZone: string = 'UTC'*/): number => {
+export const getWeekNumber = (date: Date, firstDayOfWeek: number = 0, timeZone: string = 'UTC'): number => {
     /* */
     // Calculate the day of the year in the given time zone
     /*
@@ -82,8 +82,9 @@ export const getWeekNumber = (date: Date, firstDayOfWeek: number = 0/*, timeZone
     }
     */
     //const timeZoneOffset = getTimeZoneOffset(date, timeZone)
-    //let utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()))
-    let utcDate = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0, 0))
+    let utcDate = timeZone === 'UTC' 
+        ? new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0, 0)) 
+        : new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0))
     if (date.getFullYear() < 100) {
         utcDate = new Date(utcDate.setUTCFullYear(date.getFullYear()))
     }
@@ -224,7 +225,7 @@ export const parseDateTime = (
     const fixedHours = parseInt(hours, 10) - (isGivenUTC ? 0 : offsetHours)
     const fixedMinutes = parseInt(minutes, 10) - (isGivenUTC ? 0 : offsetMinutes)
     const monthname = monthNames[Number(month) - 1]
-    const weeks = getWeekNumber(dateObject!, firstDayOfWeek)
+    const weeks = getWeekNumber(dateObject!, firstDayOfWeek, timeZone)
     const weekday = timeZone === 'UTC' ? dayNames[dateObject!.getUTCDay()] : dayNames[dateObject!.getDay()]
     const milliseconds = timeZone === 'UTC' ? dateObject!.getUTCMilliseconds() : dateObject!.getMilliseconds()
     let ISOFormatString = dateObject!.toISOString()

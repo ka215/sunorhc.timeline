@@ -2,7 +2,7 @@
 // Methods:
 // dragScroll, wheelScroll, doAlignment
 
-import { EventNodes, EventNode, TimelineOptions } from '@/types/definitions'
+import { Scale, EventNodes, EventNode, TimelineOptions } from '@/types/definitions'
 import { getRect, setAtts, setContent, setStyles, wrapChildNodes } from './dom'
 import { findEvents, truncateLowerScales } from './helper'
 import { toValidScale, parseDateTime } from './datetime'
@@ -552,10 +552,10 @@ export const dblclickZoom = (timelineElement: HTMLDivElement, timelineOptions: T
         }
         if (timelineOptions.ruler.hasOwnProperty('truncateLowers') && timelineOptions.ruler.truncateLowers) {
             if (newRulerOptions.hasOwnProperty('top') && newRulerOptions.top!.rows.length > 0) {
-                newRulerOptions.top!.rows = truncateLowerScales(zoomToScale, newRulerOptions.top!.rows)
+                newRulerOptions.top!.rows = truncateLowerScales(zoomToScale as Scale, newRulerOptions.top!.rows)
             }
             if (newRulerOptions.hasOwnProperty('bottom') && newRulerOptions.bottom!.rows.length > 0) {
-                newRulerOptions.bottom!.rows = truncateLowerScales(zoomToScale, newRulerOptions.bottom!.rows)
+                newRulerOptions.bottom!.rows = truncateLowerScales(zoomToScale as Scale, newRulerOptions.bottom!.rows)
             }
         }
 
@@ -572,10 +572,12 @@ export const dblclickZoom = (timelineElement: HTMLDivElement, timelineOptions: T
         }
     }
 
-    zoomableBaseContainer.querySelector<HTMLDivElement>('.sunorhc-timeline-nodes')?.addEventListener('mousemove', (e: MouseEvent) => {
-        const toDateStr = toDateFromOffsetX(e.offsetX, timelineOptions.scale)
-        console.log('offsetX: %s -> date: %s', e.offsetX, toDateStr)
-    })
+    if (timelineOptions.debug) {
+        zoomableBaseContainer.querySelector<HTMLDivElement>('.sunorhc-timeline-nodes')?.addEventListener('mousemove', (e: MouseEvent) => {
+            //const toDateStr = toDateFromOffsetX(e.offsetX, timelineOptions.scale)
+            //console.log('offsetX: %s -> date: %s', e.offsetX, toDateStr)
+        })
+    }
 
     zoomableElements.forEach(zoomableElement => {
         (zoomableElement as HTMLElement)!.addEventListener('dblclick', (e: MouseEvent) => {
