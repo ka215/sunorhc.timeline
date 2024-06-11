@@ -1,3 +1,3 @@
-import { Timeline } from './SunorhcTimeline'
+import { Timeline } from '@/SunorhcTimeline'
 
 export { Timeline }

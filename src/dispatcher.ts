@@ -1,6 +1,5 @@
-//import './styles/main.sass'
-import { TimelineOptions } from './types/definitions'
-import { Timeline } from './SunorhcTimeline'
+import { TimelineOptions } from '@/types/definitions'
+import { Timeline } from '@/SunorhcTimeline'
 
 // Set type of handling to dispatch plugin:
 const creationType: number = 3

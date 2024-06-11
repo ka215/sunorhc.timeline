@@ -1,4 +1,4 @@
-import { setupTester } from './SunorhcTimelineTester'
+import { setupTester } from '@/tester/SunorhcTimelineTester'
 
 document.querySelector<HTMLDivElement>('#tester')!.innerHTML = `
   <div id="sunorhc-timeline-tester"></div>
