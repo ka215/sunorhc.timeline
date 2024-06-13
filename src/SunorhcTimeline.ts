@@ -1,7 +1,15 @@
 import * as packageJson from '../package.json'
 import './styles/main.sass'
-import { Sidebars, Rulers, Alignment, EventNode, TimelineOptions, TimelineBaseClass, Measures, RulerOptions, ZoomScaleOptions } from './types/definitions'
-import { isObject, isEmptyObject, getAtts, setAtts, setStyles, setContent, deepMergeObjects, deepCloneObject, cloneObject, fetchData, deserialize, parseDateTime, convertToPixels, isElement, getRect, getParticles, getStartDatetime, getEndDatetime, createLandmarkElement, createSidebar, createSidebarItems, createRuler, createRulerItems, optimizeEventNode, placeEventNodes, showPresentTimeMarker, getDuplicateValues, validatorEventNode, validateTimelineOptions, saveToStorage, loadFromStorage, watcher, dragScroll, doAlignment, wheelScroll, dblclickZoom, onHoverTooltip } from './utils'
+import {
+  Sidebars, Rulers, Alignment, EventNode, TimelineOptions, TimelineBaseClass, Measures, RulerOptions, ZoomScaleOptions
+} from './types/definitions'
+import {
+  isObject, isEmptyObject, getAtts, setAtts, setStyles, setContent, deepMergeObjects, deepCloneObject, cloneObject, 
+  fetchData, deserialize, parseDateTime, convertToPixels, isElement, getRect, getParticles, getStartDatetime, getEndDatetime, 
+  createLandmarkElement, createSidebar, createSidebarItems, createRuler, createRulerItems, optimizeEventNode, placeEventNodes, 
+  showPresentTimeMarker, getDuplicateValues, validatorEventNode, validateTimelineOptions, saveToStorage, loadFromStorage, 
+  watcher, dragScroll, doAlignment, wheelScroll, dblclickZoom, onHoverTooltip
+} from './utils'
 import { LoggerService } from './utils/logger'
 
 // Get Env
@@ -295,13 +303,6 @@ export class Timeline implements TimelineBaseClass {
         rulerTopHeight: (this.options.ruler.top?.rows?.length || 0) * rulerTopRowHeight,
         rulerBottomHeight: (this.options.ruler.bottom?.rows?.length || 0) * rulerBottomRowHeight,
         rulerMaxCols: scaleParticle,
-        /*
-        test: {
-          elm: this.targetElement,
-          frag: this.fragmentNode,
-          date: new Date('2024-05-13T15:00:00Z'),
-          reg: new RegExp(/^some$/, 'i'),
-        },*/
       } as Measures
       this.logger.log('initMeasure:', this.elementId, this.options, preMeasures)
       if (preMeasures.sidebarItems == 0 || preMeasures.rulerTopRows + preMeasures.rulerBottomRows == 0) {
@@ -650,16 +651,8 @@ export class Timeline implements TimelineBaseClass {
       if (this.options.effects.presentTime) {
         showPresentTimeMarker(this.targetElement)
       }
-      /* simulate reload
-      if (this.test < 1) {
-        this.test++
-        this.serveEventNodes()
-      }
-      */
     }
   }
-
-   
 
   /**
    * Start watching the rendering mode changing.

@@ -17,7 +17,7 @@ export function setupTester(element: HTMLDivElement) {
     <label for="select-timezone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">TimeZone:</label>
     <div for="select-timezone" class="w-36 h-max border border-blue-500 rounded-lg _focus:ring-blue-500 _focus:border-blue-500 dark:border-gray-600 _dark:focus:ring-blue-500 _dark:focus:border-blue-500">
       <select id="select-timezone" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white">
-        <option hidden>Example TimeZone</option>
+        <option hidden>TimeZone</option>
         <option diff="-10"    value="America/Adak">America/Adak</option>
         <option diff="-7"     value="America/Phoenix">America/Phoenix</option>
         <option diff="-5"     value="America/New_York">America/New_York</option>
@@ -39,7 +39,7 @@ export function setupTester(element: HTMLDivElement) {
     <label for="select-outlined" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Outline:</label>
     <div for="select-outlined" class="w-36 h-max border border-blue-500 rounded-lg _focus:ring-blue-500 _focus:border-blue-500 dark:border-gray-600 _dark:focus:ring-blue-500 _dark:focus:border-blue-500">
       <select id="select-outlined" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white">
-        <option hidden>Outlined</option>
+        <option hidden>Choose Outline</option>
         <option value="none">"none" outline</option>
         <option value="inside">"inside" only</option>
         <option value="outside">"outside" only</option>
@@ -51,7 +51,7 @@ export function setupTester(element: HTMLDivElement) {
     <label for="select-elevation" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Elevation:</label>
     <div for="select-elevation" class="w-36 h-max border border-blue-500 rounded-lg _focus:ring-blue-500 _focus:border-blue-500 dark:border-gray-600 _dark:focus:ring-blue-500 _dark:focus:border-blue-500">
       <select id="select-elevation" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white">
-        <option hidden>Elevation None</option>
+        <option hidden>Choose Elevation</option>
         <option value="0">Elevation 0</option>
         <option value="1">Elevation 1</option>
         <option value="2">Elevation 2</option>
@@ -85,7 +85,8 @@ export function setupTester(element: HTMLDivElement) {
     <label for="select-canvas-layout" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Canvas Layout:</label>
     <div for="select-canvas-layout" class="w-32 h-max border border-blue-500 rounded-lg _focus:ring-blue-500 _focus:border-blue-500 dark:border-gray-600 _dark:focus:ring-blue-500 _dark:focus:border-blue-500">
       <select id="select-canvas-layout" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white">
-        <option hidden>Style None</option>
+        <option hidden>Choose Style</option>
+        <option value="">Style None</option>
         <option value="striped">Striped</option>
         <option value="grid">Grid</option>
         <option value="toned">Toned</option>
@@ -133,6 +134,14 @@ export function setupTester(element: HTMLDivElement) {
   <div class="flex flex-col items-start w-28 h-max">
     <label for="row-height" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Row Height</label>
     <input type="text" id="row-height" class="alnum-only bg-gray-50 border-solid border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="80px" pattern="[A-Za-z0-9\.]*" inputmode="latin" />
+  </div>
+  <div class="flex flex-col items-start w-36 h-max">
+    <label for="toggle-scale-tracker" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Scale Tracker:</label>
+    <label class="inline-flex items-center my-2 cursor-pointer">
+      <input id="toggle-scale-tracker" type="checkbox" name="scale-tracker" value="1" class="sr-only peer">
+      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+      <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">On Tracking</span>
+    </label>
   </div>
 </div>
 `
@@ -317,6 +326,31 @@ export function setupTester(element: HTMLDivElement) {
           })
         }, 300)
       }
+    }
+  })
+
+  // Toggle Scale Tracker
+  element.querySelector<HTMLInputElement>('#toggle-scale-tracker')!.addEventListener('change', (evt: Event) => {
+    const $CHECKBOX = <HTMLInputElement>evt.currentTarget
+    if (window.hasOwnProperty('SunorhcTimelineInstances')) {
+      for (const key in window.SunorhcTimelineInstances) {
+        const extendsOptions = window.SunorhcTimelineInstances[key].getOptions().extends ?? {}
+        if (extendsOptions.hasOwnProperty('zoomScaleTracker') && extendsOptions.zoomScaleTracker) {
+          const $TARGET_TIMELINE = document.getElementById(key)!
+          let $SCALE_TRACKER: HTMLDivElement
+          if ($CHECKBOX.checked) {
+            $SCALE_TRACKER = document.createElement('div')
+            $SCALE_TRACKER.classList.add('zoom-scale-coordinates-tracker')
+            $SCALE_TRACKER.setAttribute('style', `position: absolute; bottom: 0; left: 0; display: none; flex-wrap: wrap; justify-content: start; text-align: left; font-size: 12px; color: #555; background-color: #fff; border: solid 1px #ddd; border-radius: 4px; width: max-content; max-width: 50%; height: max-content; padding: 2px 4px; z-index: 9999;`)
+            $TARGET_TIMELINE.querySelector<HTMLDivElement>('.sunorhc-timeline-footer')!.append($SCALE_TRACKER)
+          } else {
+            $SCALE_TRACKER = $TARGET_TIMELINE.querySelector('.zoom-scale-coordinates-tracker') as HTMLDivElement
+            $TARGET_TIMELINE.querySelector<HTMLDivElement>('.sunorhc-timeline-footer')!.removeChild($SCALE_TRACKER)
+          }
+        }
+      }
+    } else {
+      $CHECKBOX.checked = false
     }
   })
 

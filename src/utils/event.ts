@@ -365,6 +365,8 @@ export const dblclickZoom = (timelineElement: HTMLDivElement, timelineOptions: T
         zoomableBaseContainer.querySelector('.sunorhc-timeline-nodes'),
     ]
 
+    let lastTouchEnd = 0
+
     const toDateFromOffsetX = (offsetX: number, scale: string): string => {
         const containerElement = zoomableBaseContainer.querySelector('.sunorhc-timeline-nodes')!
         const perX = offsetX / containerElement.clientWidth
@@ -410,17 +412,18 @@ export const dblclickZoom = (timelineElement: HTMLDivElement, timelineOptions: T
         return dateStr
     }
 
-    const doZoom = (evt: MouseEvent) => {
+    const doZoom = (evt: MouseEvent | TouchEvent, offsetX: number) => {
         const targetElement = evt.target as HTMLElement
+        /*
         const clientX = evt.pageX // Absolute X coordinates of the entire visible page.
         const clientY = evt.pageY // Absolute Y coordinates of the entire visible page.
         const offsetX = evt.offsetX // Relative X coordinates on the zoomableBaseContainer element.
         const offsetY = evt.offsetY // Relative Y coordinates on the zoomableBaseContainer element.
         console.log('zoomReady!!::', targetElement.nodeName, clientX, clientY, offsetX, offsetY, evt, zoomableBaseContainer.clientWidth)
-        
+        */        
         let newStartDate: string = ''
         let newEndDate: string = 'auto'
-        let previousScale: string | boolean = ''
+        let previousScale: string | boolean = timelineOptions.scale
         let zoomToScale: string = ''
         let newMinGrainWidth = Number(timelineOptions.ruler.minGrainWidth)
         if (targetElement.nodeName === 'LI') {
@@ -433,7 +436,6 @@ export const dblclickZoom = (timelineElement: HTMLDivElement, timelineOptions: T
             //console.log('zoomToScale!!!::', newStartDate, newEndDate, previousScale)
         } else {
             // Zooms to the scale range of the minimum ruler grain to which the X-axis of the double-clicked node canvas belongs.
-            previousScale = timelineOptions.scale
             newStartDate = toDateFromOffsetX(offsetX, previousScale)
             console.log('zoomToSetting!!!::', newStartDate, newEndDate, previousScale)
         }
@@ -574,16 +576,79 @@ export const dblclickZoom = (timelineElement: HTMLDivElement, timelineOptions: T
         }
     }
 
-    /*
-    zoomableBaseContainer.querySelector<HTMLDivElement>('.sunorhc-timeline-nodes')?.addEventListener('mousemove', (e: MouseEvent) => {
-        const toDateStr = toDateFromOffsetX(e.offsetX, timelineOptions.scale)
-        console.log('offsetX: %s -> date: %s', e.offsetX, toDateStr)
-    })
-    */
+    if (timelineOptions.debug && timelineOptions.extends?.zoomScaleTracker) {
+        zoomableBaseContainer.querySelector<HTMLDivElement>('.sunorhc-timeline-nodes')?.addEventListener('mousemove', (e: MouseEvent) => {
+            /*
+            const callback = timelineOptions.extends!.zoomScaleTracker
+            if (typeof callback === 'function') {
+                callback(e)
+            } else if (typeof callback !== 'string') {
+                throw new TypeError('The specified zoomScaleTracker was invalid and could not be called.')
+            }
+            try {
+                const func = new Function(`return (${callback}).apply(null, e);`)
+                return func.call(window)
+            } catch (error) {
+                console.error('Failed to execute function:', error)
+                return null
+            }
+            */
+            const trackerElement = timelineElement.querySelector('.zoom-scale-coordinates-tracker')
+            if (!trackerElement) {
+                return
+            }
+            let trackerStyles: any = trackerElement.getAttribute('style')
+            trackerStyles = trackerStyles?.split(';').map((style: string) => style.trim().replace(/^display\:\s?none$/, 'display: flex'))
+            const toDateStr = toDateFromOffsetX(e.offsetX, timelineOptions.scale)
+            trackerElement.innerHTML = `<ul>\
+            <li><label>X:</label><span style="color: blue;">${e.offsetX}</span>, <label>Y:</label><span style="color: blue;">${e.offsetY}</span></li>\
+            <li><label>Date:</label> <span style="color: red;">${toDateStr}</span></li>\
+            </ul>`
+            trackerElement.setAttribute('style', trackerStyles!.join('; '))
+        })
+    }
+
+    const handleTouchStart = (e: TouchEvent) => {
+        if (e.touches.length === 2) {
+            const touch1 = e.touches[0]
+            const touch2 = e.touches[1]
+            const touchDistance = Math.hypot(touch1.pageX - touch2.pageX, touch1.pageY - touch2.pageY) as number
+            (e.target as HTMLElement).dataset.initialTouchDistance = touchDistance.toString()
+        }
+    }
+
+    const handleTouchMove = (e: TouchEvent) => {
+        if (e.touches.length === 2) {
+            const touch1 = e.touches[0]
+            const touch2 = e.touches[1]
+            //const touchDistance = Math.hypot(touch1.pageX - touch2.pageX, touch1.pageY - touch2.pageY) as number
+            const initialTouchDistance = parseFloat((e.target as HTMLElement).dataset.initialTouchDistance || '0')
+
+            if (initialTouchDistance > 0) {
+                const offsetX = (touch1.pageX + touch2.pageX) / 2 - zoomableBaseContainer.getBoundingClientRect().left
+                doZoom(e, offsetX)
+            }
+        }
+    }
+
+    const handleDoubleTap = (e: TouchEvent) => {
+        const now = new Date().getTime()
+        if (now - lastTouchEnd <= 300) {
+            const touch = e.changedTouches[0]
+            const offsetX = touch.pageX - zoomableBaseContainer.getBoundingClientRect().left
+            doZoom(e, offsetX)
+        }
+        lastTouchEnd = now
+    }
+
+    zoomableBaseContainer.addEventListener('touchstart', handleTouchStart, { passive: true })
+    zoomableBaseContainer.addEventListener('touchmove', handleTouchMove, { passive: true })
+    zoomableBaseContainer.addEventListener('touchend', handleDoubleTap, { passive: true })
 
     zoomableElements.forEach(zoomableElement => {
         (zoomableElement as HTMLElement)!.addEventListener('dblclick', (e: MouseEvent) => {
-            doZoom(e)
+            const offsetX = e.offsetX
+            doZoom(e, offsetX)
         })
     })
 

@@ -1,3 +1,121 @@
+.github-corner {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 9999;
+}
+
+.github-corner svg {
+    position: absolute;
+    top: 0;
+}
+
+.github-corner svg.github-corner-right {
+    left: auto;
+    right: 0;
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+
+.github-corner svg.github-corner-left {
+    right: auto;
+    left: 0;
+}
+
+.github-corner.right svg.github-corner-right {
+    display: block;
+}
+
+.github-corner.right svg.github-corner-left {
+    display: none;
+}
+
+.github-corner.left svg.github-corner-left {
+    display: block;
+}
+
+.github-corner.left svg.github-corner-right {
+    display: none;
+}
+
+.github-corner:hover .octo-arm {
+    animation: octocat-wave 560ms ease-in-out;
+}
+
+@keyframes octocat-wave {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    20% {
+        transform: rotate(-25deg);
+    }
+
+    40% {
+        transform: rotate(10deg);
+    }
+
+    60% {
+        transform: rotate(-25deg);
+    }
+
+    80% {
+        transform: rotate(10deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+@media (max-width: 500px) {
+    .github-corner:hover .octo-arm {
+        animation: none;
+    }
+
+    .github-corner .octo-arm {
+        animation: octocat-wave 560ms ease-in-out;
+    }
+}
+
+body:not(.darkmode--activated) .fill-black,
+body.darkmode--activated .dark\:fill-black {
+    fill: #151513;
+}
+
+body:not(.darkmode--activated) .fill-white,
+body.darkmode--activated .dark\:fill-white {
+    fill: #fff;
+}
+
+body.darkmode--activated .dark\:text-white {
+    color: #fff;
+}
+
+body.darkmode--activated .dark\:bg-gray-900 {
+    background-color: rgb(17 24 39 / 1);
+}
+
+body.darkmode--activated .dark\:bg-gray-700 {
+    background-color: #374151;
+}
+
+
+body.darkmode--activated option {
+    background-color: rgb(17 24 39 / 1);
+    color: #fff;
+}
+
+body.darkmode--activated optgroup {
+    background-color: rgb(17 24 39 / 1);
+    color: #999;
+    font-weight: 400;
+}
+
+
+body.darkmode--activated .dark\:placeholder-gray-400::placeholder {
+    color: #9CA3AF;
+}
+
 .sunorhc-timeline-sidebar span[data-sidebar-item-type="avatar"] img {
     border-radius: 4px;
 }

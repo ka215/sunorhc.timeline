@@ -176,7 +176,7 @@ switch(creationType) {
         },
         footer: {
           display: true,
-          label: '<a href="https://github.com/ka215/sunorhc.timeline">Follow us on GitHub</a>, powered by Sunorhc.Timeline v0.9.0',
+          label: '<a href="https://github.com/ka215/sunorhc.timeline">Follow me on GitHub</a>, powered by Sunorhc.Timeline v0.9.0',
           textColor: 'gray',
           textStyles: 'margin-top: 20px;',
           textClass: '',
@@ -198,6 +198,9 @@ switch(creationType) {
           { start: '2024-5-31 12:34' },
         ], */
         zoomable: true,
+        extends: {
+          zoomScaleTracker: true,
+        },
       }
       await Timeline.create('myTimelineWithInputOptions', inputOptions as TimelineOptions )
       .then((onFulfilled?: Timeline): void => {
