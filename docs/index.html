@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Icons">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.2/css/all.css">
     <link rel="stylesheet" type="text/css" href="./assets/css/ress.css">
-    <link rel="stylesheet" type="text/css" href="./assets/css/sunorhc.timeline.min.css">
+    <link rel="stylesheet" type="text/css" href="./assets/css/sunorhc.timeline.css">
     <link rel="stylesheet" type="text/css" href="./assets/css/custom-style.css">
 </head>
 <body class="flex flex-col justify-between">
@@ -29,6 +29,19 @@
             Sunorhc.Timeline inherits the useful features of its predecessor and breaks new ground.
         </p>
     </header>
+    <!-- github-corners: @see https://github.com/tholman/github-corners -->
+    <a href="https://github.com/ka215/sunorhc.timeline" class="github-corner left" aria-label="Follow me on Github">
+      <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 250 250" class="fill-white dark:fill-black github-corner-right">
+        <path class="fill-black dark:fill-white" d="M0 0l115 115h15l12 27 108 108V0z"/>
+        <path class="octo-arm" d="M128 109c-15-9-9-19-9-19 3-7 2-11 2-11-1-7 3-2 3-2 4 5 2 11 2 11-3 10 5 15 9 16" style="-webkit-transform-origin: 130px 106px; transform-origin: 130px 106px"/>
+        <path class="octo-body" d="M115 115s4 2 5 0l14-14c3-2 6-3 8-3-8-11-15-24 2-41 5-5 10-7 16-7 1-2 3-7 12-11 0 0 5 3 7 16 4 2 8 5 12 9s7 8 9 12c14 3 17 7 17 7-4 8-9 11-11 11 0 6-2 11-7 16-16 16-30 10-41 2 0 3-1 7-5 11l-12 11c-1 1 1 5 1 5z"/>
+      </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 250 250" class="fill-white dark:fill-black github-corner-left">
+        <path class="fill-black dark:fill-white" d="M250 0L135 115h-15l-12 27L0 250V0z"/>
+        <path class="octo-arm" d="M122 109c15-9 9-19 9-19-3-7-2-11-2-11 1-7-3-2-3-2-4 5-2 11-2 11 3 10-5 15-9 16" style="-webkit-transform-origin: 120px 144px; transform-origin: 120px 144px"/>
+        <path class="octo-body" d="M135 115s-4 2-5 0l-14-14c-3-2-6-3-8-3 8-11 15-24-2-41-5-5-10-7-16-7-1-2-3-7-12-11 0 0-5 3-7 16-4 2-8 5-12 9s-7 8-9 12c-14 4-17 9-17 9 4 8 9 11 11 11 0 6 2 11 7 16 16 16 30 10 41 2 0 3 1 7 5 11l12 11c1 2-1 6-1 6z"/>
+      </svg>     
+    </a>
     <main role="article" class="px-6 w-full _max-w-full _md:max-w-screen-md _lg:max-w-screen-lg _xl:max-w-screen-xl bg-white text-center dark:bg-gray-950">
         
         <div
@@ -62,7 +75,7 @@
           data-options="config.json"
           class="my-4 mx-auto"
         ></div>
-        <div id="app"></div>
+        <div id="sunorhc-timeline-tester"></div>
         
     </main>
     <footer role="contentinfo" class="p-4 w-full bg-white select-none _md:px-6 _md:py-8 dark:bg-gray-950">
@@ -71,7 +84,7 @@
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
     <script>new Darkmode({ bottom: '20px', right: '20px', left: 'unset', time: '0.3s', mixColor: '#fff', backgroundColor: '#fff', buttonColorDark: '#3f3f46', buttonColorLight: '#f4f4f5', saveInCookies: false, label: '🌓', autoMatchOsTheme: true }).showWidget()</script>
-    <script src="./assets/js/sunorhc.timeline.min.js"></script>
+    <script src="./assets/js/sunorhc.timeline.js?36b234d20e33bd16f588b1d07cad5ad8"></script>
     <script>(async () => {
       const timelineOptions = {
         start: new Date(new Date().setHours(new Date().getHours() - 1, 0, 0, 0)),// now before a hour
@@ -111,12 +124,12 @@
             { type: 'avatar', label: 'Eleonora Talwar', group: 'E.T.', src: './avatar_09.png', action: '', onClick: false, textOverflow: false, textPosition: 'center', textStyles: 'font-size: 13px; width: 70px; text-align: left;' },
             { type: 'avatar', label: 'Harold Xiang',    group: 'H.X.', src: './avatar_03.png', action: '', onClick: false, textOverflow: false, textPosition: 'center', textStyles: 'font-size: 13px; width: 70px; text-align: left;' },
             */
-            { type: 'image',  label: 'Bottom Right'/*'韋叡 - Wei Rui'*/, group: 'group1', src: '../images/sample_1.png', action: '', onClick: false, textOverflow: true, textPosition: 'bottom right', textColor: '#fef3c7' },
-            { type: 'image',  label: 'Center Center'/*'Lyena Loki'*/, group: 'group2', src: '../images/sample_2.png', action: '', onClick: false, textOverflow: true, textPosition: 'center center', textColor: '#dcfce7' },
-            { type: 'image',  label: 'Top Right'/*'浅葱 Felice'*/, group: 'group3', src: '../images/sample_3.png', action: '', onClick: false, textOverflow: true, textPosition: 'top right', textColor: '#e9d5ff' },
-            { type: 'image',  label: 'Bottom Left'/*'浅葱 Misha'*/, group: 'group4', src: '../images/sample_4.png', action: '', onClick: false, textOverflow: true, textPosition: 'bottom left', textColor: '#f5d0fe' },
-            { type: 'image',  label: 'Top Left'/*'高田 美緒'*/, group: 'group5', src: '../images/sample_5.png', action: '', onClick: false, textOverflow: true, textPosition: 'top left', textColor: '#fda4af' },
-            { type: 'image',  label: 'Bottom Center'/*'Ysaac Hunter'*/, group: 'group6', src: '../images/sample_6.png', action: '', onClick: false, textOverflow: true, textPosition: 'bottom center', textColor: '#e0f2fe' },
+            { type: 'image',  label: 'Bottom Right', group: 'group1', src: '../images/sample_1.png', action: '', onClick: false, textOverflow: true, textPosition: 'bottom right', textColor: '#fef3c7' },
+            { type: 'image',  label: 'Center Center', group: 'group2', src: '../images/sample_2.png', action: '', onClick: false, textOverflow: true, textPosition: 'center center', textColor: '#dcfce7' },
+            { type: 'image',  label: 'Top Right', group: 'group3', src: '../images/sample_3.png', action: '', onClick: false, textOverflow: true, textPosition: 'top right', textColor: '#e9d5ff' },
+            { type: 'image',  label: 'Bottom Left', group: 'group4', src: '../images/sample_4.png', action: '', onClick: false, textOverflow: true, textPosition: 'bottom left', textColor: '#f5d0fe' },
+            { type: 'image',  label: 'Top Left', group: 'group5', src: '../images/sample_5.png', action: '', onClick: false, textOverflow: true, textPosition: 'top left', textColor: '#fda4af' },
+            { type: 'image',  label: 'Bottom Center', group: 'group6', src: '../images/sample_6.png', action: '', onClick: false, textOverflow: true, textPosition: 'bottom center', textColor: '#e0f2fe' },
           ]
         },
         ruler: {
@@ -212,7 +225,7 @@
         },
         footer: {
           display: true,
-          label: '<a href="https://github.com/ka215/sunorhc.timeline">Follow us on GitHub</a>, powered by Sunorhc.Timeline v0.9.0',
+          label: '<a href="https://github.com/ka215/sunorhc.timeline">Follow me on GitHub</a>, powered by Sunorhc.Timeline v0.9.0',
           textColor: 'gray',
           textStyles: 'margin-top: 20px;',
           textClass: '',
@@ -234,11 +247,16 @@
           { start: '2024-5-31 12:34' },
         ], */
         zoomable: true,
+        extends: {
+          zoomScaleTracker: true,
+        },
       }
       await Sunorhc.Timeline.create('myTimelineWithInputOptions', timelineOptions)
       .then(onFulfilled => {
         console.log('Success:', window.SunorhcTimelineInstances, onFulfilled.getOptions())
       })
     })();</script>
+    <script src="./assets/js/Tester.js?36b234d20e33bd16f588b1d07cad5ad8"></script>
+    <script>Sunorhc.setupTester(document.getElementById('sunorhc-timeline-tester'))</script>
 </body>
 </html>
