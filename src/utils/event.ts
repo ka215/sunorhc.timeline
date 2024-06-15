@@ -1,11 +1,11 @@
 // DOM event helper methods
 // Methods:
-// dragScroll, wheelScroll, doAlignment
+// dragScroll, wheelScroll, doAlignment, onHoverTooltip, dblclickZoom, clickOpener, 
 
-import { Scale, EventNodes, EventNode, TimelineOptions } from '@/types/definitions'
-import { getRect, setContent, setStyles } from './dom'
+import { Scale, EventNodes, Action, EventNode, TimelineOptions } from '@/types/definitions'
+import { getRect, getAtts, setAtts, setContent, setStyles } from './dom'
 import { findEvents, truncateLowerRulerItems } from './helper'
-import { toValidScale, parseDateTime } from './datetime'
+import { toValidScale, parseDateTime, getStartDatetime, getEndDatetime } from './datetime'
 
 /**
  * Register event listeners that scroll by dragging when the main canvas of the timeline overflows.
@@ -358,6 +358,14 @@ export const onHoverTooltip = (timelineElement: HTMLDivElement, eventNodes: Even
     })
 }
 
+/**
+ * zoom the rendering scale by calculating into time from the double-click position on the event node canvas or 
+ * ruler in the timeline.
+ * This zooming action supports double tap and pinch gestures on touch devices.
+ * 
+ * @param {HTMLDivElement} timelineElement 
+ * @param {TimelineOptions} timelineOptions 
+ */
 export const dblclickZoom = (timelineElement: HTMLDivElement, timelineOptions: TimelineOptions): void => {
     const zoomableBaseContainer: HTMLDivElement = timelineElement.querySelector('.sunorhc-timeline-main-canvas')!
     const zoomableElements = [
@@ -370,8 +378,10 @@ export const dblclickZoom = (timelineElement: HTMLDivElement, timelineOptions: T
     const toDateFromOffsetX = (offsetX: number, scale: string): string => {
         const containerElement = zoomableBaseContainer.querySelector('.sunorhc-timeline-nodes')!
         const perX = offsetX / containerElement.clientWidth
-        const parsedStartDate = parseDateTime(timelineOptions.start, timelineOptions.timezone)
-        const parsedEndDate   = parseDateTime(timelineOptions.end, timelineOptions.timezone)
+        const startDate = getStartDatetime(timelineOptions.start, timelineOptions.timezone, timelineOptions.scale) as Date
+        const endDate = getEndDatetime(timelineOptions.end, timelineOptions.timezone, timelineOptions.scale, startDate) as Date
+        const parsedStartDate = parseDateTime(startDate, timelineOptions.timezone)
+        const parsedEndDate   = parseDateTime(endDate, timelineOptions.timezone)
         const rangeTimes = parsedEndDate!.ts - parsedStartDate!.ts
         const targetTime = (perX * rangeTimes + parsedStartDate!.ts) * 1000
         const baseDate = new Date(targetTime)
@@ -419,7 +429,6 @@ export const dblclickZoom = (timelineElement: HTMLDivElement, timelineOptions: T
         const clientY = evt.pageY // Absolute Y coordinates of the entire visible page.
         const offsetX = evt.offsetX // Relative X coordinates on the zoomableBaseContainer element.
         const offsetY = evt.offsetY // Relative Y coordinates on the zoomableBaseContainer element.
-        console.log('zoomReady!!::', targetElement.nodeName, clientX, clientY, offsetX, offsetY, evt, zoomableBaseContainer.clientWidth)
         */        
         let newStartDate: string = ''
         let newEndDate: string = 'auto'
@@ -437,7 +446,7 @@ export const dblclickZoom = (timelineElement: HTMLDivElement, timelineOptions: T
         } else {
             // Zooms to the scale range of the minimum ruler grain to which the X-axis of the double-clicked node canvas belongs.
             newStartDate = toDateFromOffsetX(offsetX, previousScale)
-            console.log('zoomToSetting!!!::', newStartDate, newEndDate, previousScale)
+            //console.log('zoomToSetting!!!::', newStartDate, newEndDate, previousScale)
         }
         let matches = null
         let baseDate = null
@@ -457,7 +466,7 @@ export const dblclickZoom = (timelineElement: HTMLDivElement, timelineOptions: T
                     const { year, month } = matches.groups
                     const oneDay = new Date(new Date(Date.UTC(Number(year), Number(month), 1, 0, 0, 0)).getTime() - 1)
                     const monthDays = oneDay.getUTCDate()
-                    console.log('!!!:', matches, oneDay, monthDays)
+                    //console.log('!!!:', matches, oneDay, monthDays)
                     newMinGrainWidth = Math.ceil(zoomableBaseContainer.clientWidth / monthDays)
                     newEndDate = `${newStartDate}-${monthDays}T23:59:59.999`
                 } else {
@@ -570,29 +579,20 @@ export const dblclickZoom = (timelineElement: HTMLDivElement, timelineOptions: T
             end: newEndDate,
             ruler: newRulerOptions,
         }
-        console.log('Before Zoom!!!::', zoomOptions, timelineOptions.ruler)
+        //console.log('Before Zoom!!!::', zoomOptions, timelineOptions.ruler)
         if ((window as Window).hasOwnProperty('SunorhcTimelineInstances')) {
             window.SunorhcTimelineInstances[timelineElement.id].zoom(zoomOptions)
         }
     }
 
     if (timelineOptions.debug && timelineOptions.extends?.zoomScaleTracker) {
+        /*
+         * We can enable zoom scale tracking in the extended options with debug mode to track the process of converting cursor coordinates 
+         * to times in the timeline.
+         * Option Settings: { zoomable: true, debug: true, extends: { zoomScaleTracker: true } }
+         * Also we should prepare an element to display the track results: `<div class="zoom-scale-coordinates-tracker"></div>`
+         */
         zoomableBaseContainer.querySelector<HTMLDivElement>('.sunorhc-timeline-nodes')?.addEventListener('mousemove', (e: MouseEvent) => {
-            /*
-            const callback = timelineOptions.extends!.zoomScaleTracker
-            if (typeof callback === 'function') {
-                callback(e)
-            } else if (typeof callback !== 'string') {
-                throw new TypeError('The specified zoomScaleTracker was invalid and could not be called.')
-            }
-            try {
-                const func = new Function(`return (${callback}).apply(null, e);`)
-                return func.call(window)
-            } catch (error) {
-                console.error('Failed to execute function:', error)
-                return null
-            }
-            */
             const trackerElement = timelineElement.querySelector('.zoom-scale-coordinates-tracker')
             if (!trackerElement) {
                 return
@@ -601,7 +601,8 @@ export const dblclickZoom = (timelineElement: HTMLDivElement, timelineOptions: T
             trackerStyles = trackerStyles?.split(';').map((style: string) => style.trim().replace(/^display\:\s?none$/, 'display: flex'))
             const toDateStr = toDateFromOffsetX(e.offsetX, timelineOptions.scale)
             trackerElement.innerHTML = `<ul>\
-            <li><label>X:</label><span style="color: blue;">${e.offsetX}</span>, <label>Y:</label><span style="color: blue;">${e.offsetY}</span></li>\
+            <li><label>offsetX:</label><span style="color: blue;">${e.offsetX}</span>, <label>offsetY:</label><span style="color: blue;">${e.offsetY}</span></li>\
+            <li><label>pageX:</label><span style="color: blue;">${e.pageX}</span>, <label>pageY:</label><span style="color: blue;">${e.pageY}</span></li>\
             <li><label>Date:</label> <span style="color: red;">${toDateStr}</span></li>\
             </ul>`
             trackerElement.setAttribute('style', trackerStyles!.join('; '))
@@ -652,4 +653,53 @@ export const dblclickZoom = (timelineElement: HTMLDivElement, timelineOptions: T
         })
     })
 
+}
+
+/**
+ * Executes the specified action when the event node is clicked.
+ * 
+ * @param {HTMLDivElement} timelineElement 
+ * @param {TimelineOptions} timelineOptions 
+ * @param {EventNode[]} eventNodes 
+ */
+export const clickOpener = (timelineElement: HTMLDivElement, timelineOptions: TimelineOptions, eventNodes: EventNode[]): void => {
+    const eventOpen = (action: Action, eventData: Record<string, any>): void => {
+        try {
+            console.log('Open Event!!!:', action, eventData)
+            switch(action) {
+                case 'modal':
+                    // Displays a modal window and injects it with content.
+                    break
+                /* case 'slider':
+                    // Slides to reveal content in the timeline container-based display area.
+                    // Note: not implemented in the current version.
+                    break */
+                case 'custom':
+                    // Executes the specified custom action.
+                    break
+                case 'normal':
+                    // Insert content into a system-default element.
+                    break
+                default:
+                    throw new Error('Invalid action as event opener.')
+            }
+        } catch(error) {
+            console.error('Failed to open the event:', error)
+            return
+        } finally {
+            // something
+        }
+    }
+
+    const eventNodeElements: HTMLDivElement[] = Array.from(timelineElement.querySelectorAll('.sunorhc-timeline-event-node')!)
+    eventNodeElements.forEach((eventNodeElement: HTMLDivElement) => {
+        const styles = getAtts(eventNodeElement, 'style')!
+        setAtts(eventNodeElement, { style: `${styles.toString().replace(/;$/, '')}; --event-node-cursor: pointer;` })
+        eventNodeElement.addEventListener('click', (e: Event) => {
+            const eventNode = <HTMLDivElement>e.target!
+            const eventData = eventNodes.filter(elm => elm.eventId === eventNode.dataset.eventId).shift()
+            //console.log('Event Clicked!!!:', eventNode)
+            eventOpen(timelineOptions.effects.onClickEvent, eventData as Record<string, any>)
+        })
+    })
 }

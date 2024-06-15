@@ -1,10 +1,6 @@
 export function setupTester(element: HTMLDivElement) {
-  element.innerHTML = `
-<div class="inline-flex items-center justify-center w-full">
-  <hr class="w-full h-px my-4 bg-gray-300 border-0 dark:bg-gray-400">
-  <h3 class="absolute px-3 font-medium text-gray-900 -translate-x-1/2 bg-white left-1/2 dark:text-white dark:bg-gray-900">Timeline Instance Controller</h3>
-</div>
-<div class="mt-4 mb-2 flex flex-wrap justify-start gap-4">
+  const testerComponents: Record<string, string> = {
+    toggleRtl: `\
   <div class="flex flex-col items-start w-28 h-max">
     <label for="toggle-rtl" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Direction:</label>
     <label class="inline-flex items-center my-2 cursor-pointer">
@@ -12,10 +8,11 @@ export function setupTester(element: HTMLDivElement) {
       <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
       <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">on RTL</span>
     </label>
-  </div>
+  </div>`,
+    selectTimeZone: `\
   <div class="flex flex-col items-start w-36 h-max">
     <label for="select-timezone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">TimeZone:</label>
-    <div for="select-timezone" class="w-36 h-max border border-blue-500 rounded-lg _focus:ring-blue-500 _focus:border-blue-500 dark:border-gray-600 _dark:focus:ring-blue-500 _dark:focus:border-blue-500">
+    <div for="select-timezone" class="w-36 h-max border border-blue-500 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500">
       <select id="select-timezone" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white">
         <option hidden>TimeZone</option>
         <option diff="-10"    value="America/Adak">America/Adak</option>
@@ -34,24 +31,26 @@ export function setupTester(element: HTMLDivElement) {
         <option diff="+13"    value="Pacific/Tongatapu">Pacific/Tongatapu</option>
       </select>
     </div>
-  </div>
+  </div>`,
+    selectOutlined: `\
   <div class="flex flex-col items-start w-36 h-max">
     <label for="select-outlined" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Outline:</label>
-    <div for="select-outlined" class="w-36 h-max border border-blue-500 rounded-lg _focus:ring-blue-500 _focus:border-blue-500 dark:border-gray-600 _dark:focus:ring-blue-500 _dark:focus:border-blue-500">
+    <div for="select-outlined" class="w-36 h-max border border-blue-500 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500">
       <select id="select-outlined" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white">
-        <option hidden>Choose Outline</option>
+        <option hidden>Outline Type</option>
         <option value="none">"none" outline</option>
         <option value="inside">"inside" only</option>
         <option value="outside">"outside" only</option>
         <option value="both">"both" lines</option>
       </select>
     </div>
-  </div>
+  </div>`,
+    selectElevation: `\
   <div class="flex flex-col items-start w-36 h-max">
     <label for="select-elevation" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Elevation:</label>
-    <div for="select-elevation" class="w-36 h-max border border-blue-500 rounded-lg _focus:ring-blue-500 _focus:border-blue-500 dark:border-gray-600 _dark:focus:ring-blue-500 _dark:focus:border-blue-500">
+    <div for="select-elevation" class="w-36 h-max border border-blue-500 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500">
       <select id="select-elevation" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white">
-        <option hidden>Choose Elevation</option>
+        <option hidden>Choose Level</option>
         <option value="0">Elevation 0</option>
         <option value="1">Elevation 1</option>
         <option value="2">Elevation 2</option>
@@ -59,10 +58,11 @@ export function setupTester(element: HTMLDivElement) {
         <option value="4">Elevation 4</option>
       </select>
     </div>
-  </div>
+  </div>`,
+    selectPlacement: `\
   <div class="flex flex-col items-start w-36 h-max">
     <label for="select-placement" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Placement:</label>
-    <div for="select-placement" class="w-32 h-max border border-blue-500 rounded-lg _focus:ring-blue-500 _focus:border-blue-500 dark:border-gray-600 _dark:focus:ring-blue-500 _dark:focus:border-blue-500">
+    <div for="select-placement" class="w-36 h-max border border-blue-500 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500">
       <select id="select-placement" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white">
         <option hidden>Sidebar & Ruler</option>
         <optgroup label="Sidebar">
@@ -79,13 +79,13 @@ export function setupTester(element: HTMLDivElement) {
         </optgroup>
       </select>
     </div>
-  </div>
-
-  <div class="flex flex-col items-start w-36 h-max">
+  </div>`,
+    selectCanvasLayout: `\
+  <div class="flex flex-col items-start w-32 h-max">
     <label for="select-canvas-layout" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Canvas Layout:</label>
-    <div for="select-canvas-layout" class="w-32 h-max border border-blue-500 rounded-lg _focus:ring-blue-500 _focus:border-blue-500 dark:border-gray-600 _dark:focus:ring-blue-500 _dark:focus:border-blue-500">
+    <div for="select-canvas-layout" class="w-32 h-max border border-blue-500 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500">
       <select id="select-canvas-layout" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white">
-        <option hidden>Choose Style</option>
+        <option hidden>Layout Type</option>
         <option value="">Style None</option>
         <option value="striped">Striped</option>
         <option value="grid">Grid</option>
@@ -93,10 +93,11 @@ export function setupTester(element: HTMLDivElement) {
         <option value="plaid">Plaid</option>
       </select>
     </div>
-  </div>
-  <div class="flex flex-col items-start w-36 h-max">
+  </div>`,
+    selectStartWeekday: `\
+  <div class="flex flex-col items-start w-32 h-max">
     <label for="select-start-weekday" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First Day of Week:</label>
-    <div for="select-start-weekday" class="w-32 h-max border border-blue-500 rounded-lg _focus:ring-blue-500 _focus:border-blue-500 dark:border-gray-600 _dark:focus:ring-blue-500 _dark:focus:border-blue-500">
+    <div for="select-start-weekday" class="w-32 h-max border border-blue-500 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500">
       <select id="select-start-weekday" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white">
         <option hidden>Choose Day</option>
         <option value="0">Sunday (default)</option>
@@ -108,10 +109,11 @@ export function setupTester(element: HTMLDivElement) {
         <option value="6">Saturday</option>
       </select>
     </div>
-  </div>
+  </div>`,
+    selectAlignment: `\
   <div class="flex flex-col items-start w-36 h-max">
     <label for="select-alignment" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alignment:</label>
-    <div for="select-alignment" class="w-32 h-max border border-blue-500 rounded-lg _focus:ring-blue-500 _focus:border-blue-500 dark:border-gray-600 _dark:focus:ring-blue-500 _dark:focus:border-blue-500">
+    <div for="select-alignment" class="w-36 h-max border border-blue-500 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500">
       <select id="select-alignment" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white">
         <option hidden>Alignment</option>
         <option value="left">Left or Begin</option>
@@ -122,19 +124,23 @@ export function setupTester(element: HTMLDivElement) {
         <option value="1">Numeric ID (e.g., 1)</option>
       </select>
     </div>
-  </div>
+  </div>`,
+    runReload: `\
   <div class="flex flex-col items-start w-28 h-max">
     <label for="run-reload" class="block mb-2 text-sm font-medium select-none cursor-none">&nbsp;</label>
     <button type="button" id="run-reload" class="h-10 px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Reload Timeline</button>
-  </div>
-  <div class="flex flex-col items-start w-28 h-max">
+  </div>`,
+    grainWidth: `\
+  <div class="flex flex-col items-start w-20 h-max">
     <label for="grain-width" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Grain Width</label>
     <input type="text" id="grain-width" class="alnum-only bg-gray-50 border-solid border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="48px" pattern="[A-Za-z0-9\.]*" inputmode="latin" />
-  </div>
-  <div class="flex flex-col items-start w-28 h-max">
+  </div>`,
+    rowHeight: `\
+  <div class="flex flex-col items-start w-20 h-max">
     <label for="row-height" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Row Height</label>
     <input type="text" id="row-height" class="alnum-only bg-gray-50 border-solid border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="80px" pattern="[A-Za-z0-9\.]*" inputmode="latin" />
-  </div>
+  </div>`,
+    toggleScaleTracker: `\
   <div class="flex flex-col items-start w-36 h-max">
     <label for="toggle-scale-tracker" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Scale Tracker:</label>
     <label class="inline-flex items-center my-2 cursor-pointer">
@@ -142,10 +148,148 @@ export function setupTester(element: HTMLDivElement) {
       <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
       <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">On Tracking</span>
     </label>
-  </div>
-</div>
-`
+  </div>`,
+    verticalDivider: `<div class="inline-block h-[68px] min-h-[1em] w-0.5 self-stretch bg-neutral-100 dark:bg-white/10"></div>`,
+    togglePresentMarker: `\
+  <div class="flex flex-col items-start w-36 h-max">
+    <label for="toggle-present-marker" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Present Time:</label>
+    <label class="inline-flex items-center my-2 cursor-pointer">
+      <input id="toggle-present-marker" type="checkbox" name="present-marker" value="1" class="sr-only peer" checked="checked">
+      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+      <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Show Marker</span>
+    </label>
+  </div>`,
+    toggleDayColored: `\
+  <div class="flex flex-col items-start w-40 h-max">
+    <label for="toggle-day-colored" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ruler Coloring:</label>
+    <label class="inline-flex items-center my-2 cursor-pointer">
+      <input id="toggle-day-colored" type="checkbox" name="day-colored" value="1" class="sr-only peer" checked="checked">
+      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+      <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">On Day Colored</span>
+    </label>
+  </div>`,
+    toggleTooltip: `\
+  <div class="flex flex-col items-start w-36 h-max">
+    <label for="toggle-tooltip" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tooltip:</label>
+    <label class="inline-flex items-center my-2 cursor-pointer">
+      <input id="toggle-tooltip" type="checkbox" name="day-colored" value="1" class="sr-only peer">
+      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+      <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Use Tooltip</span>
+    </label>
+  </div>`,
+    selectEventOpener: `\
+  <div class="flex flex-col items-start w-36 h-max">
+    <label for="select-event-opener" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Event Opener:</label>
+    <div for="select-event-opener" class="w-36 h-max border border-blue-500 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500">
+      <select id="select-event-opener" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white">
+        <option hidden>Opener Type</option>
+        <option value="normal">Normal</option>
+        <option value="modal">Modal</option>
+        <option value="custom">Custom</option>
+        <option value="none">None</option>
+      </select>
+    </div>
+  </div>`,
+    optionViewer: `\
+  <div class="flex flex-col items-start w-24 h-max">
+    <label for="view-options" class="block mb-2 text-sm font-medium select-none cursor-none">&nbsp;</label>
+    <button type="button" data-modal-target="tester-modal" data-modal-toggle="tester-modal" id="view-options" 
+      class="block h-10 w-full px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+    >See Options</button>
+  </div>`,
+    scaleSwitcher: `\
+  <div class="flex flex-col items-start w-28 h-max">
+    <label for="select-scale" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Scale Switcher:</label>
+    <div for="select-scale" class="w-28 h-max border border-blue-500 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500">
+      <select id="select-scale" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white">
+        <option hidden>Scale</option>
+        <option value="year">Year</option>
+        <option value="month">Month</option>
+        <option value="week">Week</option>
+        <option value="day">Day</option>
+        <option value="hour">Hour</option>
+        <option value="minute">Minute</option>
+        <option value="second">Second</option>
+      </select>
+    </div>
+  </div>`,
+  }
+  const componentsOrder: Array<string> = [
+    // Scale related:
+    'selectTimeZone', 'selectStartWeekday', 'togglePresentMarker', 'verticalDivider',
+    // Display related:
+    'toggleRtl', 'selectOutlined', 'selectElevation', 'selectPlacement', 'selectCanvasLayout', 'toggleDayColored', 'grainWidth', 'rowHeight', 'verticalDivider', 
+    // Event related:
+    'selectAlignment', 'toggleTooltip', 'selectEventOpener', 'runReload', 'verticalDivider', 
+    // Debugger:
+    'toggleScaleTracker', 'scaleSwitcher', 'optionViewer', 
+  ]
 
+  let renderHTML = `\
+<div class="inline-flex items-center justify-center w-full">
+  <hr class="w-full h-px my-4 bg-gray-300 border-0 dark:bg-gray-400">
+  <h3 class="absolute px-3 font-medium text-gray-900 -translate-x-1/2 bg-white left-1/2 dark:text-white dark:bg-gray-900 custom-duration">Timeline Instance Controller</h3>
+</div>
+<div class="mt-4 mb-2 flex flex-wrap justify-start gap-4">\
+  `
+  componentsOrder.forEach((key: string): void => {
+    renderHTML += testerComponents[key]
+  })
+  renderHTML += '</div>'
+
+  element.innerHTML = renderHTML
+
+  //type ModalSize = 'small' | 'medium' | 'large' | 'extralarge';
+  const injectContentToModal = (title: string, content: string/*, size?: ModalSize = 'large'*/): void => {
+    /*
+    const sizeClass = {
+      small:      'max-w-md',
+      medium:     'max-w-lg',
+      large:      'max-w-4xl',
+      extralarge: 'max-w-7xl',
+    }
+    const modalHTML = `\
+<div id="${size}-modal" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+  <div class="relative w-full ${sizeClass[size]} max-h-full">
+    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+      <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+        <h3 class="text-xl font-medium text-gray-900 dark:text-white">
+          Current Timeline Options
+        </h3>
+        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="${size}-modal">
+          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+      </div>
+      <div class="p-4 md:p-5 space-y-4">
+        ${content}
+      </div>
+      <div class="flex items-center p-4 md:p-5 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b dark:border-gray-600">
+        <button data-modal-hide="${size}-modal" type="button" 
+          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        >Download</button>
+        <button data-modal-hide="${size}-modal" type="button" 
+          class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+        >Close</button>
+      </div>
+    </div>
+  </div>
+</div>`
+    */
+    const testerModal = document.getElementById('tester-modal')!
+    const testerModalHeadline = document.getElementById('tester-modal-headline')!
+    const testerModalBody = document.getElementById('tester-modal-body')!
+    testerModalHeadline.innerHTML = title
+    testerModalBody.innerHTML = content
+    if (testerModal.classList.contains('opacity-0')) {
+      testerModal.classList.add('opacity-1')
+      testerModal.classList.remove('opacity-0')
+    }
+  }
+
+  // Handle for changing mode
   const $TARGET_ELEMENTS: NodeListOf<HTMLDivElement> = document.querySelectorAll<HTMLDivElement>('.sunorhc-timeline-container')!
   if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
     console.log('Dark mode now')
@@ -167,10 +311,10 @@ export function setupTester(element: HTMLDivElement) {
       if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
         const targetElm = mutation.target as HTMLBodyElement
         if (targetElm.classList.contains('darkmode--activated')) {
-          console.log('Toggled to darkmode with darkmode.js', $TARGET_ELEMENTS)
+          //console.log('Toggled to darkmode with darkmode.js', $TARGET_ELEMENTS)
           $TARGET_ELEMENTS.forEach((elm: HTMLDivElement) => elm.classList.add('dark-theme'))
         } else {
-          console.log('Toggled to lightmode with darkmode.js', $TARGET_ELEMENTS)
+          //console.log('Toggled to lightmode with darkmode.js', $TARGET_ELEMENTS)
           $TARGET_ELEMENTS.forEach((elm: HTMLDivElement) => elm.classList.remove('dark-theme'))
         }
       }
@@ -185,11 +329,9 @@ export function setupTester(element: HTMLDivElement) {
         const instance = window.SunorhcTimelineInstances[key]
         const layoutOptions = instance.getOptions().layout!
         layoutOptions.rtl = $CHECKBOX.checked
-        //console.log('!!!:', layoutOptions)
         instance.reload({ layouts: layoutOptions })
       }
     }
-    //console.log('!!!:', $CHECKBOX, $CHECKBOX.checked)
   })
 
   // Change TimeZone
@@ -199,7 +341,7 @@ export function setupTester(element: HTMLDivElement) {
     if (window.hasOwnProperty('SunorhcTimelineInstances')) {
       for (const key in window.SunorhcTimelineInstances) {
         const instance = window.SunorhcTimelineInstances[key]
-        console.log('!!!:', $TIMEZONE.value)
+        //console.log('!!!:', $TIMEZONE.value)
         instance.reload({ timezone: $TIMEZONE.value })
       }
     }
@@ -246,7 +388,7 @@ export function setupTester(element: HTMLDivElement) {
           newOptions = { ruler: nowOptions.ruler! }
           newOptions.ruler.placement = placement
         }
-        console.log('!!!:', target, placement, newOptions)
+        //console.log('!!!:', target, placement, newOptions)
         instance.reload(newOptions)
       }
     }
@@ -270,7 +412,7 @@ export function setupTester(element: HTMLDivElement) {
         const instance = window.SunorhcTimelineInstances[key]
         const rulerOptions = instance.getOptions().ruler!
         rulerOptions.firstDayOfWeek = Number($FIRST_DAY.value)
-        console.log('!!!:', rulerOptions)
+        //console.log('!!!:', rulerOptions)
         instance.reload({ ruler: rulerOptions })
       }
     }
@@ -332,30 +474,283 @@ export function setupTester(element: HTMLDivElement) {
   // Toggle Scale Tracker
   element.querySelector<HTMLInputElement>('#toggle-scale-tracker')!.addEventListener('change', (evt: Event) => {
     const $CHECKBOX = <HTMLInputElement>evt.currentTarget
-    if (window.hasOwnProperty('SunorhcTimelineInstances')) {
-      for (const key in window.SunorhcTimelineInstances) {
-        const extendsOptions = window.SunorhcTimelineInstances[key].getOptions().extends ?? {}
-        if (extendsOptions.hasOwnProperty('zoomScaleTracker') && extendsOptions.zoomScaleTracker) {
-          const $TARGET_TIMELINE = document.getElementById(key)!
-          let $SCALE_TRACKER: HTMLDivElement
-          if ($CHECKBOX.checked) {
-            $SCALE_TRACKER = document.createElement('div')
-            $SCALE_TRACKER.classList.add('zoom-scale-coordinates-tracker')
-            $SCALE_TRACKER.setAttribute('style', `position: absolute; bottom: 0; left: 0; display: none; flex-wrap: wrap; justify-content: start; text-align: left; font-size: 12px; color: #555; background-color: #fff; border: solid 1px #ddd; border-radius: 4px; width: max-content; max-width: 50%; height: max-content; padding: 2px 4px; z-index: 9999;`)
-            $TARGET_TIMELINE.querySelector<HTMLDivElement>('.sunorhc-timeline-footer')!.append($SCALE_TRACKER)
+    try {
+      if (window.hasOwnProperty('SunorhcTimelineInstances')) {
+        for (const key in window.SunorhcTimelineInstances) {
+          const extendsOptions = window.SunorhcTimelineInstances[key].getOptions().extends ?? {}
+          if (extendsOptions.hasOwnProperty('zoomScaleTracker') && extendsOptions.zoomScaleTracker) {
+            const $TARGET_TIMELINE = document.getElementById(key)!
+            let $SCALE_TRACKER: HTMLDivElement
+            if ($CHECKBOX.checked) {
+              $SCALE_TRACKER = document.createElement('div')
+              $SCALE_TRACKER.classList.add('zoom-scale-coordinates-tracker')
+              $SCALE_TRACKER.setAttribute('style', `position: absolute; bottom: 6px; left: 4px; display: none; flex-wrap: wrap; justify-content: start; text-align: left; font-size: 12px; color: #555; background-color: #fff; border: solid 1px #999; border-radius: 4px; width: max-content; max-width: 50%; height: max-content; padding: 3px 6px; box-shadow: 4px 4px 4px rgba(21,21,21,.25); z-index: 9999;`)
+              $TARGET_TIMELINE.querySelector<HTMLDivElement>('.sunorhc-timeline-footer')!.append($SCALE_TRACKER)
+            } else {
+              $SCALE_TRACKER = $TARGET_TIMELINE.querySelector('.zoom-scale-coordinates-tracker') as HTMLDivElement
+              if ($SCALE_TRACKER) {
+                $TARGET_TIMELINE.querySelector<HTMLDivElement>('.sunorhc-timeline-footer')!.removeChild($SCALE_TRACKER)
+              } else {
+                throw new Error('Scale Tracker does not exists.')
+              }
+            }
           } else {
-            $SCALE_TRACKER = $TARGET_TIMELINE.querySelector('.zoom-scale-coordinates-tracker') as HTMLDivElement
-            $TARGET_TIMELINE.querySelector<HTMLDivElement>('.sunorhc-timeline-footer')!.removeChild($SCALE_TRACKER)
+            throw new Error('No extends for Scale Tracker in options.')
           }
         }
+      } else {
+        throw new Error('No valid timeline instance.')
       }
-    } else {
+    } catch(err) {
+      console.error('Could not activate Scale Tracker:', err)
       $CHECKBOX.checked = false
     }
   })
 
-  element.querySelector<HTMLInputElement>('.alnum-only')!.addEventListener('input', (e: Event) => {
-    const elm = <HTMLInputElement>e.currentTarget
+  // Toggle Present Time Marker
+  element.querySelector<HTMLInputElement>('#toggle-present-marker')!.addEventListener('change', (evt: Event) => {
+    const $CHECKBOX = <HTMLInputElement>evt.currentTarget
+    if (window.hasOwnProperty('SunorhcTimelineInstances')) {
+      for (const key in window.SunorhcTimelineInstances) {
+        const instance = window.SunorhcTimelineInstances[key]
+        const effectOptions = instance.getOptions().effects!
+        effectOptions.presentTime = $CHECKBOX.checked
+        instance.reload({ effects: effectOptions })
+      }
+    }
+  })
+
+  // Toggle Day Colored
+  element.querySelector<HTMLInputElement>('#toggle-day-colored')!.addEventListener('change', (evt: Event) => {
+    const $CHECKBOX = <HTMLInputElement>evt.currentTarget
+    if (window.hasOwnProperty('SunorhcTimelineInstances')) {
+      for (const key in window.SunorhcTimelineInstances) {
+        const instance = window.SunorhcTimelineInstances[key]
+        const rulerOptions = instance.getOptions().ruler!
+        if (!rulerOptions.hasOwnProperty('filters')) {
+          rulerOptions.filters = { dayBackgroundColor: $CHECKBOX.checked }
+        } else {
+          rulerOptions.filters.dayBackgroundColor = $CHECKBOX.checked
+        }
+        instance.reload({ ruler: rulerOptions })
+      }
+    }
+  })
+
+  // Toggle Tooltip
+  element.querySelector<HTMLInputElement>('#toggle-tooltip')!.addEventListener('change', (evt: Event) => {
+    const $CHECKBOX = <HTMLInputElement>evt.currentTarget
+    if (window.hasOwnProperty('SunorhcTimelineInstances')) {
+      for (const key in window.SunorhcTimelineInstances) {
+        const instance = window.SunorhcTimelineInstances[key]
+        const effectOptions = instance.getOptions().effects!
+        effectOptions.hoverEvent = $CHECKBOX.checked
+        instance.reload({ effects: effectOptions })
+      }
+    }
+  })
+
+  // Change Event Opener Type
+  element.querySelector<HTMLSelectElement>('#select-event-opener')!.addEventListener('change', (evt: Event) => {
+    const $OPENER_TYPE = <HTMLSelectElement>evt.currentTarget
+
+    if (window.hasOwnProperty('SunorhcTimelineInstances')) {
+      for (const key in window.SunorhcTimelineInstances) {
+        const instance = window.SunorhcTimelineInstances[key]
+        const effectOptions = instance.getOptions().effects!
+        effectOptions.onClickEvent = $OPENER_TYPE.value
+        instance.reload({ effects: effectOptions })
+      }
+    }
+  })
+
+  // Change Scale
+  element.querySelector<HTMLSelectElement>('#select-scale')!.addEventListener('change', (evt: Event) => {
+    const $SELECT_SCALE = <HTMLSelectElement>evt.currentTarget
+
+    if (window.hasOwnProperty('SunorhcTimelineInstances')) {
+      for (const key in window.SunorhcTimelineInstances) {
+        const instance = window.SunorhcTimelineInstances[key]
+        const measurements = instance.measurements
+        let newOptions = instance.getOptions()
+        // initialize options
+        newOptions.scale = $SELECT_SCALE.value
+        newOptions.start = 'currently'
+        newOptions.end = 'auto'
+        newOptions.ruler.filters.decorations.year = undefined
+        newOptions.ruler.filters.decorations.day = undefined
+        newOptions.ruler.filters.decorations.minute = undefined
+        const rulerFilters = newOptions.ruler.filters
+        let nowDate = new Date()
+        let monthName = ''
+        let dayName = ''
+        let year, hours, minutes
+        //console.log('!!!:', measurements, newOptions)
+        switch($SELECT_SCALE.value) {
+          case 'year':
+            //newOptions.start = new Date(new Date().getFullYear() - 5, 0, 1)
+            //newOptions.end = new Date(new Date().getFullYear() + 5, 0, 1)
+            newOptions.ruler.minGrainWidth = Math.max(160, Math.ceil(measurements.rulerVisibleWidth / 10))
+            newOptions.ruler.top.rows = [ 'year' ]
+            newOptions.ruler.bottom.rows = newOptions.ruler.top.rows.toReversed()
+            break
+          case 'month':
+            nowDate = newOptions.timezone === 'UTC' 
+            ? new Date(Date.UTC(nowDate.getUTCFullYear(), nowDate.getUTCMonth(), nowDate.getUTCDate(), 0, 0, 0, 0))
+            : new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), 0, 0, 0, 0)
+            newOptions.start = `${nowDate.getFullYear()}-01-01T00:00:00.000`
+            newOptions.end = `${nowDate.getFullYear()}-12-31T23:59:59.999`
+            newOptions.ruler.minGrainWidth = Math.max(120, Math.ceil(measurements.rulerVisibleWidth / 12))
+            newOptions.ruler.top.rows = [ 'year', 'month' ]
+            newOptions.ruler.bottom.rows = newOptions.ruler.top.rows.toReversed()
+            break
+          case 'week':
+            newOptions.ruler.minGrainWidth = Math.max(80, Math.ceil(measurements.rulerVisibleWidth / 53))
+            newOptions.ruler.top.rows = [ 'year', 'month', 'week' ]
+            newOptions.ruler.bottom.rows = newOptions.ruler.top.rows.toReversed()
+            break
+          case 'day':
+            newOptions.ruler.minGrainWidth = Math.max(60, Math.ceil(measurements.rulerVisibleWidth / 31))
+            newOptions.ruler.top.rows = [ 'year', 'month', 'week', 'day', 'weekday' ]
+            newOptions.ruler.bottom.rows = newOptions.ruler.top.rows.toReversed()
+            break
+          case 'hour':
+            nowDate = newOptions.timezone === 'UTC' 
+              ? new Date(Date.UTC(nowDate.getUTCFullYear(), nowDate.getUTCMonth(), nowDate.getUTCDate(), 0, 0, 0, 0))
+              : new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), 0, 0, 0, 0)
+            newOptions.start = nowDate
+            newOptions.end = new Date(nowDate.getTime() + (24 * 60 * 60 * 1000))
+            newOptions.ruler.minGrainWidth = Math.max(80, Math.ceil(measurements.rulerVisibleWidth / 24))
+            newOptions.ruler.top.rows = [ 'day', 'hour' ]
+            newOptions.ruler.bottom.rows = newOptions.ruler.top.rows.toReversed()
+            monthName = rulerFilters.monthNames[newOptions.timezone === 'UTC' ? nowDate.getUTCMonth() : nowDate.getMonth()]
+            dayName = rulerFilters.dayNames[newOptions.timezone === 'UTC' ? nowDate.getUTCDay() : nowDate.getDay()]
+            year = newOptions.timezone === 'UTC' ? nowDate.getUTCFullYear() : nowDate.getFullYear()
+            newOptions.ruler.filters.decorations.day = { replacer: `${dayName}, %s ${monthName} ${year}` }
+            break
+          case 'minute':
+            nowDate = newOptions.timezone === 'UTC' 
+              ? new Date(Date.UTC(nowDate.getUTCFullYear(), nowDate.getUTCMonth(), nowDate.getUTCDate(), nowDate.getUTCHours(), 0, 0, 0))
+              : new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), nowDate.getHours(), 0, 0, 0)
+            newOptions.start = nowDate
+            newOptions.end = new Date(nowDate.getTime() + (60 * 60 * 1000))
+            newOptions.ruler.minGrainWidth = Math.max(60, Math.ceil(measurements.rulerVisibleWidth / 60))
+            newOptions.ruler.top.rows = [ 'day', 'hour', 'minute' ]
+            newOptions.ruler.bottom.rows = newOptions.ruler.top.rows.toReversed()
+            monthName = rulerFilters.monthNames[newOptions.timezone === 'UTC' ? nowDate.getUTCMonth() : nowDate.getMonth()]
+            dayName = rulerFilters.dayNames[newOptions.timezone === 'UTC' ? nowDate.getUTCDay() : nowDate.getDay()]
+            year = newOptions.timezone === 'UTC' ? nowDate.getUTCFullYear() : nowDate.getFullYear()
+            newOptions.ruler.filters.decorations.day = { replacer: `${dayName}, %s ${monthName} ${year}` }
+            break
+          case 'second':
+            nowDate = newOptions.timezone === 'UTC' 
+              ? new Date(Date.UTC(nowDate.getUTCFullYear(), nowDate.getUTCMonth(), nowDate.getUTCDate(), nowDate.getUTCHours(), nowDate.getUTCMinutes(), 0, 0))
+              : new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), nowDate.getHours(), nowDate.getMinutes(), 0, 0)
+            newOptions.start = nowDate
+            newOptions.end = new Date(nowDate.getTime() + (60 * 1000))
+            newOptions.ruler.minGrainWidth = Math.max(60, Math.ceil(measurements.rulerVisibleWidth / 60))
+            newOptions.ruler.top.rows = [ 'day', 'minute', 'second' ]
+            newOptions.ruler.bottom.rows = newOptions.ruler.top.rows.toReversed()
+            monthName = rulerFilters.monthNames[newOptions.timezone === 'UTC' ? nowDate.getUTCMonth() : nowDate.getMonth()]
+            dayName = rulerFilters.dayNames[newOptions.timezone === 'UTC' ? nowDate.getUTCDay() : nowDate.getDay()]
+            year = newOptions.timezone === 'UTC' ? nowDate.getUTCFullYear() : nowDate.getFullYear()
+            hours = String(newOptions.timezone === 'UTC' ? nowDate.getUTCHours() : nowDate.getHours()).padStart(2, '0')
+            minutes = String(newOptions.timezone === 'UTC' ? nowDate.getUTCMinutes() : nowDate.getMinutes()).padStart(2, '0')
+            newOptions.ruler.filters.decorations.day = { replacer: `${dayName}, %s ${monthName} ${year}` }
+            newOptions.ruler.filters.decorations.minute = { replacer: `${hours}:${minutes}` }
+            break
+          default:
+            return
+        }
+        // Should be scale tracking off
+        const $SCALE_TRACKER = document.getElementById('toggle-scale-tracker')! as HTMLInputElement
+        if ($SCALE_TRACKER.checked) {
+          $SCALE_TRACKER.checked = false
+        }
+        instance.reload(newOptions)
+      }
+    }
+  })
+
+  // View Options
+  let scrollPosition = 0
+  element.querySelector<HTMLButtonElement>('#view-options')!.addEventListener('click', () => {
+    // Handler of modal opener
+    scrollPosition = window.scrollY
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
+    document.body.style.position = 'fixed'
+    document.body.style.top = `-${scrollPosition}px`
+    document.body.style.width = `calc(100% - ${scrollbarWidth}px)`
+    if (window.hasOwnProperty('SunorhcTimelineInstances')) {
+      for (const key in window.SunorhcTimelineInstances) {
+        const nowOptions = window.SunorhcTimelineInstances[key].getOptions()
+        if (nowOptions) {
+          const content = `<textarea readonly class="block p-2.5 w-full h-full font-mono text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"\
+            >${JSON.stringify(nowOptions, null, "\t").replace(/"([^"]+)":/g, '$1:')}</textarea>`
+          injectContentToModal('Current Timeline Options', content)
+          break
+        }
+      }
+    }
+  })
+  document.querySelectorAll<HTMLButtonElement>('button[data-modal-hide="tester-modal"]').forEach(btn => {
+    // Handler of modal closer
+    btn.addEventListener('click', () => {
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.width = ''
+      //document.body.style.overflowY = 'auto'
+      window.scrollTo({ top: scrollPosition, left: 0, behavior: 'instant' })
+      const testerModal = document.getElementById('tester-modal')!
+      if (testerModal.classList.contains('opacity-1')){
+        testerModal.classList.add('opacity-0')
+        testerModal.classList.remove('opacity-1')
+      }
+    })
+  })
+  document.getElementById('download-json')!.addEventListener('click', (evt: Event) => {
+    // Handler of download JSON
+    const $BUTTON = <HTMLButtonElement>evt.currentTarget
+    const activeClasses = $BUTTON.getAttribute('class') || ''
+    const originText = $BUTTON.textContent
+    $BUTTON.setAttribute('disabled', '')
+    $BUTTON.setAttribute('class', 'text-white bg-blue-400 dark:bg-blue-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center')
+    $BUTTON.textContent = 'Downloading...'
+    if (window.hasOwnProperty('SunorhcTimelineInstances')) {
+      for (const key in window.SunorhcTimelineInstances) {
+        const nowOptions = window.SunorhcTimelineInstances[key].getOptions()
+        if (nowOptions) {
+          const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(nowOptions, null, 2))
+          const downloadAnchorNode = document.createElement('a')
+          downloadAnchorNode.setAttribute('href', dataStr)
+          //const nanoHash = async () => Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(`${performance.now() * 1e6}`)))).map(byte => byte.toString(16).padStart(2, '0')).join('')
+          const nanoHash = async () => btoa(String.fromCharCode(...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(`${performance.now() * 1e6}`)))))
+          nanoHash()
+            .then(hashStr => {
+              downloadAnchorNode.setAttribute('download', `TimelineOptions-${hashStr}.json`)
+              document.body.appendChild(downloadAnchorNode)
+              downloadAnchorNode.click()
+              downloadAnchorNode.remove()
+            })
+            .catch((err) => {
+              console.error('Failed to download:', err)
+            })
+            .finally(() => {
+              setTimeout(() => {
+                $BUTTON.removeAttribute('disabled')
+                $BUTTON.setAttribute('class', activeClasses)
+                $BUTTON.textContent = originText
+              }, 300)
+            })
+          break
+        }
+      }
+    }
+  })
+  
+  // Others
+  element.querySelector<HTMLInputElement>('.alnum-only')!.addEventListener('input', (evt: Event) => {
+    const elm = <HTMLInputElement>evt.currentTarget
     const value = elm.value
     elm.value = value.replace(/[^a-zA-Z0-9\.]/g, '')
   })

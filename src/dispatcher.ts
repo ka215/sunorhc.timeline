@@ -176,7 +176,7 @@ switch(creationType) {
         },
         footer: {
           display: true,
-          label: '<a href="https://github.com/ka215/sunorhc.timeline">Follow me on GitHub</a>, powered by Sunorhc.Timeline v0.9.0',
+          label: 'powered by Sunorhc.Timeline v0.9.0',
           textColor: 'gray',
           textStyles: 'margin-top: 20px;',
           textClass: '',

@@ -99,7 +99,6 @@ body.darkmode--activated .dark\:bg-gray-700 {
     background-color: #374151;
 }
 
-
 body.darkmode--activated option {
     background-color: rgb(17 24 39 / 1);
     color: #fff;
@@ -111,6 +110,13 @@ body.darkmode--activated optgroup {
     font-weight: 400;
 }
 
+body:not(.darkmode--activated) .custom-duration {
+    transition-duration: 280ms;
+}
+
+body.darkmode--activated .custom-duration {
+    transition-duration: 75ms;
+}
 
 body.darkmode--activated .dark\:placeholder-gray-400::placeholder {
     color: #9CA3AF;

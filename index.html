@@ -7,9 +7,8 @@
     <!-- meta name="color-scheme" content="light dark" -->
     <title>Sunorhc.Timeline</title>
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
-    <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.4/dist/flowbite.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
-    <script src="https://unpkg.com/flowbite@1.5.4/dist/flowbite.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
     <link href="https://use.fontawesome.com/releases/v6.5.2/css/all.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/ress.css">
@@ -74,10 +73,41 @@
       ></div>
       <div id="tester"></div>
     </main>
-    <footer role="contentinfo" class="p-4 w-full bg-white select-none _md:px-6 _md:py-8 dark:bg-gray-950">
-      <hr class="my-6 border-gray-400 sm:mx-auto dark:border-gray-600 lg:my-8" />
-      <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-300 clear-font">2024 &copy; MAGIC METHODS</span>
+    <footer role="contentinfo" class="p-4 pb-8 w-full bg-white select-none dark:bg-gray-950">
+      <hr class="my-6 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
+      <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-300 clear-font">
+        <a href="https://github.com/ka215/sunorhc.timeline" class="hover:underline hover:text-blue-600">Follow me on GitHub</a>, 
+        2024 &copy; MAGIC METHODS
+      </span>
     </footer>
+    <div id="tester-modal" data-modal-backdrop="static" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full opacity-0 transition-all">
+      <div class="relative w-full max-w-4xl max-h-full">
+        <div class="relative flex-col bg-white rounded-lg shadow dark:bg-gray-700">
+          <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+            <h3 id="tester-modal-headline" class="text-xl font-medium text-gray-900 dark:text-white">
+              Current Timeline Options
+            </h3>
+            <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="tester-modal">
+              <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+              </svg>
+              <span class="sr-only">Close modal</span>
+            </button>
+          </div>
+          <div id="tester-modal-body" class="relative h-[calc(100vh-190px)] overflow-y-auto overflow-x-hidden p-4 md:p-5 space-y-4">
+            content
+          </div>
+          <div class="flex items-center p-4 md:p-5 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b dark:border-gray-600">
+            <button id="download-json" type="button" 
+              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >Download as JSON</button>
+            <button data-modal-hide="tester-modal" type="button" 
+              class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+            >Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
     <script>new Darkmode({
       bottom: '20px', // default: '32px'
@@ -92,6 +122,7 @@
       label: '🌓', // default: ''
       autoMatchOsTheme: true // default: true
     }).showWidget()</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
     <script type="module" src="/src/dispatcher.ts"></script>
     <script type="module" src="/src/tester.ts"></script>
   </body>

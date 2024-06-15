@@ -8,7 +8,7 @@ import {
   fetchData, deserialize, parseDateTime, convertToPixels, isElement, getRect, getParticles, getStartDatetime, getEndDatetime, 
   createLandmarkElement, createSidebar, createSidebarItems, createRuler, createRulerItems, optimizeEventNode, placeEventNodes, 
   showPresentTimeMarker, getDuplicateValues, validatorEventNode, validateTimelineOptions, saveToStorage, loadFromStorage, 
-  watcher, dragScroll, doAlignment, wheelScroll, dblclickZoom, onHoverTooltip
+  watcher, dragScroll, doAlignment, wheelScroll, dblclickZoom, onHoverTooltip, clickOpener
 } from './utils'
 import { LoggerService } from './utils/logger'
 
@@ -65,7 +65,7 @@ const defaultOptions: TimelineOptions = {
     presentTime: false,
     defaultAlignment: 'latest',
     cacheExpiration: 'always',
-    hoverEvent: true,
+    hoverEvent: false,
     onClickEvent: 'normal',
   },
   theme: {
@@ -718,8 +718,13 @@ export class Timeline implements TimelineBaseClass {
 
     //Util.onStickyRulerItems(this.targetElement)
 
-    onHoverTooltip(this.targetElement, this.eventNodes as EventNode[])
+    if (this.options.effects.hoverEvent) {
+      onHoverTooltip(this.targetElement, this.eventNodes as EventNode[])
+    }
 
+    if (this.options.effects.onClickEvent !== 'none') {
+      clickOpener(this.targetElement, this.options, this.eventNodes as EventNode[])
+    }
   }
 
   // public methods
