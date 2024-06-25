@@ -4,7 +4,7 @@ import {
   Sidebars, Rulers, Alignment, EventNode, TimelineOptions, TimelineBaseClass, Measures, RulerOptions, ZoomScaleOptions
 } from './types/definitions'
 import {
-  isObject, isEmptyObject, isNumberString, getAtts, setAtts, setStyles, setContent, deepMergeObjects, deepCloneObject, cloneObject, 
+  isObject, isEmptyObject, getAtts, setAtts, setStyles, setContent, deepMergeObjects, deepCloneObject, cloneObject, 
   fetchData, deserialize, parseDateTime, convertToPixels, isElement, getRect, getParticles, getStartDatetime, getEndDatetime, 
   createLandmarkElement, createSidebar, createSidebarItems, createRuler, createRulerItems, optimizeEventNode, placeEventNodes, 
   showPresentTimeMarker, getDuplicateValues, validatorEventNode, validateTimelineOptions, saveToStorage, loadFromStorage, 

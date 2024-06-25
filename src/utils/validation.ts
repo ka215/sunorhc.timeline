@@ -139,7 +139,7 @@ export const validatorEffects: OptionValidators<Def.Effects> = {
     cacheExpiration:  (v: Def.CacheExpiration | undefined): Def.CacheExpiration => !v || !/^(string|number)$/.test(typeof v) || !/^(\d+|always|none)$/i.test(String(v)) ? 'always' : v as Def.CacheExpiration,
     hoverEvent:       (v: boolean | undefined): boolean => typeof v === 'boolean' ? v : false,
     onClickEvent:     (v: Def.Action | undefined): Def.Action => !v || typeof v !== 'string' || !/^(normal|modal|custom|none)$/i.test(v) ? 'normal' : v as Def.Action,
-    template:         (v: Record<string, string> | undefined): Record<string, string> | undefined => !v || typeof v !== 'object' ? undefined : (Object.keys(v).filter(k => ['tooltip', 'modal', 'details'].includes(k)).length > 0 ? v : undefined),
+    template:         (v: Record<string, any> | undefined): Record<string, any> | undefined => !v || typeof v !== 'object' ? undefined : (Object.keys(v).filter(k => ['tooltip', 'modal', 'details', 'custom'].includes(k)).length > 0 ? v : undefined),
     //verticalGridStyle:   (v: string | undefined): LineStyle | undefined => !v || typeof v !== 'string' || !/^(solid|dotted|none)$/i.test(v) ? undefined : v as LineStyle,
 }
 

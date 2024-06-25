@@ -1,19 +1,19 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <title>[MOCKUP]Sunorhc.Timeline</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" type="image/svg+xml" href="./sunorhc.svg" />
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/sunorhc.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- meta name="color-scheme" content="light dark" -->
+    <title>Sunorhc.Timeline</title>
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
-    <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.4/dist/flowbite.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
-    <script src="https://unpkg.com/flowbite@1.5.4/dist/flowbite.js"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Icons">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.2/css/all.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v6.5.2/css/all.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="./assets/css/ress.css">
-    <link rel="stylesheet" type="text/css" href="./assets/css/sunorhc.timeline.css?36b234d20e33bd16f588b1d07cad5ad8">
-    <link rel="stylesheet" type="text/css" href="./assets/css/custom-style.css?36b234d20e33bd16f588b1d07cad5ad8">
+    <link rel="stylesheet" type="text/css" href="./assets/css/sunorhc.timeline.css?0495e14bad24b5fb3c4df4878b546042">
+    <link rel="stylesheet" type="text/css" href="./assets/css/custom-style.css?4da040dee1e0399d890e4bee8f4471c1">
 </head>
 <body class="flex flex-col justify-between">
     <header role="banner" class="p-4 w-full bg-white text-center dark:bg-gray-950">
@@ -75,9 +75,14 @@
           data-options="config.json"
           class="my-4 mx-auto"
         ></div>
+        <div id="sunorhc-timeline-event-details" class="block w-full h-max my-4 p-4 border border-gray-200 rounded-lg dark:border-gray-600">
+          <span class="text-sm text-gray-400 text-center dark:text-gray-500">Event Details Injection Container: 
+            <code class="font-mono text-sm text-gray-300 bg-gray-500 rounded-md px-1">&lt;div id="sunorhc-timeline-event-details"&gt;&lt;/div&gt;</code>
+          </span>
+        </div>
         <div id="sunorhc-timeline-tester"></div>
-        
     </main>
+    
     <footer role="contentinfo" class="p-4 pb-8 w-full bg-white select-none dark:bg-gray-950">
       <hr class="my-6 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
       <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-300 clear-font">
@@ -85,12 +90,279 @@
         2024 &copy; MAGIC METHODS
       </span>
     </footer>
+    <div id="tester-modal" data-modal-backdrop="static" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full opacity-0 transition-all">
+      <div class="relative w-full max-w-4xl max-h-full">
+        <div class="relative flex-col bg-white rounded-lg shadow dark:bg-gray-700">
+          <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+            <h3 id="tester-modal-headline" class="text-xl font-medium text-gray-900 dark:text-white">
+              Current Timeline Options
+            </h3>
+            <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="tester-modal">
+              <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+              </svg>
+              <span class="sr-only">Close modal</span>
+            </button>
+          </div>
+          <div id="tester-modal-body" class="relative h-[calc(100vh-190px)] overflow-y-auto overflow-x-hidden p-4 md:p-5 space-y-4">
+            content
+          </div>
+          <div class="flex items-center p-4 md:p-5 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b dark:border-gray-600">
+            <button id="download-json" type="button" 
+              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >Download as JSON</button>
+            <button data-modal-hide="tester-modal" type="button" 
+              class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+            >Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
     <script>new Darkmode({ bottom: '20px', right: '20px', left: 'unset', time: '0.3s', mixColor: '#fff', backgroundColor: '#fff', buttonColorDark: '#3f3f46', buttonColorLight: '#f4f4f5', saveInCookies: false, label: '🌓', autoMatchOsTheme: true }).showWidget()</script>
-    <script src="./assets/js/sunorhc.timeline.js?36b234d20e33bd16f588b1d07cad5ad8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    <script src="./assets/js/sunorhc.timeline.js?8cdf108b11a53be0d2daea4381a5859f"></script>
+    <script>
+/**
+ * Gets the time in milliseconds according to the specified date and time scale.
+ * @param {string} scale 
+ * @returns 
+ */
+function getScaleTime(scale) {
+  switch(scale) {
+    case 'year':
+      return Math.floor(365.25 * 24 * 60 * 60 * 1000)
+    case 'month':
+      return Math.floor(30.4375 * 24 * 60 * 60 * 1000)
+    case 'week':
+      return 7 * 24 * 60 * 60 * 1000
+    case 'day':
+      return 24 * 60 * 60 * 1000
+    case 'hour':
+      return 60 * 60 * 1000
+    case 'minutes':
+      return 60 * 1000
+    case 'second':
+      return 1000
+    case 'millisecond':
+    default:
+      return 1
+  }
+}
+
+/**
+ * Get a random datetime within the specified start and end dates.
+ * @param {Date} start 
+ * @param {Date} end 
+ * @returns {Date}
+ */
+function getRandomDate(start, end) {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()))
+}
+
+/**
+ * Gets a random element from the specified array.
+ * @param {any[]} arr
+ * @returns {any}
+ */
+function getRandomElementFromArray(arr) {
+  const randomIndex = Math.floor(Math.random() * arr.length)
+  return arr[randomIndex]
+}
+
+/**
+ * Generate dummy text that looks as natural as possible.
+ * @param {number} maxPhrases - The maximum number of phrases (words) that the dummy text may contain.
+ * @param {number} phraseLength - The maximum number of characters that will make up the generated dummy phrase.
+ * @param {string | undefined} lineBreak - The character to which the line feed code is converted when the dummy 
+ *                                         text is separated by paragraphs.
+ * @returns {string}
+ */
+function generateDummyText(maxPhrases, phraseLength, lineBreak) {
+  // Order based on frequency of alphabetical characters used in English phrases.
+  const alphabets = 'etaoinshrdlcumwfgypbvkjxqz'
+  const alphabet = [...alphabets].map((char, idx) => char.repeat(alphabets.length - idx)).join('')
+
+  // Closures
+  const getRandomArbitrary = (min, max) => {
+    return Math.random() * (max - min) + min
+  }
+  const weightedRandomChoice = (choices, weights, k = 1) => {
+    const result = []
+    const cumulativeWeights = []
+    let sum = 0
+  
+    for (let weight of weights) {
+      sum += weight
+      cumulativeWeights.push(sum)
+    }
+  
+    for (let i = 0; i < k; i++) {
+      const rand = Math.random() * sum
+      for (let j = 0; j < cumulativeWeights.length; j++) {
+        if (rand < cumulativeWeights[j]) {
+          result.push(choices[j])
+          break
+        }
+      }
+    }
+  
+    return result.length === 1 ? result[0] : result
+  }
+  const getRandomChar = () => {
+    return alphabet.charAt(Math.floor(Math.random() * alphabet.length))
+  }
+  const getRandomPhrase = (length) => {
+    let phrase = ''
+    for (let i = 0; i < length; i++) {
+      phrase += getRandomChar()
+    }
+    return phrase
+  }
+  
+  maxPhrases = Math.ceil(getRandomArbitrary(Math.floor(Math.abs(Math.sin(getRandomArbitrary(1, phraseLength) + 1) * maxPhrases)), maxPhrases))
+
+  const choicesPhraseLength = Array.from({ length: phraseLength }, (_, index) => index + 1)
+  const weightedValue = 5.2// Average number of letters in an English word (source by Google Books Ngram).
+  const weightedPhraseLength = choicesPhraseLength.map(x => Math.floor((1 / Math.abs(x - weightedValue)) * 10))
+
+  const choicesWords = Array.from({ length: 20 }, (_, index) => index + 1)
+  const averageWords = 17// Average number of words in a typical English sentence (source by Google Books Ngram).
+  const weightedWords = choicesWords.map(x => {
+    const w = Math.floor((1 / Math.abs(x - averageWords)) * 10)
+    return w > 10 ? 20 : w
+  })
+
+  let phrases = []
+  let phrase = ''
+  let result = ''
+  let separater = ''
+  let paragraphs = 0
+  let sentences = 0
+  let words = 0
+  for (let i = 0; i < maxPhrases; i++) {
+    if (words > (weightedRandomChoice(choicesWords.slice(7), weightedWords.slice(7), 1))) {
+      separater = '.'
+    } else {
+      separater = ' '
+    }
+    phrase = getRandomPhrase(weightedRandomChoice(choicesPhraseLength, weightedPhraseLength, 1))
+    if (separater === '.') {
+      result += phrase + separater
+      result = result.trim()
+      if (result.length > 0) {
+        phrases.push(result.charAt(0).toUpperCase() + result.slice(1))
+      }
+      result = ''
+      sentences++
+      words = 0
+    } else {
+      if (phrase.length === 1) {
+        // A one-letter phrase is joined to the next phrase with an apostrophe.
+        result += phrase + "'"
+      } else {
+        result += phrase + separater
+        words++
+      }
+    }
+    if (sentences >= getRandomArbitrary(3, 5)) {
+      phrases.push("\n")
+      paragraphs++
+      sentences = 0
+    }
+  }
+
+  result = result.trim()
+  if (result.length > 0) {
+    phrase = result.charAt(0).toUpperCase() + result.slice(1)
+    // If the sentence ends with an apostrophe, "s" is forcibly added.
+    phrase += /'$/.test(phrase) ? 's' : ''
+    phrases.push(phrase + '.')
+  }
+
+  result = phrases.join(' ')
+
+  if (!!lineBreak) {
+    result = result.replace(/\n/g, lineBreak)
+  }
+
+  return result
+}
+
+/**
+ * Generates a random collection of events on the timeline, avoiding overlapping events.
+ * @param {string} startDate - A datetime string representing the start date and time of the timeline on which the 
+ *                             generated event will be placed.
+ * @param {string} endDate - A datetime string representing the end date and time of the timeline on which the generated 
+ *                           event will be placed.
+ * @param {number} maxRows - The maximum number of rows in the timeline that the generated event will be placed on.
+ * @param {number} numberOfEvents - The number of events to generate.
+ * @returns {EventNodes}
+ */
+function generateRandomEventNodes(startDate, endDate, maxRows, numberOfEvents) {
+  const start = new Date(startDate)
+  const end = new Date(endDate)
+  const eventNodes = []
+  
+  for (let i = 0; i < numberOfEvents; i++) {
+    let eventStart
+    let eventEnd
+    let row
+    let overlap
+    const size = getRandomElementFromArray(['xs', 'sm', 'md', 'lg', 'xl'])
+
+    do {
+      overlap = false
+      eventStart = getRandomDate(start, end)
+      eventEnd = getRandomDate(eventStart, end)
+      row = Math.floor(Math.random() * maxRows) + 1
+
+      for (const event of eventNodes) {
+        const existingStart = new Date(event.start)
+        const existingEnd = new Date(event.end ?? event.start)
+
+        if (
+          row === event.row && 
+          (eventStart < existingEnd && eventEnd > existingStart)
+        ) {
+          overlap = true
+          break
+        }
+      }
+    } while (overlap)
+    
+    const eventNode = {
+      start: eventStart.toISOString(),
+      end: eventEnd.toISOString(),
+      row: row,
+      label: `Event ${i + 1} [Size: ${size}]`,
+      //content: generateRandomText(20, 10),
+      content: generateDummyText(200, 10, '<br>'),
+      textColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+      backgroundColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+      borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+      borderWidth: 1,// Math.floor(Math.random() * 5) + 1,
+      classes: '',
+      styles: '',
+      image: '',
+      size: size,
+      remote: false
+    }
+
+    eventNodes.push(eventNode)
+  }
+
+  return eventNodes
+}
+    </script>
     <script>(async () => {
+      const appVersion = '0.9.1'
+      const autoScale = 'day'
+      const autoStartDate = new Date(new Date().getTime() - getScaleTime('month') / 2)
+      const autoEndDate = new Date(new Date().getTime() + getScaleTime('month') / 2)
       const timelineOptions = {
-        start: new Date(new Date().setHours(new Date().getHours() - 1, 0, 0, 0)),// now before a hour
+        start: autoStartDate,
+        //start: new Date(new Date().setHours(new Date().getHours() - 1, 0, 0, 0)),// now before a hour
         //start: new Date(new Date('0001-01-01T00:00:00Z').setUTCFullYear(1)),// When want to use valid date with less than three-digit years
         //start: '164/1/1 0:0:0Z',// Dates with three or more digits can be used normally.
         //start: '2024/6/4 12:30',// for test of minute scale with JST
@@ -100,40 +372,45 @@
         //end: '2024-06-04T07:00:00.049Z',// for test of millisecond scale
         //end: '169/12/31 23:59:59Z',
         //end: new Date(new Date().setDate((new Date().getDate() + 2))),// Next day
-        end: new Date(new Date().getTime() + (24 * 60 * 60 * 1000)),// after 24 hours from now
+        //end: new Date(new Date().getTime() + (24 * 60 * 60 * 1000)),// after 24 hours from now
+        end: autoEndDate,
         //timezone: 'Asia/Tokyo',
-        //type: 'point',
-        scale: 'hour',
+        scale: autoScale,
         sidebar: {
           placement: 'both',
-          items: [
-            /*
-            { type: 'avatar', label: 'Item Label', group: 'group1', src: '/avatar_01.png', action: './', onClick: true, textOverflow: true, textPosition: 'center', textColor: '' },
-            { type: 'avatar', label: '', group: 'group1', src: './avatar_02.png', action: 'https://js2ts.com/', onClick: true, textOverflow: false, textPosition: 'center', textColor: '' },
-            { type: 'icon',   label: 'material icon', group: 'group2', src: '', action: 'alert("Clicked!")', onClick: true, textOverflow: true, textPosition: 'center', textColor: '', iconClass: 'material-icons fill-current', iconContent: 'face', iconWrapClass: 'text-gray900 dark:text-gray100' },
-            { type: 'icon',   label: 'font awesome', group: 'group2', src: '', action: 'alert("Clicked!!")', onClick: false, textOverflow: false, textPosition: 'center', textColor: '', iconClass: 'fa-regular fa-face-smile _fa-spin', iconContent: '', iconWrapClass: 'text-violet-500 dark:text-violet-400' },
-            { type: 'text',   label: 'You can handle by "textOverflow" if might overflow the label of long text.', group: 'group3', src: '', action: '', onClick: false, textOverflow: true, textPosition: 'top left', textColor: 'brown' },
-            { type: 'text',   label: 'Full text shown if the "textOverflow" is false.', group: 'group3', src: '', action: '', onClick: false, textOverflow: false, textPosition: 'center', textColor: '' },
-            { type: 'image',  label: 'Can put background image', group: 'group4', src: 'avatar_05.png', action: '', onClick: false, textOverflow: true, textPosition: 'bottom left', textColor: 'white' },
-            { type: 'image',  label: '', group: 'group4', src: './avatar_06.png', action: '', onClick: false, textOverflow: true, textPosition: 'center', textColor: 'gray' },
-            *//*
-            { type: 'avatar', label: 'Sasha Ulbricht',  group: 'S.U.', src: './avatar_06.png', action: '', onClick: false, textOverflow: false, textPosition: 'center', textStyles: 'font-size: 13px; width: 70px; text-align: left;' },
-            { type: 'avatar', label: 'Naseem Oliver',   group: 'N.O.', src: './avatar_08.png', action: '', onClick: false, textOverflow: false, textPosition: 'center', textStyles: 'font-size: 13px; width: 70px; text-align: left;' },
-            { type: 'avatar', label: 'Richard Halley',  group: 'R.H.', src: './avatar_07.png', action: '', onClick: false, textOverflow: false, textPosition: 'center', textStyles: 'font-size: 13px; width: 70px; text-align: left;' },
-            { type: 'avatar', label: 'Caryn Tailor',    group: 'C.T.', src: './avatar_01.png', action: '', onClick: false, textOverflow: false, textPosition: 'center', textStyles: 'font-size: 13px; width: 70px; text-align: left;' },
-            { type: 'avatar', label: 'Issac Madison',   group: 'I.M.', src: './avatar_02.png', action: '', onClick: false, textOverflow: false, textPosition: 'center', textStyles: 'font-size: 13px; width: 70px; text-align: left;' },
-            { type: 'avatar', label: 'Enrique Landon',  group: 'E.L.', src: './avatar_04.png', action: '', onClick: false, textOverflow: false, textPosition: 'center', textStyles: 'font-size: 13px; width: 70px; text-align: left;' },
-            { type: 'avatar', label: 'Ilia Naegelen',   group: 'I.N.', src: './avatar_05.png', action: '', onClick: false, textOverflow: false, textPosition: 'center', textStyles: 'font-size: 13px; width: 70px; text-align: left;' },
-            { type: 'avatar', label: 'Eleonora Talwar', group: 'E.T.', src: './avatar_09.png', action: '', onClick: false, textOverflow: false, textPosition: 'center', textStyles: 'font-size: 13px; width: 70px; text-align: left;' },
-            { type: 'avatar', label: 'Harold Xiang',    group: 'H.X.', src: './avatar_03.png', action: '', onClick: false, textOverflow: false, textPosition: 'center', textStyles: 'font-size: 13px; width: 70px; text-align: left;' },
-            */
-            { type: 'image',  label: 'Bottom Right', group: 'group1', src: '../images/sample_1.png', action: '', onClick: false, textOverflow: true, textPosition: 'bottom right', textColor: '#fef3c7' },
-            { type: 'image',  label: 'Center Center', group: 'group2', src: '../images/sample_2.png', action: '', onClick: false, textOverflow: true, textPosition: 'center center', textColor: '#dcfce7' },
-            { type: 'image',  label: 'Top Right', group: 'group3', src: '../images/sample_3.png', action: '', onClick: false, textOverflow: true, textPosition: 'top right', textColor: '#e9d5ff' },
-            { type: 'image',  label: 'Bottom Left', group: 'group4', src: '../images/sample_4.png', action: '', onClick: false, textOverflow: true, textPosition: 'bottom left', textColor: '#f5d0fe' },
-            { type: 'image',  label: 'Top Left', group: 'group5', src: '../images/sample_5.png', action: '', onClick: false, textOverflow: true, textPosition: 'top left', textColor: '#fda4af' },
-            { type: 'image',  label: 'Bottom Center', group: 'group6', src: '../images/sample_6.png', action: '', onClick: false, textOverflow: true, textPosition: 'bottom center', textColor: '#e0f2fe' },
-          ]
+          items: ((sidebarType = 1) => {
+            switch(sidebarType) {
+              case 1: return [
+                { type: 'avatar', label: 'Item Label', group: 'group1', src: './assets/images/avatar_01.png', action: './', onClick: true, textOverflow: true, textPosition: 'center', textColor: '' },
+                { type: 'avatar', label: '', group: 'group1', src: './assets/images/avatar_02.png', action: 'https://js2ts.com/', onClick: true, textOverflow: false, textPosition: 'center', textColor: '' },
+                { type: 'icon',   label: 'material icon', group: 'group2', src: '', action: 'alert("Clicked!")', onClick: true, textOverflow: true, textPosition: 'center', textColor: '', iconClass: 'material-icons fill-current', iconContent: 'face', iconWrapClass: 'text-gray900 dark:text-gray100' },
+                { type: 'icon',   label: 'font awesome', group: 'group2', src: '', action: 'alert("Clicked!!")', onClick: false, textOverflow: false, textPosition: 'center', textColor: '', iconClass: 'fa-regular fa-face-smile fa-spin', iconContent: '', iconWrapClass: 'text-violet-500 dark:text-violet-400' },
+                { type: 'text',   label: 'You can handle by "textOverflow" if might overflow the label of long text.', group: 'group3', src: '', action: '', onClick: false, textOverflow: true, textPosition: 'top left', textColor: 'brown' },
+                { type: 'text',   label: 'Full text shown if the "textOverflow" is false.', group: 'group3', src: '', action: '', onClick: false, textOverflow: false, textPosition: 'center', textColor: '' },
+                { type: 'image',  label: 'Can put background image', group: 'group4', src: '../images/sample_1.png', action: '', onClick: false, textOverflow: true, textPosition: 'bottom left', textColor: 'white' },
+                { type: 'image',  label: '', group: 'group4', src: '../images/sample_2.png', action: '', onClick: false, textOverflow: true, textPosition: 'center', textColor: 'gray' },
+              ]
+              case 2: return [
+                { type: 'avatar', label: 'Sasha Ulbricht',  group: 'S.U.', src: './assets/images/avatar_06.png', action: '', onClick: false, textOverflow: false, textPosition: 'center', textStyles: 'font-size: 13px; width: 70px; text-align: left;' },
+                { type: 'avatar', label: 'Naseem Oliver',   group: 'N.O.', src: './assets/images/avatar_08.png', action: '', onClick: false, textOverflow: false, textPosition: 'center', textStyles: 'font-size: 13px; width: 70px; text-align: left;' },
+                { type: 'avatar', label: 'Richard Halley',  group: 'R.H.', src: './assets/images/avatar_07.png', action: '', onClick: false, textOverflow: false, textPosition: 'center', textStyles: 'font-size: 13px; width: 70px; text-align: left;' },
+                { type: 'avatar', label: 'Caryn Tailor',    group: 'C.T.', src: './assets/images/avatar_01.png', action: '', onClick: false, textOverflow: false, textPosition: 'center', textStyles: 'font-size: 13px; width: 70px; text-align: left;' },
+                { type: 'avatar', label: 'Issac Madison',   group: 'I.M.', src: './assets/images/avatar_02.png', action: '', onClick: false, textOverflow: false, textPosition: 'center', textStyles: 'font-size: 13px; width: 70px; text-align: left;' },
+                { type: 'avatar', label: 'Enrique Landon',  group: 'E.L.', src: './assets/images/avatar_04.png', action: '', onClick: false, textOverflow: false, textPosition: 'center', textStyles: 'font-size: 13px; width: 70px; text-align: left;' },
+                { type: 'avatar', label: 'Ilia Naegelen',   group: 'I.N.', src: './assets/images/avatar_05.png', action: '', onClick: false, textOverflow: false, textPosition: 'center', textStyles: 'font-size: 13px; width: 70px; text-align: left;' },
+                { type: 'avatar', label: 'Eleonora Talwar', group: 'E.T.', src: './assets/images/avatar_09.png', action: '', onClick: false, textOverflow: false, textPosition: 'center', textStyles: 'font-size: 13px; width: 70px; text-align: left;' },
+                { type: 'avatar', label: 'Harold Xiang',    group: 'H.X.', src: './assets/images/avatar_03.png', action: '', onClick: false, textOverflow: false, textPosition: 'center', textStyles: 'font-size: 13px; width: 70px; text-align: left;' },
+              ]
+              default: return [
+                { type: 'image',  label: 'Bottom Right', group: 'group1', src: '../images/sample_1.png', action: '', onClick: false, textOverflow: true, textPosition: 'bottom right', textColor: '#fef3c7' },
+                { type: 'image',  label: 'Center Center', group: 'group2', src: '../images/sample_2.png', action: '', onClick: false, textOverflow: true, textPosition: 'center center', textColor: '#dcfce7' },
+                { type: 'image',  label: 'Top Right', group: 'group3', src: '../images/sample_3.png', action: '', onClick: false, textOverflow: true, textPosition: 'top right', textColor: '#e9d5ff' },
+                { type: 'image',  label: 'Bottom Left', group: 'group4', src: '../images/sample_4.png', action: '', onClick: false, textOverflow: true, textPosition: 'bottom left', textColor: '#f5d0fe' },
+                { type: 'image',  label: 'Top Left', group: 'group5', src: '../images/sample_5.png', action: '', onClick: false, textOverflow: true, textPosition: 'top left', textColor: '#fda4af' },
+                { type: 'image',  label: 'Bottom Center', group: 'group6', src: '../images/sample_6.png', action: '', onClick: false, textOverflow: true, textPosition: 'bottom center', textColor: '#e0f2fe' },
+              ]
+            }
+          })()
         },
         ruler: {
           placement: 'both',
@@ -141,26 +418,43 @@
           truncateLowers: true,
           firstDayOfWeek: 0,
           filters: {
-            decorations: {
-              //year: { prefix: '西暦 ', suffix: ' 年' },
-              year: { prefix: 'l\'an ', suffix: ' de notre ère' },// French
-              //month: { suffix: '<span style="margin-left: 2px">月</span>' },
-              //week: { replacer: '<small class="text-gray-500" style="margin-right: 2px">第</small>%s<small class="text-gray-500" style="margin-left: 2px">週</small>' },//{ prefix: '第', suffix: '週' },
-              //hours: { suffix: '時' },
-              //minutes: { replacer: '%s<small class="text-gray-500" style="margin-left: 2px">分</small>' },
-              //seconds: { suffix: '<small class="text-gray-500" style="margin-left: 2px">秒</small>' },
-            },
+            decorations: ((type = -1) => {
+              switch(type){
+                case 1: return {// Japanese
+                    year:    { prefix: '西暦 ', suffix: ' 年' },
+                    month:   { suffix: '<span style="margin-left: 2px">月</span>' },
+                    week:    { replacer: '<small class="text-gray-500" style="margin-right: 2px">第</small>%s<small class="text-gray-500" style="margin-left: 2px">週</small>' },//{ prefix: '第', suffix: '週' },
+                    hours:   { suffix: '時' },
+                    minutes: { replacer: '%s<small class="text-gray-500" style="margin-left: 2px">分</small>' },
+                    seconds: { suffix: '<small class="text-gray-500" style="margin-left: 2px">秒</small>' },
+                  };
+                case 4: return {// French
+                    year: { prefix: 'l\'an ', suffix: ' de notre ère' },// French
+                  };
+                default: return undefined;
+              }
+            })(),
             //monthFormat: 'numeric',
             monthFormat: 'name',
-            //monthNames: ['睦月', '如月', '弥生', '卯月', '皐月', '水無月', '文月', '葉月', '長月', '神無月', '霜月', '師走'],// legacy Japanese
-            //monthNames: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],// Japanese
-            //monthNames: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],// German
-            monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],// French
-            //monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],// Spanish
-            //dayNames: ['日曜', '月曜', '火曜', '水曜', '木曜', '金曜', '土曜'],// sun = 0; Japanese
-            //dayNames: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],// German
-            dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],// French
-            //dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],// Spanish
+            monthNames: ((type = -1) => {
+              switch(type){
+                case 0:  return ['睦月', '如月', '弥生', '卯月', '皐月', '水無月', '文月', '葉月', '長月', '神無月', '霜月', '師走'];// legacy Japanese
+                case 1:  return ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];// Japanese
+                case 2:  return ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];// German
+                case 3:  return ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];// Spanish
+                case 4:  return ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];// French
+                default: return undefined;
+              }
+            })(),
+            dayNames: ((type = -1) => {
+              switch(type){
+                case 1:  return ['日曜', '月曜', '火曜', '水曜', '木曜', '金曜', '土曜'];// sun = 0; Japanese
+                case 2:  return ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];// German
+                case 3:  return ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];// Spanish
+                case 4:  return ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];// French
+                default: return undefined;
+              }
+            })(),
             //abbreviateMonthNameLength: 2,
             abbreviateDayNameLength: 3,
             fullStop: true,
@@ -173,7 +467,7 @@
               'week',
               'day',
               'weekday',
-              'hours',
+              //'hours',
               //'minutes',
               //'seconds',
               //'milliseconds',
@@ -184,7 +478,7 @@
               //'milliseconds',
               //'seconds',
               //'minutes',
-              'hours',
+              //'hours',
               //'weekday',
               'day',
               //'week',
@@ -207,12 +501,36 @@
           //width: 1080,
           //height: 760,
           //height: 960,
-          height: 640,
+          height: 540,
           //rtl: true,
         },
         effects: {
           presentTime: true,
           defaultAlignment: 'current',
+          hoverEvent: true,
+          onClickEvent: 'modal',
+          template: {
+            modal: {
+              size: "large",
+            },
+            details: "<div class=\"mb-2\">\
+<h3 class=\"font-bold text-md text-cyan-500\">%label%</h3>\
+<small class=\"flex items-center justify-center text-gray-500\"><span>%s.weekday%, %s.day% %s.monthName% %s.year%</span>\
+<span class=\"pb-px mx-2 text-gray-400\">&mdash;</span>\
+<span>%end|undefined%</span></small>\
+</div>\
+<hr>\
+<p class=\"p-4 text-left\">%content|None%</p>",
+            //custom: (...args: any) => console.log('Closure specified directly in the options was called.', ...args),
+            custom: 'customFunction',
+            tooltip: "<ul class=\"text-left\">\
+<li>%start% ～ %end|None%<li>\
+<li class=\"flex gap-4\"><span>X: %x%,</span><span>Width: %w|Undefined%</span></li>\
+<li class=\"flex gap-4\"><span>Y: %y%,</span><span>Height: %h|Undefined%</span></li>\
+<li>EventId: <span style=\"color:#f87171;font-weight:600;\">%eventId%</span></li>\
+<li class=\"text-cyan-500 dark:text-cyan-700\">%label|Untitled%</li>\
+</ul>",
+          },
         },
         theme: { hookChangeModeClass: 'darkmode--activated' },
         header: {
@@ -228,7 +546,7 @@
         },
         footer: {
           display: true,
-          label: '<a href="https://github.com/ka215/sunorhc.timeline">Follow me on GitHub</a>, powered by Sunorhc.Timeline v0.9.0',
+          label: `powered by Sunorhc.Timeline v${appVersion}`,
           textColor: 'gray',
           textStyles: 'margin-top: 20px;',
           textClass: '',
@@ -238,7 +556,7 @@
         //events: './testYear2.json',
         //events: './testMonth.json',
         //events: './testWeek.json',
-        events: './assets/jsons/testDay.json',
+        //events: './assets/jsons/testDay.json',
         //events: '../jsons/testHour.json',
         //events: './testMinute.json',
         //events: './testSecond.json',
@@ -249,6 +567,7 @@
           { start: '2024-5-22 17:23' },
           { start: '2024-5-31 12:34' },
         ], */
+        events: generateRandomEventNodes(autoStartDate.toISOString(), autoEndDate.toISOString(), 6, 12),
         zoomable: true,
         extends: {
           zoomScaleTracker: true,
@@ -259,7 +578,17 @@
         console.log('Success:', window.SunorhcTimelineInstances, onFulfilled.getOptions())
       })
     })();</script>
-    <script src="./assets/js/Tester.js?36b234d20e33bd16f588b1d07cad5ad8"></script>
+    <script src="./assets/js/Tester.js?beac154933a942e0d913ecf92c74c159"></script>
     <script>Sunorhc.setupTester(document.getElementById('sunorhc-timeline-tester'))</script>
+    <script>
+      globalThis.customFunction = (eventData) => {
+        console.log('Called customFunction!', eventData)
+        var eventLabel = eventData.label ?? 'Untitled'
+        if (eventData.hasOwnProperty('extends') && eventData.extends.hasOwnProperty('remoteLabel')) {
+          eventLabel = eventData.extends.remoteLabel
+        }
+        alert(eventLabel)
+      }
+    </script>
 </body>
 </html>

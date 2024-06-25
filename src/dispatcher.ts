@@ -323,41 +323,6 @@ function getRandomElementFromArray(arr: any[]): any {
 }
 
 /**
- * Generate a random string by specifying the number of phrases.
- * @param {number} numPhrases - The number of phrases (words) contained in the random text.
- * @param {number} phraseLength - The number of characters that make up one phrase.
- * @returns {string}
- */
-function generateRandomText(numPhrases: number, phraseLength: number): string {
-  const alphabet = 'abcdefghijklmnopqrstuvwxyz'
-
-  function getRandomChar(): string {
-    return alphabet.charAt(Math.floor(Math.random() * alphabet.length))
-  }
-
-  function getRandomPhrase(length: number): string {
-    let phrase = ''
-    for (let i = 0; i < length; i++) {
-      phrase += getRandomChar()
-    }
-    return phrase
-  }
-
-  let result = ''
-  for (let i = 0; i < numPhrases; i++) {
-    result += getRandomPhrase(phraseLength) + ' '
-  }
-
-  result = result.trim()
-
-  if (result.length > 0) {
-    result = result.charAt(0).toUpperCase() + result.slice(1)
-  }
-
-  return result + '.'
-}
-
-/**
  * Generate dummy text that looks as natural as possible.
  * @param {number} maxPhrases - The maximum number of phrases (words) that the dummy text may contain.
  * @param {number} phraseLength - The maximum number of characters that will make up the generated dummy phrase.
