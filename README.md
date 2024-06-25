@@ -14,7 +14,7 @@ More details will be coming soon, so stay tuned!
 
 ## Demo Build
 
-[Mock-up version](https://ka215.github.io/sunorhc.timeline/)
+[Version 0.9.1 with tester](https://ka215.github.io/sunorhc.timeline/?v0.9.1)
 
 ## Coverage
 
