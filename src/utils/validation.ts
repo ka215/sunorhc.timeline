@@ -20,25 +20,25 @@ export const validatorLandmarkRole: OptionValidators<Def.LandmarkRole> = {
     label:   (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
     id:      (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
     flexDirection: (v: string | undefined): string => !v || typeof v !== 'string' || !/^(column|row)$/.test(v) ? 'column' : v,
-    textAlign: (v: string | undefined): string | undefined => !v || typeof v !== 'string' || !/^(left|center|right)$/i.test(v) ? undefined : v,
-    textColor: (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
+    textAlign:  (v: string | undefined): string | undefined => !v || typeof v !== 'string' || !/^(left|center|right)$/i.test(v) ? undefined : v,
+    textColor:  (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
     textStyles: (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
-    textClass: (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
+    textClass:  (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
 }
 
 export const validatorSidebarItem: OptionValidators<Def.SidebarItem> = {
-    type: (v: Def.SidebarItemType | undefined): Def.SidebarItemType => !v || typeof v !== 'string' || !/^(text|avatar|image)$/i.test(v) ? 'text' : v as Def.SidebarItemType,
-    label: (v: string | undefined): string => !v || typeof v !== 'string' ? '' : v,
-    group: (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
-    src: (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
-    action: (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
+    type:    (v: Def.SidebarItemType | undefined): Def.SidebarItemType => !v || typeof v !== 'string' || !/^(text|avatar|image)$/i.test(v) ? 'text' : v as Def.SidebarItemType,
+    label:   (v: string | undefined): string => !v || typeof v !== 'string' ? '' : v,
+    group:   (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
+    src:     (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
+    action:  (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
     onClick: (v: boolean | number | string | undefined): boolean | undefined => !v || !/^(boolean|number|string)$/.test(typeof v) ? undefined : /^(0|1|false|true)$/i.test(String(v)) ? /^(1|true)$/i.test(String(v)) : false,
-    textOverflow: (v: boolean | number | string | undefined): boolean => !v || !/^(boolean|number|string)$/.test(typeof v) ? false : /^(0|1|false|true)$/i.test(String(v)) ? /^(1|true)$/i.test(String(v)) : false,
-    textPosition: (v: string | undefined): string | undefined => !v || typeof v !== 'string' || !/^(top|center|bottom)?(\s+)?(left|center|right)?$/i.test(v) ? undefined : v,
-    textColor: (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
-    textStyles: (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
-    iconClass: (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
-    iconContent: (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
+    textOverflow:  (v: boolean | number | string | undefined): boolean => !v || !/^(boolean|number|string)$/.test(typeof v) ? false : /^(0|1|false|true)$/i.test(String(v)) ? /^(1|true)$/i.test(String(v)) : false,
+    textPosition:  (v: string | undefined): string | undefined => !v || typeof v !== 'string' || !/^(top|center|bottom)?(\s+)?(left|center|right)?$/i.test(v) ? undefined : v,
+    textColor:     (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
+    textStyles:    (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
+    iconClass:     (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
+    iconContent:   (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
     iconWrapClass: (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
 }
 
@@ -54,11 +54,11 @@ export const validatorSidebarRole: OptionValidators<Def.SidebarRole> = {
 export const validatorRulerFilter: OptionValidators<Def.RulerFilter> = {
     decorations: (v: Def.DecorationFormat | undefined): Def.DecorationFormat | undefined => !v || typeof v !== 'object' ? undefined : v,
     monthFormat: (v: Def.RulerMonthFormat | undefined): Def.RulerMonthFormat | undefined => !v || typeof v !== 'string' || !/^(numeric|name)$/.test(v) ? undefined : v,
-    monthNames: (v: string[] | undefined): string[] | undefined => !v || !Array.isArray(v) ? undefined : (v.length > 0 ? v : undefined),
-    dayNames: (v: string[] | undefined): string[] | undefined => !v || !Array.isArray(v) ? undefined : (v.length > 0 ? v : undefined),
+    monthNames:  (v: string[] | undefined): string[] | undefined => !v || !Array.isArray(v) ? undefined : (v.length > 0 ? v : undefined),
+    dayNames:    (v: string[] | undefined): string[] | undefined => !v || !Array.isArray(v) ? undefined : (v.length > 0 ? v : undefined),
     abbreviateMonthNameLength: (v: number | undefined): number | undefined => !v || typeof v !== 'number' ? undefined : v,
     abbreviateDayNameLength: (v: number | undefined): number | undefined => !v || typeof v !== 'number' ? undefined : v,
-    fullStop: (v: boolean | undefined): boolean | undefined => typeof v === 'boolean' ? v : undefined,
+    fullStop:    (v: boolean | undefined): boolean | undefined => typeof v === 'boolean' ? v : undefined,
     dayBackgroundColor: (v: boolean | undefined): boolean | undefined => typeof v === 'boolean' ? v : undefined,
 }
 
@@ -83,26 +83,26 @@ export const validatorRulerRole: OptionValidators<Def.RulerRole> = {
 }
 
 export const validatorRelationConfig: OptionValidators<Def.RelationConfig> = {
-    before: (v: string | number | undefined): string | number => !v || !/^(string|number)$/.test(typeof v) ? '' : v,
-    after: (v: string | number | undefined): string | number => !v || !/^(string|number)$/.test(typeof v) ? '' : v,
-    lineSize: (v: number | undefined): number | undefined => !v || typeof v !== 'number' ? undefined : v,
+    before:    (v: string | number | undefined): string | number => !v || !/^(string|number)$/.test(typeof v) ? '' : v,
+    after:     (v: string | number | undefined): string | number => !v || !/^(string|number)$/.test(typeof v) ? '' : v,
+    lineSize:  (v: number | undefined): number | undefined => !v || typeof v !== 'number' ? undefined : v,
     lineColor: (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
-    curve: (v: Def.CurveType | boolean | undefined): Def.CurveType | boolean => typeof v === 'boolean' ? v : (!!v && /^((l|r)(t|b)|s|z|n|u|auto)$/.test(String(v)) ? v : false),
+    curve:     (v: Def.CurveType | boolean | undefined): Def.CurveType | boolean => typeof v === 'boolean' ? v : (!!v && /^((l|r)(t|b)|s|z|n|u|auto)$/.test(String(v)) ? v : false),
 }
   
 export const validatorEventNode: OptionValidators<Def.EventNode> = {
     eventId: (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
     /* System internal values does not validate.:*/
     uid: (v: number | undefined): number | undefined => v || undefined,
-    x: (v: number | undefined): number | undefined => v || undefined,
-    y: (v: number | undefined): number | undefined => v || undefined,
-    w: (v: number | undefined): number | undefined => v || undefined,
-    h: (v: number | undefined): number | undefined => v || undefined,
-    s: (v: Def.DateTimeObject | undefined): Def.DateTimeObject | undefined => v || undefined,
-    e: (v: Def.DateTimeObject | undefined): Def.DateTimeObject | undefined => v || undefined,
+    x:   (v: number | undefined): number | undefined => v || undefined,
+    y:   (v: number | undefined): number | undefined => v || undefined,
+    w:   (v: number | undefined): number | undefined => v || undefined,
+    h:   (v: number | undefined): number | undefined => v || undefined,
+    s:   (v: Def.DateTimeObject | undefined): Def.DateTimeObject | undefined => v || undefined,
+    e:   (v: Def.DateTimeObject | undefined): Def.DateTimeObject | undefined => v || undefined,
     start: (v: string | undefined): string => !v || typeof v !== 'string' ? '' : v,
-    end: (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
-    row: (v: number | undefined): number => !v || typeof v !== 'number' ? 0 : v,
+    end:   (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
+    row:   (v: number | undefined): number => !v || typeof v !== 'number' ? 0 : v,
     group: (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
     label: (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
     content: (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
@@ -111,13 +111,13 @@ export const validatorEventNode: OptionValidators<Def.EventNode> = {
     borderColor: (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
     borderWidth: (v: number | undefined): number | undefined => !v || typeof v !== 'number' ? undefined : v,
     classes: (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
-    styles: (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
-    image: (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
-    size: (v: Def.PointerSize | undefined): Def.PointerSize => !v || !/^(string|number)$/.test(typeof v) ? 'md' : (/^(([+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?)|xs|sm|md|lg|xl)$/i.test(String(v)) ? v : 'md'),
-    remote: (v: boolean | undefined): boolean => !v || typeof v !== 'boolean' ? false : v,
+    styles:  (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
+    image:   (v: string | undefined): string | undefined => !v || typeof v !== 'string' ? undefined : v,
+    size:    (v: Def.PointerSize | undefined): Def.PointerSize => !v || !/^(string|number)$/.test(typeof v) ? 'md' : (/^(([+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?)|xs|sm|md|lg|xl)$/i.test(String(v)) ? v : 'md'),
+    remote:  (v: boolean | undefined): boolean => !v || typeof v !== 'boolean' ? false : v,
     expiration: (v: Def.CacheExpiration | undefined): Def.CacheExpiration => !v || !/^(string|number)$/.test(typeof v) ? 'always' : (/^(\d+|always|none)$/i.test(String(v)) ? v : 'always'),
     relation: (v: Def.RelationConfig | undefined): Def.RelationConfig | undefined => !v || typeof v !== 'object' ? undefined : validateTimelineOptions<Def.RelationConfig>(v, validatorRelationConfig) as Def.RelationConfig,
-    extends: (v: Record<string, any> | undefined): Record<string, any> | undefined => !v || typeof v !== 'object' ? undefined : v,
+    extends:  (v: Record<string, any> | undefined): Record<string, any> | undefined => !v || typeof v !== 'object' ? undefined : v,
     callback: (v: Def.UserFunction<any, void> | undefined): Def.UserFunction<any, void> | undefined => !v || typeof v !== 'function' ? undefined : v,
 }
 
@@ -130,7 +130,7 @@ export const validatorLayouts: OptionValidators<Def.Layouts> = {
     eventsBackground: (v: Def.EventsBackground | undefined): Def.EventsBackground => !v || typeof v !== 'string' || !/^(striped|grid|toned|plaid|none)$/.test(v) ? 'plaid' : String(v) as Def.EventsBackground,
     width:         (v: number | string | undefined): number | string => !v || !/^(number|string)$/.test(typeof v) ? 'auto' : (typeof v === 'number' ? v : (/^(\d+(px|%|vw)|auto|inherit|(max|min|fit)-content)$/.test(v) ? v : 'auto')),
     height:        (v: number | string | undefined): number | string => !v || !/^(number|string)$/.test(typeof v) ? 'auto' : (typeof v === 'number' ? v : (/^(\d+(px|%|vh)|auto|inherit|(max|min|fit)-content)$/.test(v) ? v : 'auto')),
-    rtl:          (v: boolean | undefined): boolean => typeof v === 'boolean' ? v : false,
+    rtl:           (v: boolean | undefined): boolean => typeof v === 'boolean' ? v : false,
 }
 
 export const validatorEffects: OptionValidators<Def.Effects> = {
@@ -139,8 +139,7 @@ export const validatorEffects: OptionValidators<Def.Effects> = {
     cacheExpiration:  (v: Def.CacheExpiration | undefined): Def.CacheExpiration => !v || !/^(string|number)$/.test(typeof v) || !/^(\d+|always|none)$/i.test(String(v)) ? 'always' : v as Def.CacheExpiration,
     hoverEvent:       (v: boolean | undefined): boolean => typeof v === 'boolean' ? v : false,
     onClickEvent:     (v: Def.Action | undefined): Def.Action => !v || typeof v !== 'string' || !/^(normal|modal|custom|none)$/i.test(v) ? 'normal' : v as Def.Action,
-    //stripedGridRow:   (v: boolean | number | string | undefined): boolean | undefined => !v || !/^(boolean|number|string)$/.test(typeof v) ? undefined : /^(0|1|false|true)$/i.test(String(v)) ? /^(1|true)$/i.test(String(v)) : false,
-    //horizontalGridStyle: (v: string | undefined): LineStyle | undefined => !v || typeof v !== 'string' || !/^(solid|dotted|none)$/i.test(v) ? undefined : v as LineStyle,
+    template:         (v: Record<string, string> | undefined): Record<string, string> | undefined => !v || typeof v !== 'object' ? undefined : (Object.keys(v).filter(k => ['tooltip', 'modal', 'details'].includes(k)).length > 0 ? v : undefined),
     //verticalGridStyle:   (v: string | undefined): LineStyle | undefined => !v || typeof v !== 'string' || !/^(solid|dotted|none)$/i.test(v) ? undefined : v as LineStyle,
 }
 

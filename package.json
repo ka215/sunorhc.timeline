@@ -1,7 +1,7 @@
 {
   "name": "sunorhc.timeline",
   "private": true,
-  "version": "0.9.0",
+  "version": "0.9.1",
   "type": "module",
   "description": "Timeline generator libraly",
   "main": "main.js",

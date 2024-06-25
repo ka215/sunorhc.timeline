@@ -3,8 +3,10 @@
 // dragScroll, wheelScroll, doAlignment, onHoverTooltip, dblclickZoom, clickOpener, 
 
 import { Scale, EventNodes, Action, EventNode, TimelineOptions } from '@/types/definitions'
-import { getRect, getAtts, setAtts, setContent, setStyles } from './dom'
-import { findEvents, truncateLowerRulerItems } from './helper'
+import { isEmptyObject, isURLOrPath } from './common'
+import { getRect, getAtts, setAtts, setContent, setStyles, isElement } from './dom'
+import { fetchData } from './files'
+import { findEvents, truncateLowerRulerItems, fillTemplate} from './helper'
 import { toValidScale, parseDateTime, getStartDatetime, getEndDatetime } from './datetime'
 
 /**
@@ -244,7 +246,7 @@ export const doAlignment = (timelineElement: HTMLDivElement, position: string | 
         case 'latest':
             // Place focus on the most recent event node.
             const latestEvent = findEvents(timelineElement.id, { latest: true })
-            if (latestEvent) {
+            if (isElement(latestEvent)) {
                 latestEvent.dispatchEvent(new MouseEvent('mouseover', { bubbles: true, cancelable: true, view: window }))
                 targetElement.scrollTo({ top: 0, left: latestEvent.offsetLeft, behavior: 'smooth' })
             }
@@ -252,7 +254,7 @@ export const doAlignment = (timelineElement: HTMLDivElement, position: string | 
         default:
             // Places focus on the event node with the specified event ID.
             const targetEvent = findEvents(timelineElement.id, { id: position })
-            if (targetEvent) {
+            if (isElement(targetEvent)) {
                 targetEvent.dispatchEvent(new MouseEvent('mouseover', { bubbles: true, cancelable: true, view: window }))
                 targetElement.scrollTo({ top: 0, left: targetEvent.offsetLeft, behavior: 'smooth' })
             }
@@ -294,67 +296,143 @@ export const onStickyRulerItems = (timelineElement: HTMLDivElement): void => {
  * Register the event listeners to display a tooltip on mouseover on an event node.
  * 
  * @param {HTMLDivElement} timelineElement 
+ * @param {TimelineOptions} timelineOptions
  * @param {EventNodes} eventNodes 
  */
-export const onHoverTooltip = (timelineElement: HTMLDivElement, eventNodes: EventNodes): void => {
+export const onHoverTooltip = (timelineElement: HTMLDivElement, timelineOptions: TimelineOptions, eventNodes: EventNodes): void => {
     let isShownTooltip = false
     const fragment: DocumentFragment = document.createDocumentFragment()
-    const timelineMainCanvas: HTMLDivElement = timelineElement.querySelector('.sunorhc-timeline-main-canvas')!
-    //const eventNodesCanvas: HTMLDivElement = timelineElement.querySelector('.sunorhc-timeline-nodes')!
+    const timelineBody: HTMLDivElement = timelineElement.querySelector('.sunorhc-timeline-body')!
     const eventNodeElements: HTMLDivElement[] = Array.from(timelineElement.querySelectorAll('.sunorhc-timeline-event-node')!)
-    const containerRect = getRect(timelineMainCanvas) as DOMRect
-    eventNodeElements.forEach((eventNode: HTMLDivElement) => {
-        eventNode.addEventListener('mouseleave', (e: MouseEvent) => {
-            const selfElement = e.target! as HTMLDivElement
-            const tooltipElement = selfElement.querySelector('.tooltip')! as HTMLDivElement
-            if (tooltipElement) {
-                selfElement.removeChild(tooltipElement)
+    const tooltipContainer = document.createElement('div')
+    tooltipContainer.classList.add('sunorhc-timeline-tooltip-container')
+    timelineBody.append(tooltipContainer)
+
+    const hideTooltip = (e: MouseEvent | TouchEvent) => {
+        e.preventDefault()
+        const tooltipElement = tooltipContainer.querySelector('.sunorhc-timeline-tooltip')! as HTMLDivElement
+        if (tooltipElement) {
+            tooltipContainer.removeChild(tooltipElement)
+            setStyles(tooltipContainer, { zIndex: '-1' })
+        }
+        isShownTooltip = false
+    }
+
+    const showTooltip = (e: MouseEvent | TouchEvent) => {
+        e.preventDefault()
+        let clientX: number, clientY: number // Coordinates relative to the top-left corner of the viewport (browser window).
+        let offsetX: number, offsetY: number // The coordinates relative to the top-left corner of the element where the event occurred.
+        let pageX: number, pageY: number // Coordinates relative to the top left corner of the entire document, so that the position remains correct even if the page is scrolled.
+        let target: HTMLElement
+        if (e instanceof MouseEvent) {
+            target = e.target as HTMLElement
+            clientX = e.clientX
+            clientY = e.clientY
+            offsetX = e.offsetX
+            offsetY = e.offsetY
+            pageX = e.pageX
+            pageY = e.pageY
+        } else if (e instanceof TouchEvent) {
+            if (e.touches.length > 0) {
+                const touch = e.touches[0]
+                clientX = touch.clientX
+                clientY = touch.clientY
+                pageX = touch.pageX
+                pageY = touch.pageY
+                target = touch.target as HTMLElement
+                const rect = target.getBoundingClientRect()
+                offsetX = touch.clientX - rect.left
+                offsetY = touch.clientY - rect.top
+            } else {
+                return
             }
-            isShownTooltip = false
+        }
+        const Event = {
+            type: e.type,
+            clientX: clientX!, clientY: clientY!,
+            offsetX: offsetX!, offsetY: offsetY!,
+            pageX: pageX!, pageY: pageY!,
+            target: target!,
+        }
+        const tooltipContainerRect = getRect(timelineElement.querySelector('.sunorhc-timeline-tooltip-container')!) as DOMRect
+        const scrollLeft = window.scrollX
+        const scrollTop = window.scrollY
+        const viewArea = {
+            left: tooltipContainerRect.left + scrollLeft,
+            top: tooltipContainerRect.top + scrollTop,
+            right: tooltipContainerRect.right + scrollLeft,
+            bottom: tooltipContainerRect.bottom + scrollTop,
+        }
+        //console.log('showTooltip!!!:', Event, viewArea)
+
+        const selfElement = Event.target as HTMLDivElement
+        const eventId = selfElement.dataset!.eventId
+        const matchedEventNodes = (eventNodes as EventNode[]).filter((item: any) => item.eventId === eventId)
+        if (matchedEventNodes.length > 0) {
+            const eventNode = matchedEventNodes.shift()!
+            setStyles(tooltipContainer, { zIndex: '80' })
+            const tooltipElement = document.createElement('div')
+            tooltipElement.classList.add('sunorhc-timeline-tooltip')
+
+            const tooltipTemplate = timelineOptions.effects.hasOwnProperty('template') && timelineOptions.effects.template?.hasOwnProperty('tooltip') 
+                ? timelineOptions.effects.template.tooltip as string
+                : `<label>%label%</label>`
+            setContent(tooltipElement, fillTemplate(tooltipTemplate, eventNode), false)
+            tooltipContainer.append(tooltipElement)
+            fragment.append(tooltipContainer)
+            timelineBody.append(fragment)
+            const tooltipRect = getRect(tooltipElement) as DOMRect
+            const gapMargin = 12
+            let placementClass: string
+            let positionStyles: string[]
+            if (pageY! - viewArea.top >= viewArea.bottom - pageY!) {
+                placementClass = 'top'
+                positionStyles = [ `--tooltip-top: ${Math.ceil((pageY! - viewArea.top) - (tooltipRect.height + (gapMargin * 1.5)))}px`, `--tooltip-left: ${Math.ceil((pageX! - viewArea.left) - (tooltipRect.width / 2))}px` ]
+            } else {
+                placementClass = 'bottom'
+                positionStyles = [ `--tooltip-top: ${Math.ceil((pageY! - viewArea.top) + gapMargin)}px`, `--tooltip-left: ${Math.ceil((pageX! - viewArea.left) - (tooltipRect.width / 2))}px` ]
+            }
+            if (pageX! - viewArea.left < tooltipRect.width / 2) {
+                placementClass = 'right'
+                positionStyles = [ `--tooltip-top: ${Math.ceil((pageY! - viewArea.top) - (tooltipRect.height / 2))}px`, `--tooltip-left: ${Math.ceil((pageX! - viewArea.left) + (gapMargin * 1.5))}px` ]
+            }
+            if (viewArea.right - pageX! < tooltipRect.width / 2) {
+                placementClass = 'left'
+                positionStyles = [ `--tooltip-top: ${Math.ceil((pageY! - viewArea.top) - (tooltipRect.height / 2))}px`, `--tooltip-left: ${Math.ceil((pageX! - viewArea.left) - (tooltipRect.width + (gapMargin * 1.5)))}px` ]
+            }
+            //console.log('showTooltip!!!::placement:', placementClass, positionStyles)
+            tooltipElement.classList.add(placementClass)
+            setStyles(tooltipElement, positionStyles.join('; '))
+            tooltipElement.classList.add('shown')
+            isShownTooltip = true
+        }
+    }
+   
+    eventNodeElements.forEach((eventNode: HTMLDivElement) => {
+        eventNode.addEventListener('mouseout', (e: MouseEvent) => {
+            hideTooltip(e)
         })
+
         eventNode.addEventListener('mouseover', (e: MouseEvent) => {
             if (isShownTooltip) return
-            e.preventDefault()
-            const selfElement = e.target! as HTMLDivElement
-            const eventId = selfElement.dataset!.eventId
-            const matchedEventNodes = (eventNodes as EventNode[]).filter((item: any) => item.eventId === eventId)
-            if (matchedEventNodes.length > 0) {
-                const eventNode = matchedEventNodes.shift()!
-                const eventNodeElementRect = getRect(selfElement) as DOMRect
-                const tooltipElement = document.createElement('div')
-                tooltipElement.classList.add('tooltip')
-                setStyles(tooltipElement, { top: `${(eventNodeElementRect.height / -2)}px`, left: `${(eventNodeElementRect.width / -2)}px` })
-                // <li>StartBaseX: ${eventNode.extends?.startBaseX ?? 'Undefined'}, EndBaseX: ${eventNode.extends?.endBaseX ?? 'Undefined'}</li>\
-                setContent(tooltipElement, `<ul>\
-                <li>${eventNode.start} ～ ${eventNode.end || 'Undefined'}<li>\
-                <li>X: ${eventNode.x}, Width:&nbsp; ${eventNode.w || 'Undefined'}</li>\
-                <li>Y: ${eventNode.y}, Height: ${eventNode.h || 'Undefined'}</li>\
-                <li>EventId: <span style="color:#f87171;font-weight:600;">${eventNode.eventId}</span></li>\
-                <li>${eventNode.label || 'Untitled'}</li>\
-                </ul>`, false)
-                fragment.append(tooltipElement)
-                selfElement.append(fragment)
-                const tooltipRect = getRect(tooltipElement) as DOMRect
-                let tooltipX = (tooltipRect.width - eventNodeElementRect.width) / -2
-                if (eventNode.x! < 0) {
-                    if (eventNode.w! + eventNode.x! > timelineMainCanvas.offsetWidth) {
-                        tooltipX = (e.pageX + containerRect.left + timelineMainCanvas.scrollLeft) / 2 - eventNode.x!
-                    } else {
-                        tooltipX = eventNodeElementRect.width - ((tooltipRect.width - e.pageX) / -2)
-                    }
-                }
-                let tooltipY = eventNode.h || eventNodeElementRect.height
-                //console.log('onHoverTooltip::X:', tooltipX, eventNode.x, eventNode.w, eventNodeElementRect.x, eventNodeElementRect.width, tooltipRect.x, mouseX, mouseY, timelineMainCanvas.offsetWidth, tooltipX)
-                //console.log('onHoverTooltip::Y:', tooltipY, eventNode.y, eventNode.h, eventNodeElementRect.y, eventNodeElementRect.height, tooltipRect.y, tooltipRect.height)
-                //console.log('onHoverTooltip:', eventNode, canvasRect, eventNodeElementRect, tooltipRect, tooltipX, tooltipY, e.pageX, e.pageY, eventNode.x!)
-                setStyles(tooltipElement, `--tooltip-y: ${tooltipY}px; --tooltip-x: ${tooltipX}px;`)
-                //await Promise.resolve(setStyles(tooltipElement, `--tooltip-y: ${tooltipY}px; --tooltip-x: ${tooltipX}px;`))
-                //.then(() => {
-                    tooltipElement.classList.add('shown')
-                    isShownTooltip = true
-                //})
-            }
+            e.stopPropagation()
+            //e.preventDefault()
+            showTooltip(e)
         })
+
+        // For touch device
+        
+        eventNode.addEventListener('touchend', (e: TouchEvent) => {
+            hideTooltip(e)
+        })
+
+        eventNode.addEventListener('touchstart', (e: TouchEvent) => {
+            if (isShownTooltip) return
+            e.stopPropagation()
+            //e.preventDefault()
+            hideTooltip(e)
+        })
+
     })
 }
 
@@ -663,12 +741,192 @@ export const dblclickZoom = (timelineElement: HTMLDivElement, timelineOptions: T
  * @param {EventNode[]} eventNodes 
  */
 export const clickOpener = (timelineElement: HTMLDivElement, timelineOptions: TimelineOptions, eventNodes: EventNode[]): void => {
-    const eventOpen = (action: Action, eventData: Record<string, any>): void => {
+    let scrollPosition = 0
+
+    const toggleModal = (event?: Event, toState: string = 'auto'): void => {
+        if (event) {
+            event.stopPropagation()
+            //event.preventDefault()
+        }
+        const modalElement = document.getElementById('sunorhc-timeline-modal')
+        if (!modalElement) {
+            return
+        }
+        const modalDialogRef = modalElement.querySelector<HTMLDivElement>('.sunorhc-timeline-modal-dialog-ref')!
+        const isShown = toState === 'auto' 
+            ? modalDialogRef.classList.contains('shown')
+            : !(toState === 'show')
+        if (isShown) {
+            modalDialogRef.classList.remove('shown')
+            setTimeout(() => {
+                setStyles(modalElement, { display: 'none' })
+                document.body.style.position = ''
+                document.body.style.top = ''
+                document.body.style.width = ''
+                window.scrollTo({ top: scrollPosition, left: 0, behavior: 'instant' })
+            }, 300)
+        } else {
+            setStyles(modalElement, { display: 'block' })
+            scrollPosition = window.scrollY
+            const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
+            document.body.style.position = 'fixed'
+            document.body.style.top = `-${scrollPosition}px`
+            document.body.style.width = `calc(100% - ${scrollbarWidth}px)`
+            setTimeout(() => {
+                modalDialogRef.classList.add('shown')
+            }, 1)
+        }
+    }
+
+    const isFunction = (obj: any, key: string): obj is { [key: string]: Function } => {
+        return typeof obj[key] === 'function'
+    }
+
+    const getRemoteContent = async (eventData: EventNode): Promise<EventNode> => {
+        if (eventData.hasOwnProperty('content') && isURLOrPath(eventData.content || '')) {
+            let mustFetch = true
+            const expiration = eventData.hasOwnProperty('expiration') ? eventData.expiration : 'none'
+            if (eventData.hasOwnProperty('extends') && eventData.extends!.hasOwnProperty('remoteContent')) {
+                // If cached remote content exists.
+                // Set an expiration time cached event; a number is seconds from cached, always abort cache on open if "always", 
+                // ever cached at no-expires on memory if "none".
+                if (typeof expiration === 'number' && eventData.extends!.hasOwnProperty('cached')) {
+                    mustFetch = new Date().getTime() > eventData.extends!.cached + expiration * 1000
+                } else if (expiration !== 'always') {
+                    mustFetch = false
+                }
+            }
+            if (mustFetch) {
+                const response = await fetchData({ url: eventData.content })
+                //console.log('Open Event as Remote Got!!!:', response)
+                if (response.hasOwnProperty('content')) {
+                    if (!eventData.hasOwnProperty('extends')) {
+                        eventData.extends = {
+                            remoteContent: response.content.toString()
+                        }
+                    } else {
+                        eventData.extends!.remoteContent = response.content.toString()
+                    }
+                    if (response.hasOwnProperty('label')) {
+                        eventData.extends!.remoteLabel = response.label.toString()
+                    }
+                    if (typeof expiration === 'number') {
+                        eventData.extends!.cached = new Date().getTime()
+                    }
+                }
+            }
+        } else {
+            console.warn('Invalid remote URL from which content can be retrieved:', eventData.content)
+        }
+        return eventData
+    }
+
+    const eventOpen = async (action: Action, eventData: EventNode): Promise<void> => {
         try {
-            console.log('Open Event!!!:', action, eventData)
+            //console.log('Open Event!!!:', action, eventData)
+            if (eventData.hasOwnProperty('remote') && eventData.remote) {
+                eventData = await getRemoteContent(eventData)
+            }
+            let injectContent = ''
             switch(action) {
                 case 'modal':
                     // Displays a modal window and injects it with content.
+                    let modalElement = document.getElementById('sunorhc-timeline-modal')
+                    let modalConfig: Record<string, any> = {
+                        size:   'medium',
+                        header: undefined,
+                        body:   undefined,
+                        //footer: undefined,
+                    }
+                    let modalSize:   string = '500px'// Default to `medium`
+                    let modalHeader: string = eventData.extends?.remoteLabel ? eventData.extends!.remoteLabel : eventData.label?.toString()
+                    let modalBody:   string = eventData.extends?.remoteContent ? eventData.extends!.remoteContent : eventData.content?.toString()
+                    let modalFooter: string = ''
+                    if (timelineOptions.effects.hasOwnProperty('template') && timelineOptions.effects.template?.hasOwnProperty('modal') && !isEmptyObject( timelineOptions.effects.template?.modal )) {
+                        modalConfig = { ...modalConfig, ...timelineOptions.effects.template.modal }
+                    }
+                    if (!modalElement) {
+                        modalElement = document.createElement('div')
+                        modalElement.id = 'sunorhc-timeline-modal'
+                        modalElement.classList.add('sunorhc-timeline-modal-container')
+                        setAtts(modalElement, { tabindex: '-1', role: 'dialog' })
+                        switch (modalConfig.size) {
+                            case 'full':
+                                modalSize = '100vw'
+                                break
+                            case 'extralarge':
+                                modalSize = 'calc(100% - 4rem)'
+                                break
+                            case 'large':
+                                modalSize = '800px'
+                                break
+                            case 'medium':
+                                modalSize = '500px'
+                                break
+                            case 'small':
+                                modalSize = '300px'
+                                break
+                            default:
+                                if (typeof modalConfig.size === 'number') {
+                                    modalSize = `${modalConfig.size}px`
+                                }
+                                break
+                        }
+                        if (modalConfig.hasOwnProperty('header') && !!modalConfig.header && modalConfig.header !== '') {
+                            modalHeader = fillTemplate(modalConfig.header, eventData)
+                        }
+                        if (modalConfig.hasOwnProperty('body') && !!modalConfig.body && modalConfig.body !== '') {
+                            modalBody = fillTemplate(modalConfig.body, eventData)
+                        }
+                        if (!modalConfig.hasOwnProperty('footer') || modalConfig.footer === undefined) {
+                            modalFooter = '<button type="button" class="sunorhc-timeline-modal-close">Close</button>'
+                        } else if (modalConfig.footer === null || modalConfig.footer === '') {
+                            modalFooter = ''
+                        } else {
+                            modalFooter = fillTemplate(modalConfig.footer, eventData)
+                        }
+                        //console.log('modalFooter?:', modalConfig.footer, modalFooter)
+                        const modalDialogHTML = `\
+\t<div class="sunorhc-timeline-modal-dialog-ref"></div>\
+\t<div class="sunorhc-timeline-modal-dialog${modalConfig.size === 'full' ? ' fullsize' : ''}" style="--modal-width: ${modalSize};">\
+\t\t<div class="sunorhc-timeline-modal-header">\
+\t\t\t<h3 class="sunorhc-timeline-modal-title">${modalHeader}</h3>
+\t\t\t<button type="button" class="sunorhc-timeline-modal-dismiss"><span><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></span></button>\
+\t\t</div>\
+\t\t<div class="sunorhc-timeline-modal-body">${modalBody}</div>\
+\t\t<div class="sunorhc-timeline-modal-footer"${modalFooter === '' ? ' style="display: none;"' : ''}>\
+\t\t\t${modalFooter}\
+\t\t</div>\
+\t</div>`
+                        setContent(modalElement, modalDialogHTML, false)
+                        timelineElement.parentElement?.insertBefore(modalElement, timelineElement.nextSibling)
+                        document.querySelector<HTMLButtonElement>('.sunorhc-timeline-modal-dismiss')!.addEventListener('click', (e: Event) => {
+                            //console.log('dismiss click!!!:')
+                            toggleModal(e)
+                        })
+                        document.querySelector<HTMLDivElement>('.sunorhc-timeline-modal-dialog-ref')!.addEventListener('click', (e: Event) => {
+                            e.preventDefault()
+                            //console.log('modalRef click!!!:', e.cancelable)
+                            toggleModal(e)
+                        })
+                        document.querySelector<HTMLButtonElement>('.sunorhc-timeline-modal-close')?.addEventListener('click', (e: Event) => {
+                            //console.log('close click!!!:')
+                            toggleModal(e)
+                        })
+                    } else {
+                        if (modalConfig.hasOwnProperty('header') && !!modalConfig.header && modalConfig.header !== '') {
+                            modalHeader = fillTemplate(modalConfig.header, eventData)
+                        }
+                        if (modalConfig.hasOwnProperty('body') && !!modalConfig.body && modalConfig.body !== '') {
+                            modalBody = fillTemplate(modalConfig.body, eventData)
+                        }
+                        setContent(modalElement.querySelector<HTMLElement>('.sunorhc-timeline-modal-title')!, modalHeader, false)
+                        setContent(modalElement.querySelector<HTMLElement>('.sunorhc-timeline-modal-body')!, modalBody, false)
+                        if (modalFooter !== '') {
+                            setContent(modalElement.querySelector<HTMLElement>('.sunorhc-timeline-modal-footer')!, modalFooter, false)
+                        }
+                    }
+                    toggleModal(undefined, 'show')
                     break
                 /* case 'slider':
                     // Slides to reveal content in the timeline container-based display area.
@@ -676,9 +934,39 @@ export const clickOpener = (timelineElement: HTMLDivElement, timelineOptions: Ti
                     break */
                 case 'custom':
                     // Executes the specified custom action.
+                    if (timelineOptions.effects.hasOwnProperty('template') && timelineOptions.effects.template?.hasOwnProperty('custom')) {
+                        if (typeof timelineOptions.effects.template.custom === 'function') {
+                            timelineOptions.effects.template.custom(eventData, timelineOptions)
+                        } else if (typeof timelineOptions.effects.template.custom === 'string') {
+                            let funcName = timelineOptions.effects.template.custom
+
+                            console.log('custom handle as string:', funcName)
+                            if (globalThis.hasOwnProperty(funcName) && isFunction(globalThis, funcName)) {
+                                (globalThis as any)[funcName](eventData, timelineOptions)
+                            } else {
+                                throw new Error(`Function to be called could not be found: ${funcName}()`)
+                            }
+                        } else {
+                            throw new Error('Invalid handler for processing the event detail data.')
+                        }
+                    }
                     break
                 case 'normal':
                     // Insert content into a system-default element.
+                    // That system-default element is defined: `<div id="sunorhc-timeline-event-details"></div>`
+                    const eventDetailElement = document.getElementById('sunorhc-timeline-event-details')
+                    if (eventDetailElement) {
+                        const fixedLabel: string = eventData.extends?.remoteLabel ? eventData.extends!.remoteLabel : eventData.label?.toString()
+                        const fixedContent: string = eventData.extends?.remoteContent ? eventData.extends!.remoteContent : eventData.content?.toString()
+                        injectContent = `<h3>${fixedLabel || ''}</h3><p>${fixedContent || ''}</p>`
+                        if (timelineOptions.effects.hasOwnProperty('template') && timelineOptions.effects.template!.details) {
+                            const referEventData = {...eventData, ...{ label: fixedLabel, content: fixedContent }}
+                            injectContent = fillTemplate(timelineOptions.effects.template!.details, referEventData)
+                        }
+                        setContent(eventDetailElement, injectContent, false)
+                    } else {
+                        throw new Error('No element into which timeline event details can be injected.')
+                    }
                     break
                 default:
                     throw new Error('Invalid action as event opener.')
@@ -687,7 +975,11 @@ export const clickOpener = (timelineElement: HTMLDivElement, timelineOptions: Ti
             console.error('Failed to open the event:', error)
             return
         } finally {
-            // something
+            // After an event is opened, the callback function for that event is executed.
+            //console.log('Common processes after opening an event.', eventData)
+            if (eventData.hasOwnProperty('callback') && typeof eventData.callback === 'function') {
+                eventData.callback(eventData)
+            }
         }
     }
 
@@ -699,7 +991,7 @@ export const clickOpener = (timelineElement: HTMLDivElement, timelineOptions: Ti
             const eventNode = <HTMLDivElement>e.target!
             const eventData = eventNodes.filter(elm => elm.eventId === eventNode.dataset.eventId).shift()
             //console.log('Event Clicked!!!:', eventNode)
-            eventOpen(timelineOptions.effects.onClickEvent, eventData as Record<string, any>)
+            eventOpen(timelineOptions.effects.onClickEvent, eventData as EventNode)
         })
     })
 }

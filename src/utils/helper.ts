@@ -428,7 +428,11 @@ export const optimizeEventNode = (
     return newObj as Partial<EventNode>
 }
 
-export const findEvents = (targetElementId: string, conditions: { [key: string]: any }/*, fromCache: boolean | undefined = false*/): any => {
+export const findEvents = (
+    targetElementId: string,
+    conditions: { [key: string]: any },
+    //fromCache: boolean | undefined = false
+): any => {
     const targetElement = document.getElementById(targetElementId)!
     const eventNodeCollection = targetElement.querySelectorAll('.sunorhc-timeline-event-node')!
     if (eventNodeCollection.length == 0) {
@@ -496,6 +500,26 @@ export const truncateLowerRulerItems = (scale: Scale, scaleCollection: string[])
     })
     console.log('truncateLowerRulerItems!!!::', scale, scaleCollection, scaleIndexBounds, remainScales)
     return remainScales
+}
+
+export const fillTemplate = (template: string, data: { [key: string]: any }): string => {
+    //const placeholderPattern = new RegExp(/\$\{([^}|]+)(\|([^}]+))?\}/g) // placeholder: `${key}`, `${key.prop}`, `${key|default}`
+    const placeholderPattern = new RegExp(/%([^%|]+)(\|([^%]+))?%/g) // placeholder: `%key%`, `%key.prop%`, `%key|default%`
+    const escapePlaceholder = 'ESCAPED_PERCENT'
+    template = template.replace(/%%/g, escapePlaceholder)
+    const result = template.replace(placeholderPattern, (_, keyPath, __, defaultValute) => {
+        const keys = keyPath.split('.')
+        let value: any = data
+        for (const key of keys) {
+            if (value && key in value) {
+                value = value[key]
+            } else {
+                return defaultValute !== undefined ? defaultValute: ''
+            }
+        }
+        return value !== undefined ? String(value) : (defaultValute !== undefined ? defaultValute : '')
+    })
+    return result.replace(new RegExp(escapePlaceholder, 'g'), '%')
 }
 
 /**

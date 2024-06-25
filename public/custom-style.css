@@ -125,3 +125,22 @@ body.darkmode--activated .dark\:placeholder-gray-400::placeholder {
 .sunorhc-timeline-sidebar span[data-sidebar-item-type="avatar"] img {
     border-radius: 4px;
 }
+
+#sunorhc-timeline-event-details code,
+.sunorhc-timeline-modal-dialog code {
+    display: inline-flex;
+    padding: 5px 12px;
+    margin: 4px;
+    margin-top: 8px;
+    align-items: center;
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #D1D5DB;
+    font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    text-align: left;
+    color: #374151;
+    background-color: #F3F4F6;
+}

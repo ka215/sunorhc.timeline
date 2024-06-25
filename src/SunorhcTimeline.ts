@@ -4,7 +4,7 @@ import {
   Sidebars, Rulers, Alignment, EventNode, TimelineOptions, TimelineBaseClass, Measures, RulerOptions, ZoomScaleOptions
 } from './types/definitions'
 import {
-  isObject, isEmptyObject, getAtts, setAtts, setStyles, setContent, deepMergeObjects, deepCloneObject, cloneObject, 
+  isObject, isEmptyObject, isNumberString, getAtts, setAtts, setStyles, setContent, deepMergeObjects, deepCloneObject, cloneObject, 
   fetchData, deserialize, parseDateTime, convertToPixels, isElement, getRect, getParticles, getStartDatetime, getEndDatetime, 
   createLandmarkElement, createSidebar, createSidebarItems, createRuler, createRulerItems, optimizeEventNode, placeEventNodes, 
   showPresentTimeMarker, getDuplicateValues, validatorEventNode, validateTimelineOptions, saveToStorage, loadFromStorage, 
@@ -103,7 +103,7 @@ export class Timeline implements TimelineBaseClass {
     this.elementId = elementId
     this.targetElement = document.querySelector<HTMLDivElement>(`#${elementId}`)!
     this.fragmentNode  = document.createDocumentFragment()
-    this.inputOptions  = inputOptions as Partial<TimelineOptions>
+    this.inputOptions  = inputOptions as Partial<TimelineOptions> ?? {}
 
     const loggerOptions = {
       debug: (Object.prototype.hasOwnProperty.call(this.inputOptions, 'debug') ? this.inputOptions.debug : isDev) || false,
@@ -167,7 +167,8 @@ export class Timeline implements TimelineBaseClass {
 
     // First, extract the options from the data-options attribute.
     if (this.targetElement.dataset.options) {
-      const datasetOptions = deserialize(this.targetElement.dataset.options)
+      const datasetOptions = deserialize<Record<string, any>>(this.targetElement.dataset.options)
+      //console.log('!!!:', datasetOptions, typeof datasetOptions)
       if (isObject(datasetOptions)) {
         const validOptions = validateTimelineOptions(datasetOptions)
         fixedOptions = deepMergeObjects(fixedOptions, validOptions)
@@ -228,7 +229,7 @@ export class Timeline implements TimelineBaseClass {
     }
     setAtts(timelineContainer, containerAtts)
     const containerWidth  = this.options.layout.width || 'auto'
-    const containerHeight = this.options.layout.height || 'auto'
+    const containerHeight = /*this.options.layout.height || */'auto'
     const containerStyles: string[] = [
       'width: ' + (typeof containerWidth  === 'number' ? `${containerWidth}px` : containerWidth),
       'height: ' + (typeof containerHeight === 'number' ? `${containerHeight}px` : containerHeight),
@@ -335,9 +336,18 @@ export class Timeline implements TimelineBaseClass {
       'data-timeline-outlined':  this.options.layout && /^(inside|both)$/.test(this.options.layout.outlined!) ? 'true' : 'false',
       'data-timeline-linestyle': this.options.layout ? this.options.layout.outlineCorner! : '',
     })
-    if (this.options.layout && this.options.layout.outlineStyle) {
-      setStyles(body, `--outline-style: ${this.options.layout.outlineStyle}`)
+    let bodyStyles: string[] = []
+    if (this.options.layout) {
+      if (this.options.layout.height && this.options.layout.height !== 'auto') {
+        let bodyHeight: number = typeof this.options.layout.height === 'string' ? convertToPixels(this.options.layout.height) : this.options.layout.height
+
+        bodyStyles.push(`height: ${bodyHeight}px`)
+      }
+      if (this.options.layout.outlineStyle) {
+        bodyStyles.push(`--outline-style: ${this.options.layout.outlineStyle}`)
+      }
     }
+    setStyles(body, bodyStyles.join('; '))
 
     // Generate sidebar containers
     //const sidebars: { [key: string]?: HTMLDivElement/* | undefined*/ } = {
@@ -467,6 +477,7 @@ export class Timeline implements TimelineBaseClass {
     timelineContainer.append(this.fragmentNode)
 
     // Final display adjustments to the layout
+    const timelineBody: HTMLDivElement = timelineContainer.querySelector('.sunorhc-timeline-body')!
     const prerenderBodyHeight = getRect(body, 'height') as number
     const sidebarActualHeight = referMeasurements.sidebarHeight + (referMeasurements.sidebarOffsetTop + referMeasurements.sidebarOffsetBottom)// = fixed actual body height
     //console.log('!:', prerenderBodyHeight, sidebarActualHeight)
@@ -478,8 +489,17 @@ export class Timeline implements TimelineBaseClass {
     const nodesContainer = timelineContainer.querySelector('.sunorhc-timeline-nodes') as HTMLDivElement
     const timelineRulers: HTMLDivElement[] = Array.from(timelineContainer.querySelectorAll('.sunorhc-timeline-ruler'))
     let nodesContainerStyles: string[]
+    const timelineMainCanvas: HTMLDivElement = timelineBody.querySelector('.sunorhc-timeline-main-canvas')!
+    const renderedRulerTopHeight = getRect(timelineRulers.filter(elm => elm.dataset.rulerPosition === 'top')![0], 'height') as number
+    const renderedRulerBottomHeight = getRect(timelineRulers.filter(elm => elm.dataset.rulerPosition === 'bottom')![0], 'height') as number
+    const timelineSidebars: HTMLDivElement[] = Array.from(timelineContainer.querySelectorAll('.sunorhc-timeline-sidebar'))
+    let adjustAmount: number
+    let varMaxHeight: number
+    let sidebarStyles: string
+    let sidebarStylesArr: string[]
     //console.log('!!!:', referMeasurements)
     if (referMeasurements.sidebarVisibleHeight < referMeasurements.sidebarHeight) {
+      // If the sidebar display area is overflowing.
       const updateStyles: string[] = [
         `--sidebar-max-width: ${referMeasurements.sidebarWidth}px`,
         `--sidebar-max-height: ${referMeasurements.sidebarVisibleHeight}px`,
@@ -501,14 +521,138 @@ export class Timeline implements TimelineBaseClass {
         setAtts(ruler, { 'data-overlay-sticky': position } as { [key: string]: string })
       })
       setStyles(nodesContainer, nodesContainerStyles.join('; '))
+
+      const reGetRenderedRulerTopHeight = timelineContainer.querySelector<HTMLDivElement>('.sunorhc-timeline-ruler[data-ruler-position="top"]')?.clientHeight
+      const reGetRenderedRulerBottomHeight = timelineContainer.querySelector<HTMLDivElement>('.sunorhc-timeline-ruler[data-ruler-position="bottom"]')?.clientHeight
+      timelineSidebars.forEach((sidebar: HTMLDivElement) => {
+        adjustAmount = renderedRulerTopHeight - convertToPixels(sidebar.style.marginTop)
+        //console.log('adjusting:', renderedRulerTopHeight, adjustAmount, sidebar.style.marginTop, window.getComputedStyle(sidebar).getPropertyValue('margin-top'))
+        sidebarStyles = getAtts(sidebar, 'style')! as string
+        sidebarStylesArr = sidebarStyles.split(/;\s?/).filter(v => v !== '')
+        if (!!renderedRulerTopHeight && !renderedRulerBottomHeight) {
+          //console.log('Top ruler only!!!:', renderedRulerTopHeight, reGetRenderedRulerTopHeight, renderedRulerBottomHeight, this.options.layout.outlined, prerenderBodyHeight)
+          sidebarStylesArr.forEach((v, i) => {
+            if (/^margin-top\:/.test(v)) {
+              if (/^(inside|both)$/.test(this.options.layout.outlined ?? '')) {
+                sidebarStylesArr[i] = `margin-top: ${reGetRenderedRulerTopHeight}px`
+              }
+            }
+          })
+          if (/^(inside|both)$/.test(this.options.layout.outlined ?? '')) {
+            timelineMainCanvas.style.height = this.options.layout.outlined === 'inside' ? '100%' : 'calc(100% - 1px)'
+            if (this.options.layout.outlined === 'both') {
+              setAtts(timelineBody, { 'data-timeline-linestyle': '' })
+              timelineBody.style.height = `${prerenderBodyHeight + 1}px`
+              timelineMainCanvas.classList.add('border-bottom')
+              sidebar.querySelector('.sunorhc-timeline-sidebar-items')!.classList.add('border-bottom')
+            }
+          }
+        } else if (!renderedRulerTopHeight && !!renderedRulerBottomHeight) {
+          //console.log('Bottom ruler only!!!:', renderedRulerTopHeight, renderedRulerBottomHeight)
+          sidebarStylesArr.forEach((v, i) => {
+            if (/^margin-top\:/.test(v)) {
+              if (!/^(inside|both)$/.test(this.options.layout.outlined ?? '')) {
+                sidebarStylesArr[i] = 'margin-top: -2px'
+              } else {
+                sidebarStylesArr[i] = this.options.layout.outlined === 'inside' ? 'margin-top: 0px' : 'margin-top: 0px'
+              }
+            }
+            if (/^margin-bottom\:/.test(v)) {
+              sidebarStylesArr[i] = `margin-bottom: ${reGetRenderedRulerBottomHeight}px`
+            }
+            if (/^(outside|none|both)$/.test(this.options.layout.outlined ?? '')) {
+              if (/^--sidebar-max-height:/.test(v)) {
+                varMaxHeight = parseInt(v.replace(/^--sidebar-max-height:\s(\d+)px$/, '$1'), 10)
+                //console.log('!!!:', v, varMaxHeight)
+                sidebarStylesArr[i] = this.options.layout.outlined === 'both' ? `--sidebar-max-height: ${varMaxHeight + 1}px` : `--sidebar-max-height: ${varMaxHeight - 4}px`
+              }
+            }
+          })
+          if (!/^(inside|both)$/.test(this.options.layout.outlined ?? '')) {
+            sidebarStylesArr.push('border-bottom: none')
+          } else if (this.options.layout.outlined === 'both') {
+            setAtts(timelineBody, { 'data-timeline-linestyle': '' })
+          }
+          timelineContainer.querySelector<HTMLDivElement>('.sunorhc-timeline-ruler[data-ruler-position="bottom"]')!.style.top = '0px'
+        } else if (!renderedRulerTopHeight && !renderedRulerBottomHeight) {
+          //console.log('Neither has ruler!!!:', renderedRulerTopHeight, renderedRulerBottomHeight)
+          sidebarStylesArr.forEach((v, i) => {
+            if (/^(outside|none)$/.test(this.options.layout.outlined ?? '')) {
+              if (/^--sidebar-max-height:/.test(v)) {
+                varMaxHeight = parseInt(v.replace(/^--sidebar-max-height:\s(\d+)px$/, '$1'), 10)
+                //console.log('!!!:', v, varMaxHeight, sidebar.clientHeight, referMeasurements.sidebarItems)
+                sidebarStylesArr[i] = `--sidebar-max-height: ${varMaxHeight - referMeasurements.sidebarItems}px`
+              }
+            } else {
+              if (/^margin-top\:/.test(v)) {
+                sidebarStylesArr[i] = `margin-top: 0`
+              }
+            }
+          })
+          if (/^(outside|none)$/.test(this.options.layout.outlined ?? '')) {
+            sidebarStylesArr.push('border-bottom: none')
+            timelineMainCanvas.style.top = '1px'
+          } else if (this.options.layout.outlined === 'inside') {
+            sidebarStylesArr.push('border-bottom: none')
+            timelineMainCanvas.style.height = '100%'
+          } else {
+            timelineMainCanvas.style.height = '100%'
+            timelineMainCanvas.classList.add('border-top', 'border-bottom')
+            setAtts(timelineBody, { 'data-timeline-linestyle': '' })
+          }
+        } else {
+          //console.log('Both have rulers!!!:', renderedRulerTopHeight, reGetRenderedRulerTopHeight, renderedRulerBottomHeight, reGetRenderedRulerBottomHeight)
+          if (this.options.layout.outlined !== 'inside') {
+            // When outlined outside, both or none
+            sidebarStylesArr.forEach((v, i) => {
+              if (/^margin-top\:/.test(v)) {
+                sidebarStylesArr[i] = `margin-top: ${reGetRenderedRulerTopHeight}px`
+              }
+              if (/^margin-bottom\:/.test(v)) {
+                sidebarStylesArr[i] = `margin-bottom: ${reGetRenderedRulerBottomHeight}px`
+              }
+            })
+            timelineContainer.querySelector<HTMLDivElement>('.sunorhc-timeline-ruler[data-ruler-position="top"]')!.style.top = '0'
+            timelineMainCanvas.style.height = 'calc(100% + 1px)'
+            if (this.options.layout.outlined !== 'both') {
+              adjustAmount = 0
+            } else {
+              console.log('!!!:', getRect(sidebar), getRect(timelineContainer.querySelector<HTMLDivElement>('.sunorhc-timeline-ruler[data-ruler-position="bottom"]')!))
+              timelineContainer.querySelector<HTMLDivElement>('.sunorhc-timeline-ruler[data-ruler-position="bottom"] .sunorhc-timeline-ruler-row[data-ruler-grain="max"]')!.style.height = '100%'
+            }
+          } else {
+            // When outlined inside
+            sidebarStylesArr.forEach((v, i) => {
+              if (/^margin-top\:/.test(v)) {
+                sidebarStylesArr[i] = `margin-top: ${reGetRenderedRulerTopHeight}px`
+              }
+            })
+            timelineMainCanvas.style.height = 'calc(100% + 1px)'
+            adjustAmount = 0
+            timelineContainer.querySelector<HTMLDivElement>('.sunorhc-timeline-ruler[data-ruler-position="bottom"] .sunorhc-timeline-ruler-row[data-ruler-grain="max"]')!.style.borderBottomStyle = 'none'
+          }
+        }
+        if (this.options.layout.outlineStyle === 'dotted') {
+          //console.log('Border style is dotted!!!:', sidebar.dataset.sidebarPosition)
+          if (sidebar.dataset.sidebarPosition === 'left') {
+            sidebarStylesArr.push('border-right: none')
+          } else {
+            sidebarStylesArr.push('border-left: none')
+          }
+          timelineContainer.querySelector<HTMLDivElement>('.sunorhc-timeline-ruler[data-ruler-position="bottom"]')!.style.top = '-1.5px'
+        }
+        sidebarStylesArr.unshift(`--sidebar-adjust-top: ${adjustAmount}px`)
+        //setAtts(sidebar, { style: `--sidebar-adjust-top: ${adjustAmount}px; ${sidebarStyles}` })
+        setAtts(sidebar, { style: sidebarStylesArr.join('; ') })
+      })
     } else {
+      // When the sidebar is fully displaying.
       nodesContainerStyles = (getAtts(nodesContainer, 'style')! as string).split(';').filter(e => e !== '').map(e => {
         const style = e.trim()
         return /^height\:/.test(style) ? `height: ${referMeasurements.sidebarHeight + 2}px` : style
       })
       //console.log(nodesContainerStyles)
       setStyles(nodesContainer, nodesContainerStyles.join('; '))
-      const timelineBody: HTMLDivElement = timelineContainer.querySelector('.sunorhc-timeline-body')!
       let stackHeight: number = 0
       timelineRulers.forEach((ruler: HTMLDivElement) => {
         const thisHeight = Math.ceil(getRect(ruler, 'height') as number)
@@ -517,27 +661,55 @@ export class Timeline implements TimelineBaseClass {
       })
       //console.log(stackHeight, stackHeight + referMeasurements.sidebarHeight)
       setStyles(timelineBody, { height: `${Math.floor(stackHeight + referMeasurements.sidebarHeight)}px` })
-      /*
-      if (referMeasurements.rulerTopRows > 6) {
-        const renderedRulerTopHeight = Util.getRect(timelineRulers.filter(elm => elm.dataset.rulerPosition === 'top')![0], 'height') as number
-        const timelineSidebars: HTMLDivElement[] = Array.from(timelineContainer.querySelectorAll('.sunorhc-timeline-sidebar'))
-        timelineSidebars.forEach((sidebar: HTMLDivElement) => {
-          const adjustAmount: number = renderedRulerTopHeight - Util.convertToPixels(sidebar.style.marginTop)
-          console.log('adjusting:', renderedRulerTopHeight, adjustAmount, sidebar.style.marginTop, window.getComputedStyle(sidebar).getPropertyValue('margin-top'))
-          const sidebarStyles = Util.getAtts(sidebar, 'style')! as string
-          Util.setAtts(sidebar, { style: `--sidebar-adjust-top: ${adjustAmount}px; ${sidebarStyles}` })
-        })
-      }
-      */
+
+      timelineSidebars.forEach((sidebar: HTMLDivElement) => {
+        adjustAmount = renderedRulerTopHeight - convertToPixels(sidebar.style.marginTop)
+        //console.log('adjusting:', renderedRulerTopHeight, adjustAmount, sidebar.style.marginTop, window.getComputedStyle(sidebar).getPropertyValue('margin-top'))
+        sidebarStyles = getAtts(sidebar, 'style')! as string
+        sidebarStylesArr = sidebarStyles.split(/;\s?/).filter(v => v !== '')
+        if (!!renderedRulerTopHeight && !renderedRulerBottomHeight) {
+          console.log('Top ruler only!!!:', renderedRulerTopHeight, renderedRulerBottomHeight, this.options.layout.outlined, prerenderBodyHeight)
+          if (/^(inside|both)$/.test(this.options.layout.outlined ?? '')) {
+            timelineMainCanvas.style.height = '100%'
+            if (this.options.layout.outlined === 'both') {
+              timelineBody.style.height = `${prerenderBodyHeight + 1}px`
+              timelineMainCanvas.classList.add('border-bottom')
+              sidebar.querySelector('.sunorhc-timeline-sidebar-items')!.classList.add('border-bottom')
+            }
+          }
+        } else if (!renderedRulerTopHeight && !!renderedRulerBottomHeight) {
+          console.log('Bottom ruler only!!!:', renderedRulerTopHeight, renderedRulerBottomHeight)
+          sidebarStylesArr.forEach((v, i) => {
+            if (/^margin-top\:/.test(v)) {
+              sidebarStylesArr[i] = this.options.layout.outlined === 'inside' ? 'margin-top: -2px' : 'margin-top: -1px'
+            }
+            if (/^margin-bottom\:/.test(v)) {
+              sidebarStylesArr[i] = `margin-bottom: ${renderedRulerBottomHeight}px`
+            }
+          })
+          timelineContainer.querySelector<HTMLDivElement>('.sunorhc-timeline-ruler[data-ruler-position="bottom"]')!.style.top = '-1.75px'
+          timelineMainCanvas.style.height = '100%'
+        } else if (!renderedRulerTopHeight && !renderedRulerBottomHeight) {
+          //console.log('Neither has ruler!!!:', renderedRulerTopHeight, renderedRulerBottomHeight)
+          // Nothing for now
+        } else {
+          //console.log('Both have rulers!!!:', renderedRulerTopHeight, renderedRulerBottomHeight)
+          // Nothing for now
+        }
+        if (this.options.layout.outlineStyle === 'dotted') {
+          //console.log('Border style is dotted!!!:', sidebar.dataset.sidebarPosition)
+          if (sidebar.dataset.sidebarPosition === 'left') {
+            sidebarStylesArr.push('border-right: none')
+          } else {
+            sidebarStylesArr.push('border-left: none')
+          }
+          timelineContainer.querySelector<HTMLDivElement>('.sunorhc-timeline-ruler[data-ruler-position="bottom"]')!.style.top = '-1.5px'
+        }
+        sidebarStylesArr.unshift(`--sidebar-adjust-top: ${adjustAmount}px`)
+        //setAtts(sidebar, { style: `--sidebar-adjust-top: ${adjustAmount}px; ${sidebarStyles}` })
+        setAtts(sidebar, { style: sidebarStylesArr.join('; ') })
+      })
     }
-    const renderedRulerTopHeight = getRect(timelineRulers.filter(elm => elm.dataset.rulerPosition === 'top')![0], 'height') as number
-    const timelineSidebars: HTMLDivElement[] = Array.from(timelineContainer.querySelectorAll('.sunorhc-timeline-sidebar'))
-    timelineSidebars.forEach((sidebar: HTMLDivElement) => {
-      const adjustAmount: number = renderedRulerTopHeight - convertToPixels(sidebar.style.marginTop)
-      //console.log('adjusting:', renderedRulerTopHeight, adjustAmount, sidebar.style.marginTop, window.getComputedStyle(sidebar).getPropertyValue('margin-top'))
-      const sidebarStyles = getAtts(sidebar, 'style')! as string
-      setAtts(sidebar, { style: `--sidebar-adjust-top: ${adjustAmount}px; ${sidebarStyles}` })
-    })
     //console.log(Util.getRect(body, 'height'), referMeasurements, this.measurements)
 
     // All elements have been completely rendered.
@@ -719,7 +891,7 @@ export class Timeline implements TimelineBaseClass {
     //Util.onStickyRulerItems(this.targetElement)
 
     if (this.options.effects.hoverEvent) {
-      onHoverTooltip(this.targetElement, this.eventNodes as EventNode[])
+      onHoverTooltip(this.targetElement, this.options, this.eventNodes as EventNode[])
     }
 
     if (this.options.effects.onClickEvent !== 'none') {
@@ -808,7 +980,7 @@ export class Timeline implements TimelineBaseClass {
     ) {
       return Promise.reject(new Error('Invalid zoom option.'))
     }
-    console.log('zoom!!!:', this.options.scale, '->', newScaleOptions.scale, newScaleOptions)
+    //console.log('zoom!!!:', this.options.scale, '->', newScaleOptions.scale, newScaleOptions)
     this.reload({ start: newScaleOptions.start, end: newScaleOptions.end, scale: newScaleOptions.scale, ruler: newScaleOptions.ruler })
     if (callback) {
       // Fires after zoom?

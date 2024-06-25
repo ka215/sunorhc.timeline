@@ -184,7 +184,14 @@ export function setupTester(element: HTMLDivElement) {
       <select id="select-event-opener" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white">
         <option hidden>Opener Type</option>
         <option value="normal">Normal</option>
-        <option value="modal">Modal</option>
+        <optgroup label="Modal">
+          <option value="modal:full">Full</option>
+          <option value="modal:extralarge">Extralarge</option>
+          <option value="modal:large">Large</option>
+          <option value="modal:medium">Medium</option>
+          <option value="modal:small">Small</option>
+          <option value="modal:960">960px</option>
+        </optgroup>
         <option value="custom">Custom</option>
         <option value="none">None</option>
       </select>
@@ -553,12 +560,28 @@ export function setupTester(element: HTMLDivElement) {
   // Change Event Opener Type
   element.querySelector<HTMLSelectElement>('#select-event-opener')!.addEventListener('change', (evt: Event) => {
     const $OPENER_TYPE = <HTMLSelectElement>evt.currentTarget
+    // Clear modal element
+    const modalElement = document.getElementById('sunorhc-timeline-modal')
+    if (modalElement) {
+      modalElement.parentNode?.removeChild(modalElement)
+    }
+    if ($OPENER_TYPE.value === 'normal') {
+      document.getElementById('sunorhc-timeline-event-details')?.classList.remove('hidden')
+    } else {
+      document.getElementById('sunorhc-timeline-event-details')?.classList.add('hidden')
+    }
 
     if (window.hasOwnProperty('SunorhcTimelineInstances')) {
       for (const key in window.SunorhcTimelineInstances) {
         const instance = window.SunorhcTimelineInstances[key]
         const effectOptions = instance.getOptions().effects!
-        effectOptions.onClickEvent = $OPENER_TYPE.value
+        if (/^modal/.test($OPENER_TYPE.value)) {
+          const [ type, size ] = $OPENER_TYPE.value.split(':')
+          effectOptions.onClickEvent = type
+          effectOptions.template.modal.size = size === '960' ? Number(size): size
+        } else {
+          effectOptions.onClickEvent = $OPENER_TYPE.value
+        }
         instance.reload({ effects: effectOptions })
       }
     }
@@ -577,13 +600,19 @@ export function setupTester(element: HTMLDivElement) {
         newOptions.scale = $SELECT_SCALE.value
         newOptions.start = 'currently'
         newOptions.end = 'auto'
-        newOptions.ruler.filters.decorations.year = undefined
-        newOptions.ruler.filters.decorations.day = undefined
-        newOptions.ruler.filters.decorations.minute = undefined
+        if (newOptions.ruler.hasOwnProperty('filters') && newOptions.ruler.filters.hasOwnProperty('decorations')) {
+          newOptions.ruler.filters.decorations = { year: undefined, day: undefined, minute: undefined }
+        } else {
+          newOptions.ruler.filters = { decorations: {} }
+        }
         const rulerFilters = newOptions.ruler.filters
         let nowDate = new Date()
-        let monthName = ''
-        let dayName = ''
+        let monthName = !!rulerFilters.monthNames && Array.isArray(rulerFilters.monthNames) 
+          ? rulerFilters.monthNames[newOptions.timezone === 'UTC' ? nowDate.getUTCMonth() : nowDate.getMonth()] 
+          : (newOptions.timezone === 'UTC' ? nowDate.getUTCMonth() + 1 : nowDate.getMonth() + 1)
+        let dayName = !!rulerFilters.dayNames && Array.isArray(rulerFilters.dayNames) 
+          ? rulerFilters.dayNames[newOptions.timezone === 'UTC' ? nowDate.getUTCDay() : nowDate.getDay()] 
+          : (newOptions.timezone === 'UTC' ? nowDate.getUTCDay() : nowDate.getDay())
         let year, hours, minutes
         //console.log('!!!:', measurements, newOptions)
         switch($SELECT_SCALE.value) {
@@ -623,8 +652,8 @@ export function setupTester(element: HTMLDivElement) {
             newOptions.ruler.minGrainWidth = Math.max(80, Math.ceil(measurements.rulerVisibleWidth / 24))
             newOptions.ruler.top.rows = [ 'day', 'hour' ]
             newOptions.ruler.bottom.rows = newOptions.ruler.top.rows.toReversed()
-            monthName = rulerFilters.monthNames[newOptions.timezone === 'UTC' ? nowDate.getUTCMonth() : nowDate.getMonth()]
-            dayName = rulerFilters.dayNames[newOptions.timezone === 'UTC' ? nowDate.getUTCDay() : nowDate.getDay()]
+            //monthName = rulerFilters.monthNames[newOptions.timezone === 'UTC' ? nowDate.getUTCMonth() : nowDate.getMonth()] || (newOptions.timezone === 'UTC' ? nowDate.getUTCMonth() + 1 : nowDate.getMonth() + 1)
+            //dayName = rulerFilters.dayNames[newOptions.timezone === 'UTC' ? nowDate.getUTCDay() : nowDate.getDay()] || (newOptions.timezone === 'UTC' ? nowDate.getUTCDay() : nowDate.getDay())
             year = newOptions.timezone === 'UTC' ? nowDate.getUTCFullYear() : nowDate.getFullYear()
             newOptions.ruler.filters.decorations.day = { replacer: `${dayName}, %s ${monthName} ${year}` }
             break
@@ -637,8 +666,8 @@ export function setupTester(element: HTMLDivElement) {
             newOptions.ruler.minGrainWidth = Math.max(60, Math.ceil(measurements.rulerVisibleWidth / 60))
             newOptions.ruler.top.rows = [ 'day', 'hour', 'minute' ]
             newOptions.ruler.bottom.rows = newOptions.ruler.top.rows.toReversed()
-            monthName = rulerFilters.monthNames[newOptions.timezone === 'UTC' ? nowDate.getUTCMonth() : nowDate.getMonth()]
-            dayName = rulerFilters.dayNames[newOptions.timezone === 'UTC' ? nowDate.getUTCDay() : nowDate.getDay()]
+            //monthName = rulerFilters.monthNames[newOptions.timezone === 'UTC' ? nowDate.getUTCMonth() : nowDate.getMonth()] ?? (newOptions.timezone === 'UTC' ? nowDate.getUTCMonth() + 1 : nowDate.getMonth() + 1)
+            //dayName = rulerFilters.dayNames[newOptions.timezone === 'UTC' ? nowDate.getUTCDay() : nowDate.getDay()] ?? (newOptions.timezone === 'UTC' ? nowDate.getUTCDay() : nowDate.getDay())
             year = newOptions.timezone === 'UTC' ? nowDate.getUTCFullYear() : nowDate.getFullYear()
             newOptions.ruler.filters.decorations.day = { replacer: `${dayName}, %s ${monthName} ${year}` }
             break
@@ -651,8 +680,8 @@ export function setupTester(element: HTMLDivElement) {
             newOptions.ruler.minGrainWidth = Math.max(60, Math.ceil(measurements.rulerVisibleWidth / 60))
             newOptions.ruler.top.rows = [ 'day', 'minute', 'second' ]
             newOptions.ruler.bottom.rows = newOptions.ruler.top.rows.toReversed()
-            monthName = rulerFilters.monthNames[newOptions.timezone === 'UTC' ? nowDate.getUTCMonth() : nowDate.getMonth()]
-            dayName = rulerFilters.dayNames[newOptions.timezone === 'UTC' ? nowDate.getUTCDay() : nowDate.getDay()]
+            //monthName = rulerFilters.monthNames[newOptions.timezone === 'UTC' ? nowDate.getUTCMonth() : nowDate.getMonth()]
+            //dayName = rulerFilters.dayNames[newOptions.timezone === 'UTC' ? nowDate.getUTCDay() : nowDate.getDay()]
             year = newOptions.timezone === 'UTC' ? nowDate.getUTCFullYear() : nowDate.getFullYear()
             hours = String(newOptions.timezone === 'UTC' ? nowDate.getUTCHours() : nowDate.getHours()).padStart(2, '0')
             minutes = String(newOptions.timezone === 'UTC' ? nowDate.getUTCMinutes() : nowDate.getMinutes()).padStart(2, '0')

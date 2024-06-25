@@ -45,18 +45,18 @@
         id="myTimelineWithDatasetOptions"
         data-appname="sunorhc.timeline"
         data-options="{
-          start: '2024-04-29',
-          end  : '2024-06-04',
+          start: '2024-06-01',
+          end  : '2024-06-30',
           scale: 'day',
-          _file : './config.json',
-          layout: { outlined: 'both', },
+          timezone: 'Asia/Tokyo',
           header: { display: true, label: 'Fuga' },
           footer: { display: true, label: 'Hoge' },
-          sidebar: { placement: 'right', items: [ { type: 'text', label: 'Hey!' } ] },
-          timezone: 'Asia/Tokyo',
-          ruler: { placement: 'bottom', bottom: { rows: ['day', 'month'] } },
+          sidebar: { placement: 'left', itemHeight: 200, items: [ { type: 'text', label: 'Pointer Events' }, { type: 'text', label: 'Bar Events'} ] },
+          ruler: { placement: 'bottom', top: { rows: ['month', 'day', 'weekday'] }, bottom: { rows: ['weekday', 'day', 'month'] } },
+          layout: { outlined: 'both', width: 'auto', height: 'auto' },
           zoomable: true,
-          extends: { initialized: 'myCallbackFunc' },
+          extends: { zoomScaleTracker: true, initialized: 'myCallbackFunc', },
+          debug: true,
         }"
         class="my-4 mx-auto"
       ></div>
@@ -71,6 +71,11 @@
         data-options="config.json"
         class="my-4 mx-auto"
       ></div>
+      <div id="sunorhc-timeline-event-details" class="block w-full h-max my-4 p-4 border border-gray-200 rounded-lg dark:border-gray-600">
+        <span class="text-sm text-gray-400 text-center dark:text-gray-500">Event Details Injection Container: 
+          <code class="font-mono text-sm text-gray-300 bg-gray-500 rounded-md px-1">&lt;div id="sunorhc-timeline-event-details"&gt;&lt;/div&gt;</code>
+        </span>
+      </div>
       <div id="tester"></div>
     </main>
     <footer role="contentinfo" class="p-4 pb-8 w-full bg-white select-none dark:bg-gray-950">
@@ -125,5 +130,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
     <script type="module" src="/src/dispatcher.ts"></script>
     <script type="module" src="/src/tester.ts"></script>
+    <script>
+      globalThis.customFunction = (eventData) => {
+        console.log('Called customFunction!', eventData)
+        var eventLabel = eventData.label ?? 'Untitled'
+        if (eventData.hasOwnProperty('extends') && eventData.extends.hasOwnProperty('remoteLabel')) {
+          eventLabel = eventData.extends.remoteLabel
+        }
+        alert(eventLabel)
+      }
+    </script>
   </body>
 </html>

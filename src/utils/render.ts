@@ -226,6 +226,7 @@ export const createSidebar = (position: string, measurements: Measures): HTMLDiv
     })
     setStyles(sidebarElement, `\
         --sidebar-max-width: ${measurements.sidebarWidth}px; \
+        --sidebar-item-height: ${measurements.sidebarItemHeight}px; \
         margin-top: ${measurements.sidebarOffsetTop}px; \
         margin-bottom: ${measurements.sidebarOffsetBottom}px; \
     `)

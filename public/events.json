@@ -17,6 +17,9 @@
     { "start": "2024/3/1",   "end": "2024/8/1",   "row": 5,  "group": "C.T.",     "label": "Both edges of event is out of range", "content": "Text...", "textColor": "rgba(255,255,255)", "backgroundColor": "#33f", "borderColor": "gray" },
     { "start": "2024/5/30",  "end": "2024/6/3",              "group": "E.L.",     "label": "Is set correct group only", "content": "Text...", "textColor": "white", "backgroundColor": "#3f3", "borderColor": "red", "size": "xl" },
     { "start": "2024/6/2",                        "row": 2,                       "label": "Is set correct start only", "content": "Text...", "textColor": "rgba(255,255,255)", "backgroundColor": "#33f", "borderColor": "gray", "size": "lg" },
-    { "start": "2023/12/2",  "end": "2023-12-31", "row": 1,                       "label": "test", "content": "Text...", "textColor": "rgba(255,255,255)", "backgroundColor": "#33f", "borderColor": "gray", "size": "lg" }
-
+    { "start": "2023/12/2",  "end": "2023-12-31", "row": 1,                       "label": "test", "content": "Text...", "textColor": "rgba(255,255,255)", "backgroundColor": "#33f", "borderColor": "gray", "size": "lg" },
+    { "start": "2024/6/25",  "end": "2024-6-26",  "row": 1,  "label": "Remote event without cache expiration", "content": "/_oneEvent.json", "remote": true },
+    { "start": "2024/6/26",  "end": "2024-6-27",  "row": 2,  "label": "Remote event has no cached", "content": "/_oneEvent.json", "remote": true, "expiration": "none" },
+    { "start": "2024/6/27",  "end": "2024-6-28",  "row": 1,  "label": "Remote event has always cached", "content": "/_oneEvent2.json", "remote": true, "expiration": "always" },
+    { "start": "2024/6/28",  "end": "2024-6-29",  "row": 2,  "label": "Remote event with cached 10 sec.", "content": "/_oneEvent2.json", "remote": true, "expiration": 10 }
 ]

@@ -26,5 +26,6 @@ dist-ssr
 # Others
 public/*.png
 public/*.js
+public/_*
 mock
 memo.md

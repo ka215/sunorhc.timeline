@@ -1,17 +1,17 @@
 @use 'variables' as vars
 @use 'test'
 
-//@media (prefers-color-scheme: light)
-//  :root
-//    --base-text: #{vars.$gray900}
-//    --base-bg: #{vars.$noneColor}
-//    --elevation-bg: #{vars.$gray50}
+@media (prefers-color-scheme: light)
+  :root
+    --modal-bg-color: #{vars.$lightModalBgColor}
+    --modal-border-color: #{vars.$whiteSmoke}
+    --modal-dialog-color: #{vars.$lightModalDialogColor}
 
-//@media (prefers-color-scheme: dark)
-//  :root
-//    --base-text: #{vars.$gray50}
-//    --base-bg: #{vars.$noneColor}
-//    --elevation-bg: #{vars.$gray900}
+@media (prefers-color-scheme: dark)
+  :root
+    --modal-bg-color: #{vars.$darkModalBgColor}
+    --modal-border-color: #{vars.$heavyGray}
+    --modal-dialog-color: #{vars.$darkModalDialogColor}
 
 :root
   --font-size: #{vars.$baseFontSize}
@@ -23,6 +23,7 @@
   --shadow-inner: #{vars.$lightShadowIn}
   --shadow-middle: #{vars.$lightShadowMid}
   --shadow-outer: #{vars.$lightShadowOut}
+  --border-radius: 8px
   --sidebar-bg-odd: #{vars.$lightSidebarBgColorOdd}
   --sidebar-bg-even: #{vars.$lightSidebarBgColorEven}
   --ruler-bg-odd: #{vars.$lightRulerBgColorOdd}
@@ -44,13 +45,25 @@
   --event-node-text-color-hovered: #{vars.$lightEventNodeHoverTextColor}
   --event-node-bg-color-hovered: #{vars.$lightEventNodeHoverBgColor}
   --event-node-border-color-hovered: #{vars.$lightEventNodeHoverBorderColor}
+  --tooltip-bd-radius: 8px
+  --tooltip-tail-size: 10px
+  --tooltip-padding: 10px
+  // 20Q = 14.2pt = 18.94px, 18Q = 12.8pt = 17.07px, 14Q = 9.9pt = 13.2px, 13Q = 9.2pt = 12.27px, 12Q = 8.5pt = 11.34px
+  --tooltip-font-size: 12px
   --tooltip-text-color: #{vars.$lightTooltipTextColor}
   --tooltip-bg-color: #{vars.$lightTooltipBgColor}
   --marker-bg-color: #{vars.$lightMarkerBgColor}
+  --offtone-color: #{vars.$cloud}
+  --offtone-hover-color: #{vars.$steelBlue}
+  --button-bg-color: #{vars.$gray200}
+  --button-bg-color-hovered: #{vars.$gray100}
+  --button-text-color: #{vars.$gray700}
+  --button-text-color-hovered: #{vars.$steelBlue}
   transition: .3s
   scroll-behavior: smooth
 
-.dark-theme
+.dark-theme,
+.darkmode--activated
   --text-color: #{vars.$gray100}
   --border-color: #{vars.$gray600}
   --bg-color: #{vars.$noneColor}
@@ -82,7 +95,15 @@
   --tooltip-text-color: #{vars.$darkTooltipTextColor}
   --tooltip-bg-color: #{vars.$darkTooltipBgColor}
   --marker-bg-color: #{vars.$darkMarkerBgColor}
-
+  --modal-bg-color: #{vars.$darkModalBgColor}
+  --modal-border-color: #{vars.$heavyGray}
+  --modal-dialog-color: #{vars.$darkModalDialogColor}
+  --offtone-color: #{vars.$subduedGray}
+  --offtone-hover-color: #{vars.$lightSteelBlue}
+  --button-bg-color: #{vars.$darkModalDialogColorHalf}
+  --button-bg-color-hovered: #{vars.$gray700}
+  --button-text-color: #{vars.$gray500}
+  --button-text-color-hovered: #{vars.$lightSteelBlue}
 
 
 .sunorhc-timeline-container
@@ -117,7 +138,7 @@
 
   &[data-timeline-layout="rounded"],
   &[data-timeline-linestyle="rounded"]
-    border-radius: 8px
+    border-radius: var(--border-radius, 8px)
     overflow: hidden
 
   &[data-timeline-outline="true"],
@@ -254,7 +275,7 @@
 
     &[data-timeline-layout="rounded"],
     &[data-timeline-linestyle="rounded"]
-      border-radius: 8px // = 0.5em
+      border-radius: var(--border-radius, 8px)// = 0.5em
 
     &[data-timeline-outline="true"],
     &[data-timeline-outlined="true"]
@@ -264,6 +285,7 @@
       overflow: hidden
 
       .sunorhc-timeline-sidebar
+        top: 1px
         padding-bottom: 0
 
         &[data-sidebar-position="left"]
@@ -279,61 +301,79 @@
           li:not(:last-child)
             border-bottom: var(--outline-style, solid) 1px var(--border-color)
 
-      .sunorhc-timeline-ruler
-        transition: all 0.15s ease-out
+      .sunorhc-timeline-main-canvas
+        height: calc(100% + 2px)
 
-        &[data-ruler-position="top"]
-          top: 1px
-          border-bottom: var(--outline-style, solid) 1px var(--border-color)
+        .sunorhc-timeline-ruler
+          transition: all 0.15s ease-out
 
-          .sunorhc-timeline-ruler-row
-            li
-              border-right: var(--outline-style, solid) 1px var(--border-color)
-              border-bottom: var(--outline-style, solid) 1px var(--border-color)
+          &[data-ruler-position="top"]
+            top: 1px
+            border-bottom: var(--outline-style, solid) 1px var(--border-color)
 
-              &:last-child
-                border-right: none
+            .sunorhc-timeline-ruler-row
+              li
+                border-right: var(--outline-style, solid) 1px var(--border-color)
+                border-bottom: var(--outline-style, solid) 1px var(--border-color)
 
-            &[data-ruler-grain="min"] li,
-            &.last-order-row li
-              // The dynamic class ".last-order-row" is assigned to an element whose "data-ruler-order" attribute has 
-              // the same value as the "data-ruler-rows" attribute value of the parent element ".sunorhc-timeline-ruler".
-              padding-bottom: 1px
-              border-bottom: none
+                &:last-child
+                  border-right: none
 
-        &[data-ruler-position="bottom"]
-          top: -1px !important
-          border-top: var(--outline-style, solid) 1px var(--border-color)
+              &[data-ruler-grain="min"] li,
+              &.last-order-row li
+                // The dynamic class ".last-order-row" is assigned to an element whose "data-ruler-order" attribute has 
+                // the same value as the "data-ruler-rows" attribute value of the parent element ".sunorhc-timeline-ruler".
+                padding-bottom: 1px
+                border-bottom: none
 
-          .sunorhc-timeline-ruler-row
-            background-color: var(--ruler-bg-odd)
+          &[data-ruler-position="bottom"]
+            top: 0
+            border-top: var(--outline-style, solid) 1px var(--border-color)
 
-            li
-              border-right: var(--outline-style, solid) 1px var(--border-color)
-              border-bottom: var(--outline-style, solid) 1px var(--border-color)
+            .sunorhc-timeline-ruler-row
+              background-color: var(--ruler-bg-odd)
 
-              &:last-child
-                border-right: none
+              li
+                border-right: var(--outline-style, solid) 1px var(--border-color)
+                border-bottom: var(--outline-style, solid) 1px var(--border-color)
 
-            &.last-order-row li
-              // The dynamic class ".last-order-row" is assigned to an element whose "data-ruler-order" attribute has 
-              // the same value as the "data-ruler-rows" attribute value of the parent element ".sunorhc-timeline-ruler".
-              border-bottom: none
+                &:last-child
+                  border-right: none
 
-        &[data-alternate-rows="true"]
-          .sunorhc-timeline-ruler-row
-            &:nth-child(2n)
-              background-color: var(--ruler-bg-even)
+              &.last-order-row li
+                // The dynamic class ".last-order-row" is assigned to an element whose "data-ruler-order" attribute has 
+                // the same value as the "data-ruler-rows" attribute value of the parent element ".sunorhc-timeline-ruler".
+                border-bottom: none
 
-            li:nth-child(2n)
-              background-color: var(--ruler-cell-bg-even)
+              &[data-ruler-grain="max"]
+                bottom: 0
+                border-bottom: var(--outline-style, solid) 1px var(--border-color)
+
+          &[data-alternate-rows="true"]
+            .sunorhc-timeline-ruler-row
+              &:nth-child(2n)
+                background-color: var(--ruler-bg-even)
+
+              li:nth-child(2n)
+                background-color: var(--ruler-cell-bg-even)
       
       .sunorhc-timeline-nodes
         top: 1px !important
 
     &[data-timeline-outline="false"],
     &[data-timeline-outlined="false"]
+      .sunorhc-timeline-sidebar
+        min-height: calc(var(--sidebar-max-height) + 5px)
+        border-color: transparent
+        border-top: var(--outline-style, solid) 1px transparent
+      
+        li
+          border-color: transparent
+          border-bottom: var(--outline-style, solid) 1px transparent
+
       .sunorhc-timeline-main-canvas
+        height: 100%
+        border-color: transparent
         border-right: var(--outline-style, solid) 1px transparent
         border-left: var(--outline-style, solid) 1px transparent
 
@@ -343,7 +383,7 @@
       display: block
       max-width: var(--sidebar-max-width, 150px)
       width: 100%
-      height: 100%//calc(100% + 1px)
+      height: 100%// calc(100% + 1px)
       top: var(--sidebar-adjust-top, 1px)
       margin: 0
       padding: 0
@@ -392,7 +432,7 @@
           margin: 0 auto
           padding: 1px
           width: 100% // calc(100% - 2px) | calc(100% - (border-left + border-right))
-          height: 100% // calc(100% - 2px) | calc(100% - (border-top + border-bottom))
+          height: var(--sidebar-item-height, 100%)// calc(100% - 2px) | calc(100% - (border-top + border-bottom))
           background-color: var(--sidebar-bg-odd, --bg-color)
           border-style: none
 
@@ -525,11 +565,11 @@
         overflow: hidden
 
         &[data-ruler-position="top"]
-          top: 1px
+          top: 0// 1px
 
           &[data-overlay-sticky="top"]
             position: sticky
-            top: 1px
+            top: 0// 1px
             z-index: 25
             background-color: var(--elevation-bg)
       
@@ -606,6 +646,10 @@
             overflow: hidden
             white-space: nowrap
             text-overflow: ellipsis
+          
+          &[data-ruler-grain="min"]
+            li
+              max-width: var(--min-grain-width, 48px)
 
       .sunorhc-timeline-nodes
         box-sizing: border-box !important
@@ -708,42 +752,6 @@
             text-overflow: ellipsis
             pointer-events: none
 
-          .tooltip
-            display: none
-            position: absolute
-            padding: 8px
-            font-size: 12px
-            line-height: 1.4
-            color: var(--tooltip-text-color)
-            border-radius: 4px
-            background-color: var(--tooltip-bg-color)
-            height: var(--tooltip-height, max-content)
-            width: var(--tooltip-width, max-content)
-            box-shadow: 0 2px 4px -1px var(--shadow-inner), 0 4px 5px 0 var(--shadow-middle), 0 1px 10px 0 var(--shadow-outer)
-            opacity: 0
-            z-index: 81 !important
-            pointer-events: auto !important
-            transition: opacity .3s ease-out
-
-            &::before
-              content: ''
-              position: absolute
-              top: -17px
-              right: calc(50% - 10px)
-              border: solid 10px transparent
-              border-top: solid 10px var(--tooltip-bg-color)
-              margin-left: -10px
-              z-index: 80 !important
-              transform: rotateZ(180deg)
-
-            &.shown
-              opacity: 1
-         
-          &:hover .tooltip
-            display: inline-block
-            top: var(--tooltip-y, 30px)
-            left: var(--tooltip-x, 0)
-
         .present-time-marker
           position: absolute
           display: inline-block
@@ -754,6 +762,94 @@
           background-color: var(--marker-bg-color, rgba(#fffbeb, .25))
           pointer-events: none
           z-index: 21
+
+    .sunorhc-timeline-tooltip-container
+      position: absolute
+      height: 100%
+      width: 100%
+      background-color: transparent
+      z-index: 0
+      pointer-events: none
+
+      .sunorhc-timeline-tooltip
+        display: flex
+        flex-direction: column
+        justify-content: flex-start
+        align-items: space-evenly
+        position: absolute
+        padding: var(--tooltip-padding, 8px)
+        font-size: var(--tooltip-font-size, 12px)
+        line-height: 1.4
+        color: var(--tooltip-text-color)
+        border-radius: var(--tooltip-bd-radius, 4px)
+        border-style: none
+        background-color: var(--tooltip-bg-color)
+        top: var(--tooltip-top, 0)
+        left: var(--tooltip-left, 0)
+        height: max-content// var(--tooltip-height, max-content)
+        width: max-content// var(--tooltip-width, max-content)
+        visibility: hidden
+        opacity: 0
+        z-index: 81
+        pointer-events: none
+        transition: opacity .3s ease-out
+        transform: scale(0)
+        animation-fill-mode: forwards
+        animation-name: shrink
+        animation-duration: 0.1s
+
+        &::after
+          content: ''
+          position: absolute
+          border-width: var(--tooltip-tail-size, 10px)
+          border-style: solid
+          z-index: 82
+          pointer-events: none
+          transition: opacity .1s linear
+
+        &.top
+          transform-origin: center bottom
+          
+          &::after
+            top: 100%
+            left: 50%
+            transform: translateX(-50%)
+            border-color: var(--tooltip-bg-color) transparent transparent transparent
+
+        &.bottom
+          transform-origin: center top
+
+          &::after
+            bottom: 100%
+            left: 50%
+            transform: translate(-50%)
+            border-color: transparent transparent var(--tooltip-bg-color) transparent
+
+        &.left
+          transform-origin: right center
+
+          &::after
+            top: 50%
+            right: calc(var(--tooltip-tail-size, 10px) * -2)
+            transform: translateY(-50%)
+            border-color: transparent transparent transparent var(--tooltip-bg-color)
+
+        &.right
+          transform-origin: left center
+
+          &::after
+            top: 50%
+            left: calc(var(--tooltip-tail-size, 10px) * -2)
+            transform: translateY(-50%)
+            border-color: transparent var(--tooltip-bg-color) transparent transparent
+
+        &.shown
+          visibility: visible
+          opacity: 1
+          box-shadow: 0 2px 4px -1px var(--shadow-inner), 0 4px 5px 0 var(--shadow-middle), 0 1px 10px 0 var(--shadow-outer)
+          animation-name: expand-bounce
+          animation-duration: 0.25s
+
 
   &[dir="rtl"]
     .sunorhc-timeline-body
@@ -786,6 +882,182 @@
 
           .present-time-marker
             left: calc(var(--marker-x, -1px) + 1px)
+
+  .border-top
+    border-top: var(--outline-style, solid) 1px var(--border-color)
+
+  .border-bottom
+    border-bottom: var(--outline-style, solid) 1px var(--border-color)
+
+  .border-left
+    border-left: var(--outline-style, solid) 1px var(--border-color)
+
+  .border-right
+    border-right: var(--outline-style, solid) 1px var(--border-color)
+
+// Modal
+
+.sunorhc-timeline-modal-container
+  position: fixed
+  display: none
+  height: 100vh
+  width: 100%
+  left: 0
+  right: 0
+  top: 0
+  margin: 0
+  overflow-x: hidden
+  overflow-y: auto
+  background-color: var(--modal-bg-color)
+  outline: 2px solid transparent
+  outline-offset: 2px
+  justify-content: center
+  align-items: center
+  transition-property: all
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1)
+  transition-duration: 300ms
+  z-index: 1055
+
+  .sunorhc-timeline-modal-dialog-ref
+    position: relative
+    width: 100%
+    height: 100%
+    margin: 0
+    opacity: 0
+    transform: translateY(-25%)
+    transition-property: all
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1)
+    transition-duration: 300ms
+    //transition: all 300ms ease-in-out
+    pointer-events: none
+    z-index: 1056
+
+    &.shown
+      opacity: 1
+      pointer-events: auto
+
+  .sunorhc-timeline-modal-dialog
+    position: absolute
+    display: flex
+    flex-direction: column
+    max-height: calc(100vh - 4rem)
+    height: max-content
+    width: var(--modal-width, 500px)// calc(100% - 4rem)
+    border-radius: 6px
+    border-style: none
+    background-color: var(--modal-dialog-color)
+    background-clip: padding-box
+    color: var(--text-color)
+    //box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)
+    //box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)
+    outline: 2px solid transparent
+    outline-offset: 2px
+    left: 50%
+    top: 24px
+    transform: translate(-50%, -25%)
+    opacity: 0
+    transition-property: all
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1)
+    transition-duration: 300ms
+    z-index: 1057
+
+    &.fullsize
+      max-height: 100vh
+      height: 100vh
+      box-shadow: none
+      left: 50%
+      top: 0
+      border-radius: 0
+      transform: translate(-50%, 0)
+
+      .sunorhc-timeline-modal-body
+        height: 100%
+
+    .sunorhc-timeline-modal-header
+      display: flex
+      justify-content: space-between
+      align-items: center
+      padding: .5rem 1rem
+      border-bottom: solid 1px var(--modal-border-color)
+      z-index: 1058
+
+      h3
+        font-size: 1.25rem
+        line-height: 1.75rem
+        font-weight: 600
+
+      .sunorhc-timeline-modal-dismiss
+        padding: 0
+        height: 24px
+        pointer-events: auto
+
+        &>*
+          display: inline-block
+          width: 24px
+          height: 24px
+          color: var(--offtone-color)
+        
+        &:hover>*
+          color: var(--offtone-hover-color)
+
+    .sunorhc-timeline-modal-body
+      position: relative
+      padding: 1rem
+      text-align: left
+      font-size: 1rem
+      line-height: 1.5rem
+      overflow-y: auto
+      z-index: 1058
+
+    .sunorhc-timeline-modal-footer
+      display: flex
+      justify-content: flex-end
+      align-items: center
+      padding: .5rem 1rem
+      border-top: solid 1px var(--modal-border-color)
+      z-index: 1058
+
+      .sunorhc-timeline-modal-close
+        padding: .25rem 1rem
+        border-radius: 6px
+        background-color: var(--button-bg-color)
+        color: var(--button-text-color)
+        text-transform: uppercase
+        font-size: 0.875rem
+        line-height: 1.25rem
+        pointer-events: auto
+
+        &:hover
+          background-color: var(--button-bg-color-hovered)
+          color: var(--button-text-color-hovered)
+
+
+  .sunorhc-timeline-modal-dialog-ref.shown + .sunorhc-timeline-modal-dialog
+    opacity: 1
+    transform: translate(-50%, 24px)
+
+  .sunorhc-timeline-modal-dialog-ref.shown + .sunorhc-timeline-modal-dialog.fullsize
+    opacity: 1
+    transform: translate(-50%, 0)
+    z-index: 10000 !important
+
+// Animations
+
+@keyframes expand-bounce
+  0%
+    transform: scale(0)
+  50%
+    transform: scale(1.1)
+  100%
+    transform: scale(1)
+
+@keyframes shrink
+  0%
+    transform: scale(1)
+  100%
+    transform: scale(0)
+
 
 // Extended Styles
 

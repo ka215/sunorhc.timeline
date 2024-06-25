@@ -18,6 +18,7 @@ export type LineStyle = 'solid' | 'dotted' | 'none';
 export type EventsBackground = 'striped' | 'grid' | 'toned' | 'plaid' | 'none';
 export type Alignment = number | 'left' | 'begin' | 'center' | 'right' | 'end' | 'current' | 'currently' | 'latest';
 export type Action = 'normal' | 'modal' | 'custom' | 'none';
+export type ModalSize = number | 'small' | 'medium' | 'large' | 'extralarge' | 'full';
 export type StorageType = 'localStorage' | 'sessionStorage';
 
 // Interfaces:
@@ -166,9 +167,17 @@ export interface Effects {
   cacheExpiration: CacheExpiration;// Set an expiration time cached all events; a number is seconds from cached, always reset cache when initialize library if "always", ever cached at no-expires into specific storage if "none". Default is "always".
   hoverEvent: boolean;// default is false.
   onClickEvent: Action;
-  //stripedGridRow?: boolean;
-  //horizontalGridStyle?: LineStyle;
-  //verticalGridStyle?: LineStyle;
+  template?: {
+    tooltip?: string;
+    modal?: {
+      size?:   ModalSize;
+      header?: string;
+      body?:   string;
+      footer?: string;
+    },
+    details?: string;
+    custom?: string | Function;
+  };
 }
 
 interface ThemeColors {
@@ -188,6 +197,7 @@ export interface ThemeConfig {
 }
 
 export interface ExtendedOptions {
+  zoomScaleTracker?: boolean;
   [key: string]: any;
 }
 
