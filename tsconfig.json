@@ -21,6 +21,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
 
     /* Linting */
     "strict": true,
@@ -28,7 +30,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*", "node_modules/vitest/global.d.ts", "vite.config.ts", "vitest.setup.ts"],
+  "include": ["src/**/*", "node_modules/vitest/global.d.ts", "vite.config.ts", "vitest.setup.ts", "build-all.ts"],
   "exclude": ["dist", "node_modules"],
   "compileOnSave": false
 }

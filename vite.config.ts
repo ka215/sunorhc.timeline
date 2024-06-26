@@ -73,6 +73,12 @@ export default defineConfig(({ mode }) => {
             tsconfigPaths({
                 root: './',
             }),
+            /*
+            {
+                name: 'custom-build-plugin',
+                closeBundle: async () => {
+                }
+            },*/
         ],
         css: {
             postcss: './postcss.config.cjs'
