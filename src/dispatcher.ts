@@ -36,6 +36,8 @@ switch(creationType) {
       const autoScale = 'day'
       const autoStartDate = new Date(new Date().getTime() - getScaleTime('month') / 2)
       const autoEndDate = new Date(new Date().getTime() + getScaleTime('month') / 2)
+      const autoSidebarPlacement = updateSizeVariable(['left', 'left', 'both'])
+      const autoRulerPlacement = updateSizeVariable(['top', 'top', 'both'])
       const inputOptions: Partial<TimelineOptions> = {
         start: autoStartDate,
         //start: new Date(new Date().setHours(new Date().getHours() - 1, 0, 0, 0)),// now before a hour
@@ -54,7 +56,7 @@ switch(creationType) {
         //scale: 'hour',
         scale: autoScale,
         sidebar: {
-          placement: 'both',
+          placement: autoSidebarPlacement,
           items: ((sidebarType = 2) => {
             switch(sidebarType) {
               case 1: return [
@@ -90,7 +92,7 @@ switch(creationType) {
           })()
         },
         ruler: {
-          placement: 'both',
+          placement: autoRulerPlacement,
           minGrainWidth: 60,
           truncateLowers: true,
           firstDayOfWeek: 0,
@@ -511,3 +513,23 @@ function generateRandomEventNodes(
 
   return eventNodes
 }
+
+/**
+ * Returns the elements of a given array depending on the browser window size.
+ * @param {any[]} vars
+ * @returns {any}
+ */
+function updateSizeVariable(vars: any[]): any {
+  const width = window.innerWidth
+  if (width <= 600) {
+    // for small size as likes smart device.
+    return vars[0]
+  } else if (width <= 1024) {
+    // for medium size as likes tablet device.
+    return vars[1]
+  } else {
+    // for large size as likes pc etc.
+    return vars[2]
+  }
+}
+

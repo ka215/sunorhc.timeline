@@ -1,3 +1,51 @@
+@media (prefers-color-scheme: light) {
+    :root {
+        --color-black:    #151513;
+        --color-gray-900: #111827;
+        --color-gray-800: #1F2937;
+        --color-gray-700: #374151;
+        --color-gray-600: #4B5563;
+        --color-gray-500: #6B7280;
+        --color-gray-400: #9CA3AF;
+        --color-gray-300: #D1D5DB;
+        --color-gray-200: #E5E7EB;
+        --color-gray-100: #F3F4F6;
+        --color-gray-50:  #F9FAFB;
+        --color-white:    #FFFFFF;
+        --custom-duration: 280ms;
+    }
+
+    html {
+        background-color: #FFFFFF;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-black:    #FFFFFF;
+        --color-gray-900: #F9FAFB;
+        --color-gray-800: #F3F4F6;
+        --color-gray-700: #E5E7EB;
+        --color-gray-600: #D1D5DB;
+        --color-gray-500: #9CA3AF;
+        --color-gray-400: #6B7280;
+        --color-gray-300: #4B5563;
+        --color-gray-200: #374151;
+        --color-gray-100: #1F2937;
+        --color-gray-50:  #111827;
+        --color-white:    #151513;
+        --custom-duration: 75ms;
+    }
+
+    html {
+        background-color: #151513;
+    }
+}
+
+body {
+    background-color: transparent;
+}
+
 .github-corner {
     position: fixed;
     top: 0;
@@ -79,48 +127,50 @@
 
 body:not(.darkmode--activated) .fill-black,
 body.darkmode--activated .dark\:fill-black {
-    fill: #151513;
+    fill: var(--color-black);
 }
 
 body:not(.darkmode--activated) .fill-white,
 body.darkmode--activated .dark\:fill-white {
-    fill: #fff;
+    fill: var(--color-white);
 }
 
 body.darkmode--activated .dark\:text-white {
-    color: #fff;
+    color: var(--color-white);
 }
 
 body.darkmode--activated .dark\:bg-gray-900 {
-    background-color: rgb(17 24 39 / 1);
+    background-color: var(--color-gray-900);
 }
 
 body.darkmode--activated .dark\:bg-gray-700 {
-    background-color: #374151;
+    background-color: var(--color-gray-700);
 }
 
 body.darkmode--activated option {
-    background-color: rgb(17 24 39 / 1);
-    color: #fff;
+    background-color: var(--color-gray-900);
+    color: var(--color-white);
 }
 
 body.darkmode--activated optgroup {
-    background-color: rgb(17 24 39 / 1);
-    color: #999;
+    background-color: var(--color-gray-900);
+    color: var(--color-gray-400);
     font-weight: 400;
 }
 
 body:not(.darkmode--activated) .custom-duration {
-    transition-duration: 280ms;
+    transition-duration: var(--custom-duration);
 }
 
 body.darkmode--activated .custom-duration {
-    transition-duration: 75ms;
+    transition-duration: var(--custom-duration);
 }
 
 body.darkmode--activated .dark\:placeholder-gray-400::placeholder {
-    color: #9CA3AF;
+    color: var(--color-gray-400);
 }
+
+/* For Sunorhc.Timeline components */
 
 .sunorhc-timeline-sidebar span[data-sidebar-item-type="avatar"] img {
     border-radius: 4px;
@@ -136,11 +186,11 @@ body.darkmode--activated .dark\:placeholder-gray-400::placeholder {
     border-radius: 4px;
     border-style: solid;
     border-width: 1px;
-    border-color: #D1D5DB;
+    border-color: var(--color-gray-300);
     font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 0.875rem;
     line-height: 1.25rem;
     text-align: left;
-    color: #374151;
-    background-color: #F3F4F6;
+    color: var(--color-gray-700);
+    background-color: var(--color-gray-100);
 }

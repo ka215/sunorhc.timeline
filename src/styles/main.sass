@@ -3,107 +3,157 @@
 
 @media (prefers-color-scheme: light)
   :root
+    --font-size: #{vars.$baseFontSize}
+    --font-family: #{vars.$baseFontFamily}
+    --text-color: #{vars.$gray900}
+    --border-color: #{vars.$gray400}
+    --bg-color: #{vars.$noneColor}
+    --elevation-bg: #{vars.$white}
+    --shadow-inner: #{vars.$lightShadowIn}
+    --shadow-middle: #{vars.$lightShadowMid}
+    --shadow-outer: #{vars.$lightShadowOut}
+    --border-radius: 8px
+    --sidebar-bg-odd: #{vars.$lightSidebarBgColorOdd}
+    --sidebar-bg-even: #{vars.$lightSidebarBgColorEven}
+    --ruler-bg-odd: #{vars.$lightRulerBgColorOdd}
+    --ruler-bg-even: #{vars.$lightRulerBgColorEven}
+    --ruler-cell-bg-even: #{vars.$lightRulerCellBgColorEven}
+    --canvas-bg-odd: #{vars.$lightCanvasBgColorOdd}
+    --canvas-bg-even: #{vars.$lightCanvasBgColorEven}
+    --canvas-border: #{vars.$lightCanvasBorderColor}
+    --ruler-sat-text: #{vars.$lightSaturdayTextColor}
+    --ruler-sun-text: #{vars.$lightSundayTextColor}
+    --ruler-sat-bg: #{vars.$lightSaturdayBgColor}
+    --ruler-sun-bg: #{vars.$lightSundayBgColor}
+    --link-text: #{vars.$lightLinkTextColor}
+    --link-hover-bg: #{vars.$lightLinkHoverBgColor}
+    --text-shadow: #{vars.$lightTextShadow}
+    --event-node-text-color: #{vars.$lightEventNodeTextColor}
+    --event-node-bg-color: #{vars.$lightEventNodeBgColor}
+    --event-node-border-color: #{vars.$lightEventNodeBorderColor}
+    --event-node-text-color-hovered: #{vars.$lightEventNodeHoverTextColor}
+    --event-node-bg-color-hovered: #{vars.$lightEventNodeHoverBgColor}
+    --event-node-border-color-hovered: #{vars.$lightEventNodeHoverBorderColor}
+    --tooltip-bd-radius: 8px
+    --tooltip-tail-size: 10px
+    --tooltip-padding: 10px
+    // 20Q = 14.2pt = 18.94px, 18Q = 12.8pt = 17.07px, 14Q = 9.9pt = 13.2px, 13Q = 9.2pt = 12.27px, 12Q = 8.5pt = 11.34px
+    --tooltip-font-size: 12px
+    --tooltip-text-color: #{vars.$lightTooltipTextColor}
+    --tooltip-bg-color: #{vars.$lightTooltipBgColor}
+    --marker-bg-color: #{vars.$lightMarkerBgColor}
     --modal-bg-color: #{vars.$lightModalBgColor}
     --modal-border-color: #{vars.$whiteSmoke}
     --modal-dialog-color: #{vars.$lightModalDialogColor}
+    --offtone-color: #{vars.$cloud}
+    --offtone-hover-color: #{vars.$steelBlue}
+    --button-bg-color: #{vars.$gray200}
+    --button-bg-color-hovered: #{vars.$gray100}
+    --button-text-color: #{vars.$gray700}
+    --button-text-color-hovered: #{vars.$steelBlue}
+    transition: .3s
+    scroll-behavior: smooth
+
+    .dark-theme,
+    .darkmode--activated
+      --text-color: #{vars.$gray100}
+      --border-color: #{vars.$gray600}
+      --bg-color: #{vars.$noneColor}
+      --elevation-bg: #{vars.$gray950}
+      --shadow-inner: #{vars.$darkShadowIn}
+      --shadow-middle: #{vars.$darkShadowMid}
+      --shadow-outer: #{vars.$darkShadowOut}
+      --sidebar-bg-odd: #{vars.$darkSidebarBgColorOdd}
+      --sidebar-bg-even: #{vars.$darkSidebarBgColorEven}
+      --ruler-bg-odd: #{vars.$darkRulerBgColorOdd}
+      --ruler-bg-even: #{vars.$darkRulerBgColorEven}
+      --ruler-cell-bg-even: #{vars.$darkRulerCellBgColorEven}
+      --canvas-bg-odd: #{vars.$darkCanvasBgColorOdd}
+      --canvas-bg-even: #{vars.$darkCanvasBgColorEven}
+      --canvas-border: #{vars.$darkCanvasBorderColor}
+      --ruler-sat-text: #{vars.$darkSaturdayTextColor}
+      --ruler-sun-text: #{vars.$darkSundayTextColor}
+      --ruler-sat-bg: #{vars.$darkSaturdayBgColor}
+      --ruler-sun-bg: #{vars.$darkSundayBgColor}
+      --link-text: #{vars.$darkLinkTextColor}
+      --link-hover-bg: #{vars.$darkLinkHoverBgColor}
+      --text-shadow: #{vars.$darkTextShadow}
+      --event-node-text-color: #{vars.$darkEventNodeTextColor}
+      --event-node-bg-color: #{vars.$darkEventNodeBgColor}
+      --event-node-border-color: #{vars.$darkEventNodeBorderColor}
+      --event-node-text-color-hovered: #{vars.$darkEventNodeHoverTextColor}
+      --event-node-bg-color-hovered: #{vars.$darkEventNodeHoverBgColor}
+      --event-node-border-color-hovered: #{vars.$darkEventNodeHoverBorderColor}
+      --tooltip-text-color: #{vars.$darkTooltipTextColor}
+      --tooltip-bg-color: #{vars.$darkTooltipBgColor}
+      --marker-bg-color: #{vars.$darkMarkerBgColor}
+      --modal-bg-color: #{vars.$darkModalBgColor}
+      --modal-border-color: #{vars.$heavyGray}
+      --modal-dialog-color: #{vars.$darkModalDialogColor}
+      --offtone-color: #{vars.$subduedGray}
+      --offtone-hover-color: #{vars.$lightSteelBlue}
+      --button-bg-color: #{vars.$darkModalDialogColorHalf}
+      --button-bg-color-hovered: #{vars.$gray700}
+      --button-text-color: #{vars.$gray500}
+      --button-text-color-hovered: #{vars.$lightSteelBlue}
+
 
 @media (prefers-color-scheme: dark)
   :root
+    --font-size: #{vars.$baseFontSize}
+    --font-family: #{vars.$baseFontFamily}
+    --text-color: #{vars.$gray100}
+    --border-color: #{vars.$gray600}
+    --bg-color: #{vars.$noneColor}
+    --elevation-bg: #{vars.$gray950}
+    --shadow-inner: #{vars.$darkShadowIn}
+    --shadow-middle: #{vars.$darkShadowMid}
+    --shadow-outer: #{vars.$darkShadowOut}
+    --border-radius: 8px
+    --sidebar-bg-odd: #{vars.$darkSidebarBgColorOdd}
+    --sidebar-bg-even: #{vars.$darkSidebarBgColorEven}
+    --ruler-bg-odd: #{vars.$darkRulerBgColorOdd}
+    --ruler-bg-even: #{vars.$darkRulerBgColorEven}
+    --ruler-cell-bg-even: #{vars.$darkRulerCellBgColorEven}
+    --canvas-bg-odd: #{vars.$darkCanvasBgColorOdd}
+    --canvas-bg-even: #{vars.$darkCanvasBgColorEven}
+    --canvas-border: #{vars.$darkCanvasBorderColor}
+    --ruler-sat-text: #{vars.$darkSaturdayTextColor}
+    --ruler-sun-text: #{vars.$darkSundayTextColor}
+    --ruler-sat-bg: #{vars.$darkSaturdayBgColor}
+    --ruler-sun-bg: #{vars.$darkSundayBgColor}
+    --link-text: #{vars.$darkLinkTextColor}
+    --link-hover-bg: #{vars.$darkLinkHoverBgColor}
+    --text-shadow: #{vars.$darkTextShadow}
+    --event-node-text-color: #{vars.$darkEventNodeTextColor}
+    --event-node-bg-color: #{vars.$darkEventNodeBgColor}
+    --event-node-border-color: #{vars.$darkEventNodeBorderColor}
+    --event-node-text-color-hovered: #{vars.$darkEventNodeHoverTextColor}
+    --event-node-bg-color-hovered: #{vars.$darkEventNodeHoverBgColor}
+    --event-node-border-color-hovered: #{vars.$darkEventNodeHoverBorderColor}
+    --tooltip-bd-radius: 8px
+    --tooltip-tail-size: 10px
+    --tooltip-padding: 10px
+    // 20Q = 14.2pt = 18.94px, 18Q = 12.8pt = 17.07px, 14Q = 9.9pt = 13.2px, 13Q = 9.2pt = 12.27px, 12Q = 8.5pt = 11.34px
+    --tooltip-font-size: 12px
+    --tooltip-text-color: #{vars.$darkTooltipTextColor}
+    --tooltip-bg-color: #{vars.$darkTooltipBgColor}
+    --marker-bg-color: #{vars.$darkMarkerBgColor}
     --modal-bg-color: #{vars.$darkModalBgColor}
     --modal-border-color: #{vars.$heavyGray}
     --modal-dialog-color: #{vars.$darkModalDialogColor}
+    --offtone-color: #{vars.$subduedGray}
+    --offtone-hover-color: #{vars.$lightSteelBlue}
+    --button-bg-color: #{vars.$darkModalDialogColorHalf}
+    --button-bg-color-hovered: #{vars.$gray700}
+    --button-text-color: #{vars.$gray500}
+    --button-text-color-hovered: #{vars.$lightSteelBlue}
+    transition: .3s
+    scroll-behavior: smooth
 
-:root
-  --font-size: #{vars.$baseFontSize}
-  --font-family: #{vars.$baseFontFamily}
-  --text-color: #{vars.$gray900}
-  --border-color: #{vars.$gray400}
-  --bg-color: #{vars.$noneColor}
-  --elevation-bg: #{vars.$white}
-  --shadow-inner: #{vars.$lightShadowIn}
-  --shadow-middle: #{vars.$lightShadowMid}
-  --shadow-outer: #{vars.$lightShadowOut}
-  --border-radius: 8px
-  --sidebar-bg-odd: #{vars.$lightSidebarBgColorOdd}
-  --sidebar-bg-even: #{vars.$lightSidebarBgColorEven}
-  --ruler-bg-odd: #{vars.$lightRulerBgColorOdd}
-  --ruler-bg-even: #{vars.$lightRulerBgColorEven}
-  --ruler-cell-bg-even: #{vars.$lightRulerCellBgColorEven}
-  --canvas-bg-odd: #{vars.$lightCanvasBgColorOdd}
-  --canvas-bg-even: #{vars.$lightCanvasBgColorEven}
-  --canvas-border: #{vars.$lightCanvasBorderColor}
-  --ruler-sat-text: #{vars.$lightSaturdayTextColor}
-  --ruler-sun-text: #{vars.$lightSundayTextColor}
-  --ruler-sat-bg: #{vars.$lightSaturdayBgColor}
-  --ruler-sun-bg: #{vars.$lightSundayBgColor}
-  --link-text: #{vars.$lightLinkTextColor}
-  --link-hover-bg: #{vars.$lightLinkHoverBgColor}
-  --text-shadow: #{vars.$lightTextShadow}
-  --event-node-text-color: #{vars.$lightEventNodeTextColor}
-  --event-node-bg-color: #{vars.$lightEventNodeBgColor}
-  --event-node-border-color: #{vars.$lightEventNodeBorderColor}
-  --event-node-text-color-hovered: #{vars.$lightEventNodeHoverTextColor}
-  --event-node-bg-color-hovered: #{vars.$lightEventNodeHoverBgColor}
-  --event-node-border-color-hovered: #{vars.$lightEventNodeHoverBorderColor}
-  --tooltip-bd-radius: 8px
-  --tooltip-tail-size: 10px
-  --tooltip-padding: 10px
-  // 20Q = 14.2pt = 18.94px, 18Q = 12.8pt = 17.07px, 14Q = 9.9pt = 13.2px, 13Q = 9.2pt = 12.27px, 12Q = 8.5pt = 11.34px
-  --tooltip-font-size: 12px
-  --tooltip-text-color: #{vars.$lightTooltipTextColor}
-  --tooltip-bg-color: #{vars.$lightTooltipBgColor}
-  --marker-bg-color: #{vars.$lightMarkerBgColor}
-  --offtone-color: #{vars.$cloud}
-  --offtone-hover-color: #{vars.$steelBlue}
-  --button-bg-color: #{vars.$gray200}
-  --button-bg-color-hovered: #{vars.$gray100}
-  --button-text-color: #{vars.$gray700}
-  --button-text-color-hovered: #{vars.$steelBlue}
-  transition: .3s
-  scroll-behavior: smooth
-
-.dark-theme,
-.darkmode--activated
-  --text-color: #{vars.$gray100}
-  --border-color: #{vars.$gray600}
-  --bg-color: #{vars.$noneColor}
-  --elevation-bg: #{vars.$gray950}
-  --shadow-inner: #{vars.$darkShadowIn}
-  --shadow-middle: #{vars.$darkShadowMid}
-  --shadow-outer: #{vars.$darkShadowOut}
-  --sidebar-bg-odd: #{vars.$darkSidebarBgColorOdd}
-  --sidebar-bg-even: #{vars.$darkSidebarBgColorEven}
-  --ruler-bg-odd: #{vars.$darkRulerBgColorOdd}
-  --ruler-bg-even: #{vars.$darkRulerBgColorEven}
-  --ruler-cell-bg-even: #{vars.$darkRulerCellBgColorEven}
-  --canvas-bg-odd: #{vars.$darkCanvasBgColorOdd}
-  --canvas-bg-even: #{vars.$darkCanvasBgColorEven}
-  --canvas-border: #{vars.$darkCanvasBorderColor}
-  --ruler-sat-text: #{vars.$darkSaturdayTextColor}
-  --ruler-sun-text: #{vars.$darkSundayTextColor}
-  --ruler-sat-bg: #{vars.$darkSaturdayBgColor}
-  --ruler-sun-bg: #{vars.$darkSundayBgColor}
-  --link-text: #{vars.$darkLinkTextColor}
-  --link-hover-bg: #{vars.$darkLinkHoverBgColor}
-  --text-shadow: #{vars.$darkTextShadow}
-  --event-node-text-color: #{vars.$darkEventNodeTextColor}
-  --event-node-bg-color: #{vars.$darkEventNodeBgColor}
-  --event-node-border-color: #{vars.$darkEventNodeBorderColor}
-  --event-node-text-color-hovered: #{vars.$darkEventNodeHoverTextColor}
-  --event-node-bg-color-hovered: #{vars.$darkEventNodeHoverBgColor}
-  --event-node-border-color-hovered: #{vars.$darkEventNodeHoverBorderColor}
-  --tooltip-text-color: #{vars.$darkTooltipTextColor}
-  --tooltip-bg-color: #{vars.$darkTooltipBgColor}
-  --marker-bg-color: #{vars.$darkMarkerBgColor}
-  --modal-bg-color: #{vars.$darkModalBgColor}
-  --modal-border-color: #{vars.$heavyGray}
-  --modal-dialog-color: #{vars.$darkModalDialogColor}
-  --offtone-color: #{vars.$subduedGray}
-  --offtone-hover-color: #{vars.$lightSteelBlue}
-  --button-bg-color: #{vars.$darkModalDialogColorHalf}
-  --button-bg-color-hovered: #{vars.$gray700}
-  --button-text-color: #{vars.$gray500}
-  --button-text-color-hovered: #{vars.$lightSteelBlue}
+    .dark-theme,
+    .darkmode--activated
+      --text-color: #{vars.$gray900}
 
 
 .sunorhc-timeline-container
@@ -387,6 +437,7 @@
       top: var(--sidebar-adjust-top, 1px)
       margin: 0
       padding: 0
+      color: var(--text-color)
       background-color: var(--bg-color)
       //border-style: none
       border-top: var(--outline-style, solid) 1px var(--border-color)
@@ -417,6 +468,7 @@
         height: auto // calc(100% - (offset-top + offset-bottom))
         margin: 0
         padding: 0
+        color: inherit
 
         &[data-alternate-rows="true"] li:nth-child(2n)
           background-color: var(--sidebar-bg-even)
@@ -433,6 +485,7 @@
           padding: 1px
           width: 100% // calc(100% - 2px) | calc(100% - (border-left + border-right))
           height: var(--sidebar-item-height, 100%)// calc(100% - 2px) | calc(100% - (border-top + border-bottom))
+          color: inherit
           background-color: var(--sidebar-bg-odd, --bg-color)
           border-style: none
 
@@ -441,7 +494,7 @@
             margin: 4px // = 0.25em
 
             &[data-sidebar-item-type="text"]
-              color: attr(data-text-color, inherit)
+              color: var(--text-color, inherit)// attr(data-text-color, inherit)
 
             &[data-sidebar-item-type="avatar"]
               max-width: calc(100% - 8px)

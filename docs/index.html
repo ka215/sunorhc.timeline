@@ -12,8 +12,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
     <link href="https://use.fontawesome.com/releases/v6.5.2/css/all.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="./assets/css/ress.css">
-    <link rel="stylesheet" type="text/css" href="./assets/css/sunorhc.timeline.css?0495e14bad24b5fb3c4df4878b546042">
-    <link rel="stylesheet" type="text/css" href="./assets/css/custom-style.css?4da040dee1e0399d890e4bee8f4471c1">
+    <link rel="stylesheet" type="text/css" href="./assets/css/sunorhc.timeline.css?3221c904e5f69bd9f1734897ee05f3f2">
+    <link rel="stylesheet" type="text/css" href="./assets/css/custom-style.css?f3d571e05a0ae3932c7f54a1aa3fa940">
 </head>
 <body class="flex flex-col justify-between">
     <header role="banner" class="p-4 w-full bg-white text-center dark:bg-gray-950">
@@ -21,7 +21,7 @@
             <img src="./sunorhc.svg" class="h-10 w-10 mr-2 fill-current">
             <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">Sunorhc.Timeline</span>
         </h1>
-        <p class="mb-3 text-lg font-normal text-gray-900 lg:text-xl sm:px-16 xl:px-48 dark:text-white clear-font">
+        <p class="mb-3 text-lg font-normal text-gray-900 lg:text-xl sm:px-16 xl:px-48 clear-font">
             See the future, reflect on the past. Control time with <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">Sunorhc.Timeline</span>.
         </p>
         <p class="text-md font-normal text-gray-700 sm:px-16 xl:px-48 dark:text-gray-200 clear-font">
@@ -82,7 +82,7 @@
         </div>
         <div id="sunorhc-timeline-tester"></div>
     </main>
-    
+
     <footer role="contentinfo" class="p-4 pb-8 w-full bg-white select-none dark:bg-gray-950">
       <hr class="my-6 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
       <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-300 clear-font">
@@ -121,8 +121,27 @@
     <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
     <script>new Darkmode({ bottom: '20px', right: '20px', left: 'unset', time: '0.3s', mixColor: '#fff', backgroundColor: '#fff', buttonColorDark: '#3f3f46', buttonColorLight: '#f4f4f5', saveInCookies: false, label: '🌓', autoMatchOsTheme: true }).showWidget()</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
-    <script src="./assets/js/sunorhc.timeline.js?8cdf108b11a53be0d2daea4381a5859f" type="application/javascript"></script>
+    <script src="./assets/js/sunorhc.timeline.js?8cdf108b11a53be0d2daea4381a5859f"></script>
     <script>
+/**
+ * Returns the elements of a given array depending on the browser window size.
+ * @param {any[]} vars
+ * @returns {any}
+ */
+function updateSizeVariable(vars) {
+  const width = window.innerWidth
+  if (width <= 600) {
+    // for small size as likes smart device.
+    return vars[0]
+  } else if (width <= 1024) {
+    // for medium size as likes tablet device.
+    return vars[1]
+  } else {
+    // for large size as likes pc etc.
+    return vars[2]
+  }
+}
+
 /**
  * Gets the time in milliseconds according to the specified date and time scale.
  * @param {string} scale 
@@ -360,6 +379,8 @@ function generateRandomEventNodes(startDate, endDate, maxRows, numberOfEvents) {
       const autoScale = 'day'
       const autoStartDate = new Date(new Date().getTime() - getScaleTime('month') / 2)
       const autoEndDate = new Date(new Date().getTime() + getScaleTime('month') / 2)
+      const autoSidebarPlacement = updateSizeVariable(['left', 'left', 'both'])
+      const autoRulerPlacement = updateSizeVariable(['top', 'top', 'both'])
       const timelineOptions = {
         start: autoStartDate,
         //start: new Date(new Date().setHours(new Date().getHours() - 1, 0, 0, 0)),// now before a hour
@@ -377,7 +398,7 @@ function generateRandomEventNodes(startDate, endDate, maxRows, numberOfEvents) {
         //timezone: 'Asia/Tokyo',
         scale: autoScale,
         sidebar: {
-          placement: 'both',
+          placement: autoSidebarPlacement,
           items: ((sidebarType = 1) => {
             switch(sidebarType) {
               case 1: return [
@@ -413,7 +434,7 @@ function generateRandomEventNodes(startDate, endDate, maxRows, numberOfEvents) {
           })()
         },
         ruler: {
-          placement: 'both',
+          placement: autoRulerPlacement,
           minGrainWidth: 60,
           truncateLowers: true,
           firstDayOfWeek: 0,
@@ -578,7 +599,7 @@ function generateRandomEventNodes(startDate, endDate, maxRows, numberOfEvents) {
         console.log('Success:', window.SunorhcTimelineInstances, onFulfilled.getOptions())
       })
     })();</script>
-    <script src="./assets/js/Tester.js?beac154933a942e0d913ecf92c74c159" type="application/javascript"></script>
+    <script src="./assets/js/Tester.js?beac154933a942e0d913ecf92c74c159"></script>
     <script>Sunorhc.setupTester(document.getElementById('sunorhc-timeline-tester'))</script>
     <script>
       globalThis.customFunction = (eventData) => {

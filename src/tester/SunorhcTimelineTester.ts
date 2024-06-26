@@ -2,7 +2,7 @@ export function setupTester(element: HTMLDivElement) {
   const testerComponents: Record<string, string> = {
     toggleRtl: `\
   <div class="flex flex-col items-start w-28 h-max">
-    <label for="toggle-rtl" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Direction:</label>
+    <label for="toggle-rtl" class="block mb-2 text-sm font-medium text-gray-900">Direction:</label>
     <label class="inline-flex items-center my-2 cursor-pointer">
       <input id="toggle-rtl" type="checkbox" name="dir-rtl" value="1" class="sr-only peer">
       <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
@@ -11,7 +11,7 @@ export function setupTester(element: HTMLDivElement) {
   </div>`,
     selectTimeZone: `\
   <div class="flex flex-col items-start w-36 h-max">
-    <label for="select-timezone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">TimeZone:</label>
+    <label for="select-timezone" class="block mb-2 text-sm font-medium text-gray-900">TimeZone:</label>
     <div for="select-timezone" class="w-36 h-max border border-blue-500 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500">
       <select id="select-timezone" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white">
         <option hidden>TimeZone</option>
@@ -34,7 +34,7 @@ export function setupTester(element: HTMLDivElement) {
   </div>`,
     selectOutlined: `\
   <div class="flex flex-col items-start w-36 h-max">
-    <label for="select-outlined" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Outline:</label>
+    <label for="select-outlined" class="block mb-2 text-sm font-medium text-gray-900">Outline:</label>
     <div for="select-outlined" class="w-36 h-max border border-blue-500 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500">
       <select id="select-outlined" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white">
         <option hidden>Outline Type</option>
@@ -47,7 +47,7 @@ export function setupTester(element: HTMLDivElement) {
   </div>`,
     selectElevation: `\
   <div class="flex flex-col items-start w-36 h-max">
-    <label for="select-elevation" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Elevation:</label>
+    <label for="select-elevation" class="block mb-2 text-sm font-medium text-gray-900">Elevation:</label>
     <div for="select-elevation" class="w-36 h-max border border-blue-500 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500">
       <select id="select-elevation" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white">
         <option hidden>Choose Level</option>
@@ -61,7 +61,7 @@ export function setupTester(element: HTMLDivElement) {
   </div>`,
     selectPlacement: `\
   <div class="flex flex-col items-start w-36 h-max">
-    <label for="select-placement" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Placement:</label>
+    <label for="select-placement" class="block mb-2 text-sm font-medium text-gray-900">Placement:</label>
     <div for="select-placement" class="w-36 h-max border border-blue-500 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500">
       <select id="select-placement" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white">
         <option hidden>Sidebar & Ruler</option>
@@ -82,7 +82,7 @@ export function setupTester(element: HTMLDivElement) {
   </div>`,
     selectCanvasLayout: `\
   <div class="flex flex-col items-start w-32 h-max">
-    <label for="select-canvas-layout" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Canvas Layout:</label>
+    <label for="select-canvas-layout" class="block mb-2 text-sm font-medium text-gray-900">Canvas Layout:</label>
     <div for="select-canvas-layout" class="w-32 h-max border border-blue-500 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500">
       <select id="select-canvas-layout" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white">
         <option hidden>Layout Type</option>
@@ -96,7 +96,7 @@ export function setupTester(element: HTMLDivElement) {
   </div>`,
     selectStartWeekday: `\
   <div class="flex flex-col items-start w-32 h-max">
-    <label for="select-start-weekday" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First Day of Week:</label>
+    <label for="select-start-weekday" class="block mb-2 text-sm font-medium text-gray-900">First Day of Week:</label>
     <div for="select-start-weekday" class="w-32 h-max border border-blue-500 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500">
       <select id="select-start-weekday" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white">
         <option hidden>Choose Day</option>
@@ -112,7 +112,7 @@ export function setupTester(element: HTMLDivElement) {
   </div>`,
     selectAlignment: `\
   <div class="flex flex-col items-start w-36 h-max">
-    <label for="select-alignment" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alignment:</label>
+    <label for="select-alignment" class="block mb-2 text-sm font-medium text-gray-900">Alignment:</label>
     <div for="select-alignment" class="w-36 h-max border border-blue-500 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500">
       <select id="select-alignment" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white">
         <option hidden>Alignment</option>
@@ -132,17 +132,17 @@ export function setupTester(element: HTMLDivElement) {
   </div>`,
     grainWidth: `\
   <div class="flex flex-col items-start w-20 h-max">
-    <label for="grain-width" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Grain Width</label>
+    <label for="grain-width" class="block mb-2 text-sm font-medium text-gray-900">Grain Width</label>
     <input type="text" id="grain-width" class="alnum-only bg-gray-50 border-solid border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="48px" pattern="[A-Za-z0-9\.]*" inputmode="latin" />
   </div>`,
     rowHeight: `\
   <div class="flex flex-col items-start w-20 h-max">
-    <label for="row-height" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Row Height</label>
+    <label for="row-height" class="block mb-2 text-sm font-medium text-gray-900">Row Height</label>
     <input type="text" id="row-height" class="alnum-only bg-gray-50 border-solid border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="80px" pattern="[A-Za-z0-9\.]*" inputmode="latin" />
   </div>`,
     toggleScaleTracker: `\
   <div class="flex flex-col items-start w-36 h-max">
-    <label for="toggle-scale-tracker" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Scale Tracker:</label>
+    <label for="toggle-scale-tracker" class="block mb-2 text-sm font-medium text-gray-900">Scale Tracker:</label>
     <label class="inline-flex items-center my-2 cursor-pointer">
       <input id="toggle-scale-tracker" type="checkbox" name="scale-tracker" value="1" class="sr-only peer">
       <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
@@ -152,7 +152,7 @@ export function setupTester(element: HTMLDivElement) {
     verticalDivider: `<div class="inline-block h-[68px] min-h-[1em] w-0.5 self-stretch bg-neutral-100 dark:bg-white/10"></div>`,
     togglePresentMarker: `\
   <div class="flex flex-col items-start w-36 h-max">
-    <label for="toggle-present-marker" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Present Time:</label>
+    <label for="toggle-present-marker" class="block mb-2 text-sm font-medium text-gray-900">Present Time:</label>
     <label class="inline-flex items-center my-2 cursor-pointer">
       <input id="toggle-present-marker" type="checkbox" name="present-marker" value="1" class="sr-only peer" checked="checked">
       <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
@@ -161,7 +161,7 @@ export function setupTester(element: HTMLDivElement) {
   </div>`,
     toggleDayColored: `\
   <div class="flex flex-col items-start w-40 h-max">
-    <label for="toggle-day-colored" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ruler Coloring:</label>
+    <label for="toggle-day-colored" class="block mb-2 text-sm font-medium text-gray-900">Ruler Coloring:</label>
     <label class="inline-flex items-center my-2 cursor-pointer">
       <input id="toggle-day-colored" type="checkbox" name="day-colored" value="1" class="sr-only peer" checked="checked">
       <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
@@ -170,7 +170,7 @@ export function setupTester(element: HTMLDivElement) {
   </div>`,
     toggleTooltip: `\
   <div class="flex flex-col items-start w-36 h-max">
-    <label for="toggle-tooltip" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tooltip:</label>
+    <label for="toggle-tooltip" class="block mb-2 text-sm font-medium text-gray-900">Tooltip:</label>
     <label class="inline-flex items-center my-2 cursor-pointer">
       <input id="toggle-tooltip" type="checkbox" name="day-colored" value="1" class="sr-only peer">
       <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
@@ -179,7 +179,7 @@ export function setupTester(element: HTMLDivElement) {
   </div>`,
     selectEventOpener: `\
   <div class="flex flex-col items-start w-36 h-max">
-    <label for="select-event-opener" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Event Opener:</label>
+    <label for="select-event-opener" class="block mb-2 text-sm font-medium text-gray-900">Event Opener:</label>
     <div for="select-event-opener" class="w-36 h-max border border-blue-500 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500">
       <select id="select-event-opener" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white">
         <option hidden>Opener Type</option>
@@ -206,7 +206,7 @@ export function setupTester(element: HTMLDivElement) {
   </div>`,
     scaleSwitcher: `\
   <div class="flex flex-col items-start w-28 h-max">
-    <label for="select-scale" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Scale Switcher:</label>
+    <label for="select-scale" class="block mb-2 text-sm font-medium text-gray-900">Scale Switcher:</label>
     <div for="select-scale" class="w-28 h-max border border-blue-500 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500">
       <select id="select-scale" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white">
         <option hidden>Scale</option>
@@ -235,7 +235,7 @@ export function setupTester(element: HTMLDivElement) {
   let renderHTML = `\
 <div class="inline-flex items-center justify-center w-full">
   <hr class="w-full h-px my-4 bg-gray-300 border-0 dark:bg-gray-400">
-  <h3 class="absolute px-3 font-medium text-gray-900 -translate-x-1/2 bg-white left-1/2 dark:text-white dark:bg-gray-900 custom-duration">Timeline Instance Controller</h3>
+  <h3 class="absolute px-3 font-medium text-gray-900 -translate-x-1/2 bg-white left-1/2 dark:bg-gray-900 dark:text-white custom-duration">Timeline Instance Controller</h3>
 </div>
 <div class="mt-4 mb-2 flex flex-wrap justify-start gap-4">\
   `
