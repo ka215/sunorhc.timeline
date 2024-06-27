@@ -32,6 +32,10 @@ js/sunorhc.timeline.js
 ```
 Each package also includes a gzip compressed file, so please use whichever you need.
 
+Alternatively, you can load the relevant resources via a CDN.
+- CSS: `https://cdn.jsdelivr.net/npm/sunorhc.timeline@0.9.1/dists/css/sunorhc.timeline.css`
+- JS: `https://cdn.jsdelivr.net/npm/sunorhc.timeline@0.9.1/dists/js/sunorhc.timeline.js`
+
 ### Usage
 
 1. Include the CSS file in the head tag of your HTML and load the JS file before the end of the body tag.
@@ -65,9 +69,16 @@ Note: To control the component after it is instantiated, we recommend using asyn
 })()
 ```
 
+## Documentaion
+
+It is currently being written, so please wait until it is published.  
+
 ## Demo Build
 
-[Version 0.9.1 with tester](https://ka215.github.io/sunorhc.timeline/?v0.9.1-2)
+The demo on the Github page below allows you to try out various features of the timeline component.  
+Come and experience the potential of Sunorhc.Timeline!
+
+[Version 0.9.1 with tester](https://ka215.github.io/sunorhc.timeline/?F5mvFvnZDn8d4GD213FuY7CnZL8=)
 
 ## Coverage
 
