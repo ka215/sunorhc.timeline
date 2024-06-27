@@ -57,7 +57,7 @@ switch(creationType) {
         scale: autoScale,
         sidebar: {
           placement: autoSidebarPlacement,
-          items: ((sidebarType = 2) => {
+          items: ((sidebarType = 3) => {
             switch(sidebarType) {
               case 1: return [
                 { type: 'avatar', label: 'Item Label', group: 'group1', src: '/avatar_01.png', action: './', onClick: true, textOverflow: true, textPosition: 'center', textColor: '' },
@@ -115,7 +115,7 @@ switch(creationType) {
             })(),
             //monthFormat: 'numeric',
             monthFormat: 'name',
-            monthNames: ((type = -1) => {
+            monthNames: ((type = 4) => {
               switch(type){
                 case 0:  return ['睦月', '如月', '弥生', '卯月', '皐月', '水無月', '文月', '葉月', '長月', '神無月', '霜月', '師走'];// legacy Japanese
                 case 1:  return ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];// Japanese
@@ -125,7 +125,7 @@ switch(creationType) {
                 default: return undefined;
               }
             })(),
-            dayNames: ((type = -1) => {
+            dayNames: ((type = 4) => {
               switch(type){
                 case 1:  return ['日曜', '月曜', '火曜', '水曜', '木曜', '金曜', '土曜'];// sun = 0; Japanese
                 case 2:  return ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];// German
