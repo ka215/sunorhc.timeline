@@ -19,7 +19,7 @@ We use Vite for development and builds, Vitest for coverage testing, lz-string f
 
 More details will be coming soon, so stay tuned!
 
-## Get Started
+## Getting Started
 To get started, first get the library in one of the following ways:
 - `npm install sunorhc.timeline`
 - `git clone https://github.com/ka215/sunorhc.timeline.git`
@@ -71,7 +71,9 @@ Note: To control the component after it is instantiated, we recommend using asyn
 
 ## Documentaion
 
-It is currently being written, so please wait until it is published.  
+Please check the Wiki for updates as they occur.  
+
+[Wiki Home](https://github.com/ka215/sunorhc.timeline/wiki)
 
 ## Demo Build
 
@@ -90,4 +92,4 @@ Come and experience the potential of Sunorhc.Timeline!
 
 ## Copyright and License
 
-Code and documentation copyright 2024- the [ka2](https://ka2.org/). Code released under the MIT License.
+Code and documentation copyright 2024- the [ka2](https://ka2.org/). Code released under the [MIT License](https://github.com/ka215/sunorhc.timeline/blob/main/LICENSE).
