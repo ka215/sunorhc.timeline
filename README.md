@@ -21,8 +21,9 @@ More details will be coming soon, so stay tuned!
 
 ## Get Started
 To get started, first get the library in one of the following ways:
-- [Download latest release](https://github.com/ka215/sunorhc.timeline/releases/latest)
+- `npm install sunorhc.timeline`
 - `git clone https://github.com/ka215/sunorhc.timeline.git`
+- [Download latest release](https://github.com/ka215/sunorhc.timeline/releases/latest)
 
 The following files stored in the `dists` directory in the package are the core files of the library.
 ```bash
