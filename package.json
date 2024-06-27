@@ -1,6 +1,5 @@
 {
   "name": "sunorhc.timeline",
-  "private": true,
   "version": "0.9.1",
   "type": "module",
   "description": "Timeline generator libraly",
@@ -22,10 +21,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ka215/sunorhc-timeline"
+    "url": "https://github.com/ka215/sunorhc.timeline"
   },
   "keywords": [
-    "timeline"
+    "typescript", "horizontal", "timeline"
   ],
   "author": "Ka2",
   "license": "MIT",
